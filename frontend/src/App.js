@@ -12,7 +12,6 @@ import About from "./OtherPages/About";
 import Contact from "./OtherPages/Contact";
 import { Error404 } from "./OtherPages/ErrorPages";
 
-
 function App() {
 
   return (
@@ -20,7 +19,7 @@ function App() {
       <Router>
 
         <header className="App-header">
-          <h1><Link to="/">HOME</Link>nav bar ...</h1>
+          <h1><Link to="/">HOME</Link> nav bar ...</h1>
         </header>
 
         <Switch>

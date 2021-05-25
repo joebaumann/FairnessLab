@@ -21,10 +21,15 @@ class BaseRates(Resource):
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
         base_rate_women = (data['y_test'][ix_women] == 1).mean()
         base_rate_men = (data['y_test'][ix_men] == 1).mean()
-
         base_rates = {"base_rate_women": base_rate_women, "base_rate_men": base_rate_men}
-        print("base_rates:", base_rates)
         return base_rates
+
+
+class Fingerprint(Resource):
+    def get(self):
+        data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
+        # TODO: for now, we just return the data calculated for a sliderValue=0.0
+        return {"metric_values_slider_dict": metric_values_slider_dict["acceptance"][0.0]}
 
 class Scores(Resource):
     def get(self):
@@ -33,7 +38,7 @@ class Scores(Resource):
         scores_women = s[ix_women].tolist()
         return {"scores_men": scores_men, "scores_women": scores_women}
 
-class FairnessMetrics(Resource):
+class FairnessMetricsAndSliderValues(Resource):
 
     def get(self, fairness_label, slider_value):
         #parse slider value from string to float

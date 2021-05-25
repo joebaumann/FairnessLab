@@ -2,7 +2,6 @@ import './FairnessLabMakeFair.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
-
 function FairnessLabMakeFair() {
     return(
       <div className="FairnessLabMakeFair">
@@ -12,103 +11,109 @@ function FairnessLabMakeFair() {
     )
   }
   
-  
   function FairnessLabMakeFairHeader() {
-  
     return (
       <header className="FairnessLabMakeFair-header">
         <h1>Fairness Lab: Make Fair</h1>
       </header>
     );
-  
   }
-  
-  
   
   function NothingSelected() {
     return (
-      <h1 id="NothingSelected" className="NothingSelected">You selected nothing.</h1>
+      <h1 id="NothingSelected" className="NothingSelected">Please select a fairness metric.</h1>
     );
   }
   
   function MetricSelected({fairnessMetric, sliderValue}) {
-  
-    const [getMessage, setGetMessage] = useState({});
-    const [getData, setGetData] = useState({});
-    
-  
+
+    // test the connection
+    const [testMessage, setTestMessage] = useState({});
     useEffect(()=>{
-      axios.get('http://localhost:5000/home').then(response => {
+      // example to check connection
+      axios.get('http://localhost:5000/home')
+      .then(response => {
         console.log("SUCCESS", response)
-        setGetMessage(response)
-      }).catch(error => {
+        setTestMessage(response)
+      })
+      .catch(error => {
         console.log(error)
       })
-  
     }, [])
+
+    // get the data for selected fairness metric and slider value
+    const [loading, setLoading] = useState(false);
+    const [getData, setGetData] = useState(null);
   
     useEffect(()=>{
-      var url = 'http://localhost:5000/fairnessmetrics/' + fairnessMetric + '/' + sliderValue;
-      console.log("url!", url)
-      axios.get(url).then(response => {
+      // uncomment if login is required
+      // if (!login) return;
+      setLoading(true);
+      let url = 'http://localhost:5000/fairnessmetrics/' + fairnessMetric + '/' + sliderValue;
+      axios.get(url)
+      .then(response => {
         console.log("funktionierts!", response.status)
         console.log("funktionierts?", response)
         setGetData(response)
-      }).catch(error => {
+      })
+      .then(() => setLoading(false))
+      .catch(error => {
         console.log(error)
       })
   
     }, [fairnessMetric, sliderValue])
+    
+    if (loading) return <h1>Loading...</h1>;  
   
+    if (getData) {
+
+      return (
   
-    return (
-  
-      <div id="MetricSelected" className="MetricSelected">
-        <h1>You selected metric: {fairnessMetric} and sliderValue: {sliderValue}.</h1>
-  
-  
-  
-        <div>
-          {getData.status === 200 ? 
-          <ul>
-            {/* utility: {JSON.stringify(getData.data.metric_values_slider_dict)} */}
-            <li>
-              utility: {getData.data.metric_values_slider_dict.utility}
-            </li>
-            <li>
-              thresholds: {getData.data.metric_values_slider_dict.thresholds}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-          </ul>
-          :
-          <p>a2</p>}
-  
-  
+        <div id="MetricSelected" className="MetricSelected">
+          <h1>You selected metric: {fairnessMetric} and sliderValue: {sliderValue}.</h1>
+    
+          <div>
+            {getData.status === 200 ? 
+            <ul style={{display: "inline-block"}}>
+              {/* utility: {JSON.stringify(getData.data.metric_values_slider_dict)} */}
+              <li>
+                utility: {JSON.stringify(getData.data.metric_values_slider_dict.utility)}
+              </li>
+              <li>
+                thresholds: {JSON.stringify(getData.data.metric_values_slider_dict.thresholds)}
+              </li>
+              <li>
+                acceptance rate: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.acceptance)}
+              </li>
+              <li>
+                tpr: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.tpr)}
+              </li>
+              <li>
+                fpr: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.fpr)}
+              </li>
+              <li>
+                ppv: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.ppv)}
+              </li>
+              <li>
+                for: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.for)}
+              </li>
+            </ul>
+            :
+            <p>Failed with status: {getData.status}</p>}
+
+          </div>
         </div>
-      </div>
-  
-    );
+    
+      );
+    };
+
+    return <div>No Data Available.</div>;
   }
-  
+
   function FairnessMetricSelection() {
     const [fairnessMetric, setFairnessMetric] = useState();
     const [sliderValue, setSliderValue] = useState(1);
   
-    
     useEffect(() => {
       console.log(`Fairness metric chosen: ${fairnessMetric}!`);
     }, [fairnessMetric]);
@@ -117,8 +122,6 @@ function FairnessLabMakeFair() {
       console.log(`Slider value chosen ${sliderValue} !`);
     }, [sliderValue]);
     
-  
-  
     return (
       <>
       
@@ -142,8 +145,6 @@ function FairnessLabMakeFair() {
         <button onClick={() => setSliderValue(1)}>
           Slider value: 1
         </button>
-          
-  
   
         <>
           {fairnessMetric==null ? (
@@ -151,8 +152,6 @@ function FairnessLabMakeFair() {
             ) : (
             <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
           )}
-  
-  
   
         </>
       </>

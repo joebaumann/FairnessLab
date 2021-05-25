@@ -1,0 +1,39 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: win-64
+aniso8601=9.0.1=pypi_0
+blas=1.0=mkl
+ca-certificates=2021.4.13=haa95532_1
+certifi=2020.12.5=py39haa95532_0
+click=8.0.1=pyhd3eb1b0_0
+colorama=0.4.4=pypi_0
+flask=1.1.2=pyhd3eb1b0_0
+flask-cors=3.0.10=pypi_0
+flask-restful=0.3.9=pypi_0
+importlib-metadata=3.10.0=py39haa95532_0
+intel-openmp=2021.2.0=haa95532_616
+itsdangerous=2.0.1=pyhd3eb1b0_0
+jinja2=3.0.0=pyhd3eb1b0_0
+markupsafe=2.0.1=py39h2bbff1b_0
+mkl=2021.2.0=haa95532_296
+mkl-service=2.3.0=py39h2bbff1b_1
+mkl_fft=1.3.0=py39h277e83a_2
+mkl_random=1.2.1=py39hf11a4ad_2
+numpy=1.20.2=py39ha4e8547_0
+numpy-base=1.20.2=py39hc2deb75_0
+openssl=1.1.1k=h2bbff1b_0
+pandas=1.2.4=pypi_0
+pip=21.1.1=py39haa95532_0
+python=3.9.5=h6244533_3
+python-dateutil=2.8.1=pypi_0
+pytz=2021.1=pypi_0
+setuptools=52.0.0=py39haa95532_0
+six=1.16.0=pypi_0
+sqlite=3.35.4=h2bbff1b_0
+tzdata=2020f=h52ac0ba_0
+vc=14.2=h21ff451_1
+vs2015_runtime=14.27.29016=h5e58377_2
+werkzeug=1.0.1=pyhd3eb1b0_0
+wheel=0.36.2=pyhd3eb1b0_0
+wincertstore=0.2=py39h2bbff1b_0
+zipp=3.4.1=pyhd3eb1b0_0

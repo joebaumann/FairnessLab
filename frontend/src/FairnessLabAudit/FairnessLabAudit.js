@@ -2,161 +2,127 @@ import './FairnessLabAudit.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
-
 function FairnessLabAudit() {
     return(
       <div className="FairnessLabAudit">
         <FairnessLabAuditHeader />
-        <FairnessMetricSelection />
+        <FairnessFingerprint />
       </div>
     )
   }
   
-  
   function FairnessLabAuditHeader() {
-  
     return (
       <header className="FairnessLabAudit-header">
         <h1>Fairness Lab: Audit</h1>
       </header>
     );
-  
   }
   
-  
-  
-  function NothingSelected() {
-    return (
-      <h1 id="NothingSelected" className="NothingSelected">You selected nothing.</h1>
-    );
-  }
-  
-  function MetricSelected({fairnessMetric, sliderValue}) {
-  
-    const [getMessage, setGetMessage] = useState({});
-    const [getData, setGetData] = useState({});
-    
-  
+  function FairnessFingerprint({fairnessMetric, sliderValue}) {
+
+    // test the connection
+    const [testMessage, setTestMessage] = useState({});
     useEffect(()=>{
-      axios.get('http://localhost:5000/home').then(response => {
+      // example to check connection
+      axios.get('http://localhost:5000/home')
+      .then(response => {
         console.log("SUCCESS", response)
-        setGetMessage(response)
-      }).catch(error => {
+        setTestMessage(response)
+      })
+      .catch(error => {
         console.log(error)
       })
-  
     }, [])
+
+    // get the data for selected fairness metric and slider value
+    const [loading, setLoading] = useState(false);
+    const [getData, setGetData] = useState(null);
   
+    function getBaseRates() {
+      return axios.get('http://localhost:5000/baserates');
+    }
+    
+    function getFingerprint() {
+      return axios.get('http://localhost:5000/fingerprint');
+    }
+    
+
     useEffect(()=>{
-      var url = 'http://localhost:5000/fairnessmetrics/' + fairnessMetric + '/' + sliderValue;
-      console.log("url!", url)
-      axios.get(url).then(response => {
+      // uncomment if login is required
+      // if (!login) return;
+      setLoading(true);
+
+      
+      Promise.all([getBaseRates(), getFingerprint()])
+      .then(response => {
         console.log("funktionierts!", response.status)
         console.log("funktionierts?", response)
-        setGetData(response)
-      }).catch(error => {
+        setGetData({"baseRates": response[0], "fingerprint": response[1]})
+      })
+      .then(() => setLoading(false))
+      .catch(error => {
         console.log(error)
       })
   
     }, [fairnessMetric, sliderValue])
+    
+    if (loading) return <h1>Loading...</h1>;  
   
-  
-    return (
-  
-      <div id="MetricSelected" className="MetricSelected">
-        <h1>You selected metric: {fairnessMetric} and sliderValue: {sliderValue}.</h1>
-  
-  
-  
+    if (getData) {
+
+      return (
+
         <div>
-          {getData.status === 200 ? 
-          <ul>
-            {/* utility: {JSON.stringify(getData.data.metric_values_slider_dict)} */}
-            <li>
-              utility: {getData.data.metric_values_slider_dict.utility}
-            </li>
-            <li>
-              thresholds: {getData.data.metric_values_slider_dict.thresholds}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
-            <li>
-              tpr: {getData.data.metric_values_slider_dict.fairness.tpr}
-            </li>
+          <h3>Base rates and Fairness Fingerprint:</h3>
+    
+          <ul style={{display: "inline-block"}}>
+
+            {getData.baseRates.status === 200 ? 
+              <li>
+                base rates: {JSON.stringify(getData.baseRates.data)}
+              </li>
+            :
+            <p>baseRates: Failed with status: {getData.baseRates.status}</p>}
+
+            {getData.fingerprint.status === 200 ? 
+              <li>
+                fingerprint:
+                <ul>
+                  <li>
+                    utility: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}
+                  </li>
+                  <li>
+                    thresholds: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.thresholds)}
+                  </li>
+                  <li>
+                    acceptance: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.acceptance)}
+                  </li>
+                  <li>
+                    tpr: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.tpr)}
+                  </li>
+                  <li>
+                    fpr: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.fpr)}
+                  </li>
+                  <li>
+                    ppv: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.ppv)}
+                  </li>
+                  <li>
+                    for: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.for)}
+                  </li>
+                </ul>
+              </li>
+            :
+            <p>fingerprint: Failed with status: {getData.fingerprint.status}</p>}
+
           </ul>
-          :
-          <p>a2</p>}
-  
-  
         </div>
-      </div>
   
-    );
+      );
+    };
+
+    return <div>No Data Available.</div>;
   }
-  
-  function FairnessMetricSelection() {
-    const [fairnessMetric, setFairnessMetric] = useState();
-    const [sliderValue, setSliderValue] = useState(1);
-  
-    
-    useEffect(() => {
-      console.log(`Fairness metric chosen: ${fairnessMetric}!`);
-    }, [fairnessMetric]);
-    
-    useEffect(() => {
-      console.log(`Slider value chosen ${sliderValue} !`);
-    }, [sliderValue]);
-    
-  
-  
-    return (
-      <>
-      
-        <p>Select a fairness metric from the list.</p>
-  
-        <select id="fairnessMetricDropdown" defaultValue={'DEFAULT'} onChange={() => setFairnessMetric(document.getElementById("fairnessMetricDropdown").value)}>
-          <option disabled value="DEFAULT"> -- select an option -- </option>
-          <option value="acceptance">Statistical Parity</option>
-          <option value="tpr">TPR</option>
-          <option value="fpr">FPR</option>
-          <option value="ppv">PPV</option>
-          <option value="for">FOR</option>
-        </select>
-  
-        <button onClick={() => setSliderValue(0)}>
-          Slider value: 0
-        </button>
-        <button onClick={() => setSliderValue(0.5)}>
-          Slider value: 0.5
-        </button>
-        <button onClick={() => setSliderValue(1)}>
-          Slider value: 1
-        </button>
-          
-  
-  
-        <>
-          {fairnessMetric==null ? (
-            <NothingSelected />
-            ) : (
-            <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
-          )}
-  
-  
-  
-        </>
-      </>
-    );
-  }
+
   
   export default FairnessLabAudit;

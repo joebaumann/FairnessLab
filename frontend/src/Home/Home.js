@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
-      <h1>[Welcome to the Fairness Lab :)]</h1>
+      <h1>Welcome to the Fairness Lab :)</h1>
       <nav>
         <ul>
           <li>
