@@ -5,12 +5,12 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Home from "./Home/Home";
-import FairnessLabMakeFair from "./FairnessLabMakeFair/FairnessLabMakeFair";
-import FairnessLabAudit from "./FairnessLabAudit/FairnessLabAudit";
-import About from "./OtherPages/About";
-import Contact from "./OtherPages/Contact";
-import { Error404 } from "./OtherPages/ErrorPages";
+import Home from "./Components/Home/Home";
+import FairnessLabMakeFair from "./Components/FairnessLabMakeFair/FairnessLabMakeFair";
+import FairnessLabAudit from "./Components/FairnessLabAudit/FairnessLabAudit";
+import About from "./Components/OtherPages/About";
+import Contact from "./Components/OtherPages/Contact";
+import { Error404 } from "./Components/OtherPages/ErrorPages";
 
 function App() {
 
