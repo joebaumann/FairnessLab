@@ -24,7 +24,7 @@ function App() {
           <Navbar/>
         </header>
 
-        <div className="App">
+        <div className="Content">
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/data" component={Data}/>
