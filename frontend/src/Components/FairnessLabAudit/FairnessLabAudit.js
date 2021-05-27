@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
 import UtilityPlot from '../UtilityPlot';
+import ComparisonPlot from '../ComparisonPlot';
 
 function FairnessLabAudit() {
     return(
@@ -64,6 +65,12 @@ function FairnessLabAudit() {
     if (loading) return <h1>Loading...</h1>;  
   
     if (getData) {
+      let fairness;
+      let utility;
+      if (getData.fingerprint.status === 200) {
+        fairness = getData.fingerprint.data.metric_values_slider_dict.fairness;
+        utility = getData.fingerprint.data.metric_values_slider_dict.utility
+      }
 
       return (
 
@@ -82,7 +89,8 @@ function FairnessLabAudit() {
             {getData.fingerprint.status === 200 ? 
               <li>
                 fingerprint:
-                <UtilityPlot utility={JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}/>
+                <UtilityPlot utility={utility}/>
+                <ComparisonPlot labels={["Women", "Men"]} data={fairness.tpr} ylabel={'TPR'}/>
                 <ul>
                   <li>
                     utility: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}
@@ -91,7 +99,7 @@ function FairnessLabAudit() {
                     thresholds: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.thresholds)}
                   </li>
                   <li>
-                    acceptance: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.acceptance)}
+                    acceptance: {JSON.stringify(fairness.acceptance)}
                   </li>
                   <li>
                     tpr: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.tpr)}
