@@ -5,22 +5,7 @@ function Home() {
   return (
     <div>
       <h1>Welcome to the Fairness Lab :)</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link to="audit">Fairness Lab: Audit</Link>
-          </li>
-          <li>
-            <Link to="improve">Fairness Lab: make fair</Link>
-          </li>
-          <li>
-            <Link to="about">About</Link>
-          </li>
-          <li>
-            <Link to="contact">Contact</Link>
-          </li>
-        </ul>
-      </nav>
+      This tool is built to help you evaluate the fairness of your tool and improve it.
     </div>
   );
 }
