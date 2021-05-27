@@ -5,7 +5,9 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";
+import Data from "./Components/Data";
 import FairnessLabAudit from "./Components/FairnessLabAudit/FairnessLabAudit";
 import FairnessLabMakeFair from "./Components/FairnessLabMakeFair/FairnessLabMakeFair";
 import About from "./Components/OtherPages/About";
@@ -19,31 +21,22 @@ function App() {
       <Router>
 
         <header className="App-header">
-          <h1><Link to="/">HOME</Link> nav bar ...</h1>
+          <Navbar/>
         </header>
 
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/audit">
-            <FairnessLabAudit />
-          </Route>
-          <Route path="/makefair">
-            <FairnessLabMakeFair />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/contact">
-            <Contact />
-          </Route>
-          <Route path="*">
-            <Error404 />
-          </Route>
-        </Switch>
+        <div className="App">
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/data" component={Data}/>
+            <Route path="/audit" component={FairnessLabAudit}/>
+            <Route path="/improve" component={FairnessLabMakeFair}/>
+            <Route path="/about" component={About}/>
+            <Route path="/contact" component={Contact}/>
+            <Route path="*" component={Error404}/>
+          </Switch>
+        
+        </div>
       </Router>
-      
     </div>
   );
 }

@@ -11,7 +11,7 @@ function Home() {
             <Link to="audit">Fairness Lab: Audit</Link>
           </li>
           <li>
-            <Link to="makefair">Fairness Lab: make fair</Link>
+            <Link to="improve">Fairness Lab: make fair</Link>
           </li>
           <li>
             <Link to="about">About</Link>

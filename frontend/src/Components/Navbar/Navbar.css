@@ -1,0 +1,42 @@
+.Navbar {
+    overflow: hidden;
+    background-color: var(--main);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 5px;
+    z-index: 100;
+  }
+  
+  .Navbar-icon {
+    background-color: transparent;
+    border: none;
+    color: white;
+    display: none;
+    cursor: pointer;
+  }
+  
+  .Navbar-logo {
+    float: left;
+    padding: 5px 16px;
+  }
+  
+  .Navbar-link {
+    float: left;
+    text-align: center;
+    display: block;
+    padding: 10px 16px;
+    color: white;
+    font-size: 1.3em;
+    text-decoration: none;
+    background-image: linear-gradient(white, white);
+    background-size: 0 2px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .2s ease-out;
+  }
+  
+  .active, .Navbar-link:hover {
+    background-size: 80% 2px, auto;
+    color: white;
+  }
