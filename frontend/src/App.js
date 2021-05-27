@@ -20,9 +20,7 @@ function App() {
     <div>
       <Router>
 
-        <header className="App-header">
-          <Navbar/>
-        </header>
+        <Navbar/>
 
         <div className="Content">
           <Switch>
