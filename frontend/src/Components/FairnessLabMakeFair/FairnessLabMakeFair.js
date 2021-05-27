@@ -1,22 +1,15 @@
 import './FairnessLabMakeFair.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
+import Header from '../Header';
 
 function FairnessLabMakeFair() {
     return(
       <div className="FairnessLabMakeFair">
-        <FairnessLabMakeFairHeader />
+        <Header title="Fairness Lab: Make Fair"/>
         <FairnessMetricSelection />
       </div>
     )
-  }
-  
-  function FairnessLabMakeFairHeader() {
-    return (
-      <header className="FairnessLabMakeFair-header">
-        <h1>Fairness Lab: Make Fair</h1>
-      </header>
-    );
   }
   
   function NothingSelected() {

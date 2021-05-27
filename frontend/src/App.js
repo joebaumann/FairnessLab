@@ -6,8 +6,8 @@ import {
   Link
 } from "react-router-dom";
 import Home from "./Components/Home/Home";
-import FairnessLabMakeFair from "./Components/FairnessLabMakeFair/FairnessLabMakeFair";
 import FairnessLabAudit from "./Components/FairnessLabAudit/FairnessLabAudit";
+import FairnessLabMakeFair from "./Components/FairnessLabMakeFair/FairnessLabMakeFair";
 import About from "./Components/OtherPages/About";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";

@@ -1,22 +1,15 @@
 import './FairnessLabAudit.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
+import Header from '../Header';
 
 function FairnessLabAudit() {
     return(
       <div className="FairnessLabAudit">
-        <FairnessLabAuditHeader />
+        <Header title="Fairness Lab: Audit"/>
         <FairnessFingerprint />
       </div>
     )
-  }
-  
-  function FairnessLabAuditHeader() {
-    return (
-      <header className="FairnessLabAudit-header">
-        <h1>Fairness Lab: Audit</h1>
-      </header>
-    );
   }
   
   function FairnessFingerprint({fairnessMetric, sliderValue}) {
