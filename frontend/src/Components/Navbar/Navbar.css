@@ -19,14 +19,14 @@
   
   .Navbar-logo {
     float: left;
-    padding: 5px 16px;
+    padding: 1vh 3vh;
   }
   
   .Navbar-link {
     float: left;
     text-align: center;
     display: block;
-    padding: 10px 16px;
+    padding: 3vh 3vh;
     color: white;
     font-size: 1.3em;
     text-decoration: none;

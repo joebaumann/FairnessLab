@@ -2,6 +2,7 @@ import './FairnessLabMakeFair.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
+import FairnessFingerprint from '../FairnessFingerprint';
 
 function FairnessLabMakeFair() {
     return(
@@ -59,6 +60,12 @@ function FairnessLabMakeFair() {
     if (loading) return <h1>Loading...</h1>;  
   
     if (getData) {
+      let fairness;
+      let utility;
+      if (getData.status === 200) {
+        fairness = getData.data.metric_values_slider_dict.fairness;
+        utility = getData.data.metric_values_slider_dict.utility
+      }
 
       return (
   
@@ -67,32 +74,9 @@ function FairnessLabMakeFair() {
     
           <div>
             {getData.status === 200 ? 
-            <ul style={{display: "inline-block"}}>
-              {/* utility: {JSON.stringify(getData.data.metric_values_slider_dict)} */}
-              <li>
-                utility: {JSON.stringify(getData.data.metric_values_slider_dict.utility)}
-              </li>
-              <li>
-                thresholds: {JSON.stringify(getData.data.metric_values_slider_dict.thresholds)}
-              </li>
-              <li>
-                acceptance rate: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.acceptance)}
-              </li>
-              <li>
-                tpr: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.tpr)}
-              </li>
-              <li>
-                fpr: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.fpr)}
-              </li>
-              <li>
-                ppv: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.ppv)}
-              </li>
-              <li>
-                for: {JSON.stringify(getData.data.metric_values_slider_dict.fairness.for)}
-              </li>
-            </ul>
+              <FairnessFingerprint utility={utility} fairness={fairness} labels={["Women", "Men"]} />            
             :
-            <p>Failed with status: {getData.status}</p>}
+            <p>Fairness fingerprint failed with status: {getData.fingerprint.status}</p>}
 
           </div>
         </div>

@@ -1,5 +1,5 @@
 .Header {
-    background-color: #5b6475;
+    background-color: var(--accent1);
     min-height: 10vh;
     display: flex;
     flex-direction: column;

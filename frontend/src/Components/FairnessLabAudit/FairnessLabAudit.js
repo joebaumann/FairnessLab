@@ -2,19 +2,18 @@ import './FairnessLabAudit.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
-import UtilityPlot from '../UtilityPlot';
-import ComparisonPlot from '../ComparisonPlot';
+import FairnessFingerprint from '../FairnessFingerprint';
 
 function FairnessLabAudit() {
     return(
       <div className="FairnessLabAudit">
         <Header title="Fairness Lab: Audit"/>
-        <FairnessFingerprint />
+        <FairnessAudit />
       </div>
     )
   }
   
-  function FairnessFingerprint({fairnessMetric, sliderValue}) {
+  function FairnessAudit({fairnessMetric, sliderValue}) {
 
     // test the connection
     const [testMessage, setTestMessage] = useState({});
@@ -75,50 +74,20 @@ function FairnessLabAudit() {
       return (
 
         <div>
-          <h3>Base rates and Fairness Fingerprint:</h3>
-    
-          <ul style={{display: "inline-block"}}>
+          {getData.baseRates.status === 200 ? 
+            <div>
+              <h3>Stats</h3>
+              base rates: {JSON.stringify(getData.baseRates.data)}
+              {/* <ComparisonPlot labels={["Women", "Men"]} data={getData.baseRates.data} ylabel={'Base rate'}/> */}
+            </div> 
+            
+          :
+          <p>Base rates failed with status: {getData.baseRates.status}</p>}
 
-            {getData.baseRates.status === 200 ? 
-              <li>
-                base rates: {JSON.stringify(getData.baseRates.data)}
-              </li>
-            :
-            <p>baseRates: Failed with status: {getData.baseRates.status}</p>}
-
-            {getData.fingerprint.status === 200 ? 
-              <li>
-                fingerprint:
-                <UtilityPlot utility={utility}/>
-                <ComparisonPlot labels={["Women", "Men"]} data={fairness.tpr} ylabel={'TPR'}/>
-                <ul>
-                  <li>
-                    utility: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}
-                  </li>
-                  <li>
-                    thresholds: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.thresholds)}
-                  </li>
-                  <li>
-                    acceptance: {JSON.stringify(fairness.acceptance)}
-                  </li>
-                  <li>
-                    tpr: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.tpr)}
-                  </li>
-                  <li>
-                    fpr: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.fpr)}
-                  </li>
-                  <li>
-                    ppv: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.ppv)}
-                  </li>
-                  <li>
-                    for: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.fairness.for)}
-                  </li>
-                </ul>
-              </li>
-            :
-            <p>fingerprint: Failed with status: {getData.fingerprint.status}</p>}
-
-          </ul>
+          {getData.fingerprint.status === 200 ? 
+            <FairnessFingerprint utility={utility} fairness={fairness} labels={["Women", "Men"]} />            
+          :
+          <p>Fairness fingerprint failed with status: {getData.fingerprint.status}</p>}
         </div>
   
       );

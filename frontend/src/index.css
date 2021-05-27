@@ -13,8 +13,8 @@ code {
 }
 
 :root {
-  --main: #7ed6df;
-  --accent1: #22a6b3;
+  --main: #22a6b3;
+  --accent1: #7ed6df;
   --accent2: #c7ecee;
   --accent3: #95afc0;
 }
