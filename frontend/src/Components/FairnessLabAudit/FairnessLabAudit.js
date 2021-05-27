@@ -2,6 +2,7 @@ import './FairnessLabAudit.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
+import UtilityPlot from '../UtilityPlot';
 
 function FairnessLabAudit() {
     return(
@@ -81,6 +82,7 @@ function FairnessLabAudit() {
             {getData.fingerprint.status === 200 ? 
               <li>
                 fingerprint:
+                <UtilityPlot utility={JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}/>
                 <ul>
                   <li>
                     utility: {JSON.stringify(getData.fingerprint.data.metric_values_slider_dict.utility)}
