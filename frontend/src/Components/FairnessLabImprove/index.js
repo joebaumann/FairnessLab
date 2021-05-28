@@ -1,4 +1,4 @@
-import './FairnessLabMakeFair.css';
+import './FairnessLabImprove.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
@@ -6,7 +6,7 @@ import FairnessFingerprint from '../FairnessFingerprint';
 
 function FairnessLabMakeFair() {
     return(
-      <div className="FairnessLabMakeFair">
+      <div className="FairnessLabImprove">
         <Header title="Fairness Lab: Improve"/>
         <FairnessMetricSelection />
       </div>
