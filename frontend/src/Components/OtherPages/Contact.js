@@ -1,9 +1,10 @@
 import React from "react";
+import Header from '../Header';
 
 export function Contact() {
   return (
     <div>
-      <h1>[Contact]</h1>
+      <Header title="Contact"/>
     </div>
   );
 }

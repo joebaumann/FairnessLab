@@ -13,12 +13,6 @@ function FairnessLabMakeFair() {
     )
   }
   
-  function NothingSelected() {
-    return (
-      <h1 id="NothingSelected" className="NothingSelected">Please select a fairness metric.</h1>
-    );
-  }
-  
   function MetricSelected({fairnessMetric, sliderValue}) {
 
     // test the connection
@@ -88,8 +82,9 @@ function FairnessLabMakeFair() {
   }
 
   function FairnessMetricSelection() {
-    const [fairnessMetric, setFairnessMetric] = useState();
-    const [sliderValue, setSliderValue] = useState(1);
+    const [fairnessMetric, setFairnessMetric] = useState('acceptance');
+    const [sliderValue, setSliderValue] = useState(0);
+    const [sliderMoving, setSliderMoving] = useState(false);
   
     useEffect(() => {
       console.log(`Fairness metric chosen: ${fairnessMetric}!`);
@@ -104,33 +99,21 @@ function FairnessLabMakeFair() {
       
         <p>Select a fairness metric from the list.</p>
   
-        <select id="fairnessMetricDropdown" defaultValue={'DEFAULT'} onChange={() => setFairnessMetric(document.getElementById("fairnessMetricDropdown").value)}>
-          <option disabled value="DEFAULT"> -- select an option -- </option>
+        <select id="fairnessMetricDropdown" defaultValue={'acceptance'} onChange={(e) => setFairnessMetric(e.target.value)}>
           <option value="acceptance">Statistical Parity</option>
           <option value="tpr">TPR</option>
           <option value="fpr">FPR</option>
           <option value="ppv">PPV</option>
           <option value="for">FOR</option>
         </select>
-  
-        <button onClick={() => setSliderValue(0)}>
-          Slider value: 0
-        </button>
-        <button onClick={() => setSliderValue(0.5)}>
-          Slider value: 0.5
-        </button>
-        <button onClick={() => setSliderValue(1)}>
-          Slider value: 1
-        </button>
-  
-        <>
-          {fairnessMetric==null ? (
-            <NothingSelected />
-            ) : (
-            <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
-          )}
-  
-        </>
+
+        <input type="range" min="0" max="1" step="0.1" value={sliderValue} onChange={(e) => setSliderValue(e.target.value)} onMouseDown={(e) => setSliderMoving(true)} onMouseUp={(e) => setSliderMoving(false)} />
+
+        {!sliderMoving
+          ? <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
+          : <h1>Please pick a slider value</h1>
+        }
+
       </>
     );
   }
