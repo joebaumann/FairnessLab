@@ -29,7 +29,6 @@ class UtilityPlot extends Component {
               scales: {
                 xAxes: [
                   {
-                    barPercentage: 1,
                     gridLines: {
                       display: true,
                       color: "rgba(0, 0, 0, 0.1)"
