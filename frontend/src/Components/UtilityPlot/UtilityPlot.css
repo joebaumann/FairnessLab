@@ -1,0 +1,35 @@
+/* .UtilityPlot {
+    width: 12%;
+    height: 20vh;
+} */
+
+.UtilityPlot {
+    margin: 12px;
+    margin-top: 5vh;
+    display: inline-block;
+    width: 10.9999%;
+    height: 30vh;
+}
+  
+@media only screen and (max-width: 850px) {
+    .UtilityPlot {
+      width: 29.99999%;
+      margin: 6px;
+      margin-top: 5vh;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+    .UtilityPlot {
+      width: 45.99999%;
+      margin: 6px;
+      margin-top: 5vh;
+    }
+}
+  
+@media only screen and (max-width: 500px) {
+    .UtilityPlot {
+      width: 100%;
+      margin: 6px 0 6px 0;
+    }
+}

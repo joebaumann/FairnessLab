@@ -67,7 +67,7 @@ class ComparisonPlot extends Component {
   
     render() {
       return (
-        <MDBContainer>
+        <MDBContainer className="ComparisonPlot">
           <h3 className="mt-5">{this.props.ylabel}</h3>
           <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
         </MDBContainer>

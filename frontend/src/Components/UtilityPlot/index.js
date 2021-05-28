@@ -57,7 +57,7 @@ class UtilityPlot extends Component {
   
     render() {
       return (
-        <MDBContainer>
+        <MDBContainer className="UtilityPlot">
           <h3 className="mt-5">Utility</h3>
           <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
         </MDBContainer>
