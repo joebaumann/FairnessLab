@@ -8,8 +8,8 @@ import {
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";
 import Data from "./Components/Data";
-import FairnessLabAudit from "./Components/FairnessLabAudit/FairnessLabAudit";
-import FairnessLabMakeFair from "./Components/FairnessLabMakeFair/FairnessLabMakeFair";
+import FairnessLabAudit from "./Components/FairnessLabAudit";
+import FairnessLabMakeFair from "./Components/FairnessLabImprove";
 import About from "./Components/OtherPages/About";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";
