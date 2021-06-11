@@ -1,0 +1,35 @@
+/* .ComparisonPlot {
+    width: 14%;
+    padding-left: 3%;
+    height: 20vh;
+} */
+
+.ComparisonPlot {
+    margin: 12px;
+    display: inline-block;
+    width: 14.9999%;
+    height: 30vh;
+}
+  
+@media only screen and (max-width: 850px) {
+    .ComparisonPlot {
+      width: 29.99999%;
+      margin: 6px;
+      margin-top: 5vh;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+    .ComparisonPlot {
+      width: 45.99999%;
+      margin: 6px;
+      margin-top: 5vh;
+    }
+}
+  
+@media only screen and (max-width: 500px) {
+    .ComparisonPlot {
+      width: 100%;
+      margin: 6px 0 6px 0;
+    }
+}

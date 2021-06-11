@@ -63,9 +63,7 @@ function FairnessLabMakeFair() {
 
       return (
   
-        <div id="MetricSelected" className="MetricSelected">
-          <h1>You selected metric: {fairnessMetric} and sliderValue: {sliderValue}.</h1>
-    
+        <div id="MetricSelected" className="MetricSelected">    
           <div>
             {getData.status === 200 ? 
               <FairnessFingerprint utility={utility} fairness={fairness} labels={["Women", "Men"]} />            
@@ -95,26 +93,29 @@ function FairnessLabMakeFair() {
     }, [sliderValue]);
     
     return (
-      <>
+      <div className="FairnessMetricSelection">
       
-        <p>Select a fairness metric from the list.</p>
-  
-        <select id="fairnessMetricDropdown" defaultValue={'acceptance'} onChange={(e) => setFairnessMetric(e.target.value)}>
-          <option value="acceptance">Statistical Parity</option>
-          <option value="tpr">TPR</option>
-          <option value="fpr">FPR</option>
-          <option value="ppv">PPV</option>
-          <option value="for">FOR</option>
-        </select>
+        <label>Fairness metric
+          <select className="Dropdown" defaultValue={'acceptance'} onChange={(e) => setFairnessMetric(e.target.value)}>
+            <option value="acceptance">Statistical Parity</option>
+            <option value="tpr">TPR</option>
+            <option value="fpr">FPR</option>
+            <option value="ppv">PPV</option>
+            <option value="for">FOR</option>
+          </select>
+        </label>
 
-        <input type="range" min="0" max="1" step="0.1" value={sliderValue} onChange={(e) => setSliderValue(e.target.value)} onMouseDown={(e) => setSliderMoving(true)} onMouseUp={(e) => setSliderMoving(false)} />
+        <label>Equalization rate
+          <input className="Slider" type="range" min="0" max="1" step="0.1" value={sliderValue} onChange={(e) => setSliderValue(e.target.value)} onMouseDown={(e) => setSliderMoving(true)} onMouseUp={(e) => setSliderMoving(false)} />
+          <span>{sliderValue}</span>
+        </label>
 
         {!sliderMoving
           ? <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
           : <h1>Please pick a slider value</h1>
         }
 
-      </>
+      </div>
     );
   }
   
