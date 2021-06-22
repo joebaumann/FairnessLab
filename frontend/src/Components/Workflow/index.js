@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Workflow.css';
 import Header from '../Header';
+import Step1 from '../WorkflowSteps/Step1';
 
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -17,14 +18,9 @@ import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
 import StepConnector from '@material-ui/core/StepConnector';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 // creating the forceUpdate hook
-function useForceUpdate(){
+function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
   return () => setValue(value => value + 1); // update the state to force render
 }
@@ -129,57 +125,11 @@ const useStyles = makeStyles((theme) => ({
   instructions: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1)
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 function getSteps() {
   return ['Choose dataset', 'Name labels', 'Utility function', 'Visualizations'];
-}
-
-function Step1(props) {
-
-  const classes = useStyles();
-
-  const handleChange = (event) => {
-    // update state: currently selected dataset
-    props.handleChangeDataset(event.target.value);
-  };
-
-  return (
-    <div className="Step1">
-
-      'Please select or add a dataset:'
-      <br/>
-      Selected: {props.dataset}
-      <br/>
-
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Dataset</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={props.dataset}
-          onChange={handleChange}
-          label="Dataset"
-          >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {/* TODO: use available datasets as selection items */}
-          <MenuItem value={"dataset1"}>dataset1</MenuItem>
-          <MenuItem value={"dataset2"}>dataset2</MenuItem>
-          <MenuItem value={"dataset3"}>dataset3</MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  )
 }
 
 function getStepContent(activeStep, dataset, handleChangeDataset) {
@@ -202,9 +152,9 @@ export function Workflow() {
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
   const steps = getSteps();
-  
+
   const [dataset, setDataset] = useState(''); // step1 state
-  
+
   const forceUpdate = useForceUpdate();
 
   const totalSteps = () => {
