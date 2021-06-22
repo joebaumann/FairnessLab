@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/core": "^7.13.0",
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "^7.13.12",
+    "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

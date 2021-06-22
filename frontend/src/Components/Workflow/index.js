@@ -1,12 +1,274 @@
 import React from "react";
 import './Workflow.css';
 import Header from '../Header';
+import Step1 from '../WorkflowSteps/Step1';
+
+import PropTypes from 'prop-types';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepButton from '@material-ui/core/StepButton';
+import StorageIcon from '@material-ui/icons/Storage';
+import TextFieldsIcon from '@material-ui/icons/TextFields';
+import FunctionsIcon from '@material-ui/icons/Functions';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
+import StepConnector from '@material-ui/core/StepConnector';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+
+
+const ColorlibConnector = withStyles({
+  alternativeLabel: {
+    top: 22,
+  },
+  /* active: {
+    '& $line': {
+      backgroundImage:
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+    },
+  },
+  completed: {
+    '& $line': {
+      backgroundImage:
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+    },
+  }, */
+  line: {
+    height: 3,
+    border: 0,
+    backgroundColor: '#eaeaf0',
+    borderRadius: 1,
+  },
+})(StepConnector);
+
+const useColorlibStepIconStyles = makeStyles({
+  root: {
+    backgroundColor: '#ccc',
+    zIndex: 1,
+    color: '#fff',
+    width: 50,
+    height: 50,
+    display: 'flex',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  active: {
+    backgroundImage:
+      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+  },
+  completed: {
+    /* backgroundImage:
+      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)', */
+    border: '3px solid limegreen',
+  },
+});
+
+function ColorlibStepIcon(props) {
+  const classes = useColorlibStepIconStyles();
+  const { active, completed } = props;
+
+  const icons = {
+    1: <StorageIcon />,
+    2: <TextFieldsIcon />,
+    3: <FunctionsIcon />,
+    4: <BarChartIcon />,
+  };
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+        [classes.completed]: completed,
+      })}
+    >
+      {icons[String(props.icon)]}
+      {completed ? <CheckCircleTwoToneIcon style={{ position: "absolute", top: "12px", left: "59%", color: "limegreen" }} /> : null}
+    </div>
+  );
+}
+
+ColorlibStepIcon.propTypes = {
+  /**
+   * Whether this step is active.
+   */
+  active: PropTypes.bool,
+  /**
+   * Mark the step as completed. Is passed to child components.
+   */
+  completed: PropTypes.bool,
+  /**
+   * The label displayed in the step icon.
+   */
+  icon: PropTypes.node,
+};
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%"
+  },
+  button: {
+    marginRight: theme.spacing(1)
+  },
+  completed: {
+    display: "inline-block"
+  },
+  instructions: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1)
+  }
+}));
+
+function getSteps() {
+  return ['Choose dataset', 'Name labels', 'Utility function', 'Visualizations'];
+}
+
+
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return 'Please select or add a dataset:';
+    case 1:
+      return 'Please define the names of the following labels:';
+    case 2:
+      return 'Please define the utility function:';
+    case 3:
+      return 'Here we should display the visualizations...';
+    default:
+      return 'Unknown step';
+  }
+}
 
 export function Workflow() {
+  const classes = useStyles();
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [completed, setCompleted] = React.useState({});
+  const steps = getSteps();
+
+  const totalSteps = () => {
+    return steps.length;
+  };
+
+  const completedSteps = () => {
+    return Object.keys(completed).length;
+  };
+
+  const isLastStep = () => {
+    return activeStep === totalSteps() - 1;
+  };
+
+  const allStepsCompleted = () => {
+    return completedSteps() === totalSteps();
+  };
+
+  const handleNext = () => {
+    const newActiveStep =
+      isLastStep() && !allStepsCompleted()
+        ? // It's the last step, but not all steps have been completed,
+        // find the first step that has been completed
+        steps.findIndex((step, i) => !(i in completed))
+        : activeStep + 1;
+    setActiveStep(newActiveStep);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStep = (step) => () => {
+    setActiveStep(step);
+  };
+
+  const handleComplete = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    handleNext();
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setCompleted({});
+  };
+
   return (
-    <div className="Worflow">
-      <Header title="Complete all steps..."/>
-    </div>
+    <>
+
+      <div className="Worflow">
+        <Header title="Complete all steps..." />
+      </div>
+
+      <div className={classes.root}>
+        <Stepper nonLinear alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepButton
+                onClick={handleStep(index)}
+                completed={completed[index]}
+              >
+                <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
+
+        <div>
+          {allStepsCompleted() ? (
+            <div>
+              <Typography className={classes.instructions}>
+                All steps completed - you&apos;re finished
+              </Typography>
+              <Button onClick={handleReset} className={classes.button}>Reset</Button>
+            </div>
+          ) : (
+            <div>
+              <Typography className={classes.instructions}>
+                {getStepContent(activeStep)}
+              </Typography>
+              <div>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  className={classes.button}
+                >
+                  Back
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                </Button>
+                {activeStep !== steps.length &&
+                  (completed[activeStep] ? (
+                    <Typography variant="caption" className={classes.completed}>
+                      Step {activeStep + 1} already completed
+                    </Typography>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleComplete}
+                    >
+                      {completedSteps() === totalSteps() - 1
+                        ? "Finish"
+                        : "Complete Step"}
+                    </Button>
+                  ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+    </>
   );
 }
 
