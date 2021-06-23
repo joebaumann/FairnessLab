@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './Workflow.css';
 import Header from '../Header';
 import Step1 from '../WorkflowSteps/Step1';
+import Step2 from '../WorkflowSteps/Step2';
+import Step3 from '../WorkflowSteps/Step3';
+import Step4 from '../WorkflowSteps/Step4';
 
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -60,6 +63,7 @@ const useColorlibStepIconStyles = makeStyles({
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+    border: '3px solid white',
   },
   active: {
     backgroundImage:
@@ -92,7 +96,7 @@ function ColorlibStepIcon(props) {
       })}
     >
       {icons[String(props.icon)]}
-      {completed ? <CheckCircleTwoToneIcon style={{ position: "absolute", top: "12px", left: "59%", color: "limegreen" }} /> : null}
+      {completed ? <CheckCircleTwoToneIcon style={{ position: "absolute", top: "12px", left: "calc(50% + 20px)", color: "limegreen" }} /> : null}
     </div>
   );
 }
@@ -137,11 +141,11 @@ function getStepContent(activeStep, dataset, handleChangeDataset) {
     case 0:
       return <Step1 dataset={dataset} handleChangeDataset={handleChangeDataset} />;
     case 1:
-      return 'Please define the names of the following labels:';
+      return <Step2 />;
     case 2:
-      return 'Please define the utility function:';
+      return <Step3 />;
     case 3:
-      return 'Here we should display the visualizations...';
+      return <Step4 />;
     default:
       return 'Unknown step';
   }
@@ -245,7 +249,9 @@ export function Workflow() {
                 onClick={handleStep(index)}
                 completed={completed[index]}
               >
-                <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+                <StepLabel StepIconComponent={ColorlibStepIcon}>
+                  {activeStep === index ? <div className="activesteplabel">{label}</div> : <div className="inactivesteplabel">{label}</div>}
+                </StepLabel>
               </StepButton>
             </Step>
           ))}
