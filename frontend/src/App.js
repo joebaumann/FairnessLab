@@ -25,13 +25,13 @@ function App() {
 
         <div className="Content">
           <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/data" component={Data}/>
-            <Route path="/workflow" component={Workflow}/>
-            <Route path="/audit" component={FairnessLabAudit}/>
-            <Route path="/improve" component={FairnessLabMakeFair}/>
-            <Route path="/about" component={About}/>
-            <Route path="/contact" component={Contact}/>
+            <Route exact path="/FairnessLab" component={Home}/>
+            <Route path="/FairnessLab/data" component={Data}/>
+            <Route path="/FairnessLab/workflow" component={Workflow}/>
+            <Route path="/FairnessLab/audit" component={FairnessLabAudit}/>
+            <Route path="/FairnessLab/improve" component={FairnessLabMakeFair}/>
+            <Route path="/FairnessLab/about" component={About}/>
+            <Route path="/FairnessLab/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
           </Switch>
         
