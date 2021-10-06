@@ -1,5 +1,6 @@
 from flask_restful import Api, Resource, reqparse
 import pickle
+import json
 
 
 def load_data():
@@ -21,6 +22,15 @@ class Shares(Resource):
         share_women = len(data['y_test'][ix_women])/len(data['y_test'])
         share_men = len(data['y_test'][ix_men])/len(data['y_test'])
         shares = {"statistic": [share_women, share_men], "labels": ["Women", "Men"]}
+
+        """
+        # navigate to http://127.0.0.1:5000/shares in the browser
+        # use this once to move the data to the frontend more easily.
+        # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
+        with open('frontend/src/data_static/shares.json', 'w') as outfile:
+            json.dump(shares, outfile)
+        """
+        
         return shares
 
 class BaseRates(Resource):
@@ -29,6 +39,15 @@ class BaseRates(Resource):
         base_rate_women = (data['y_test'][ix_women] == 1).mean()
         base_rate_men = (data['y_test'][ix_men] == 1).mean()
         base_rates = {"statistic": [base_rate_women, base_rate_men], "labels": ["Women", "Men"]}
+
+        """
+        # # navigate to http://127.0.0.1:5000/base_rates in the browser
+        # use this once to move the data to the frontend more easily.
+        # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
+        with open('frontend/src/data_static/base_rates.json', 'w') as outfile:
+            json.dump(base_rates, outfile)
+        """
+        
         return base_rates
 
 
@@ -36,14 +55,36 @@ class Fingerprint(Resource):
     def get(self):
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
         # TODO: for now, we just return the data calculated for a sliderValue=0.0
-        return {"metric_values_slider_dict": metric_values_slider_dict["acceptance"][0.0]}
+
+        metric_values_slider_dict = {"metric_values_slider_dict": metric_values_slider_dict["acceptance"][0.0]}
+
+        """
+        # # navigate to http://127.0.0.1:5000/fingerprint in the browser
+        # use this once to move the data to the frontend more easily.
+        # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
+        with open('frontend/src/data_static/fingerprint.json', 'w') as outfile:
+            json.dump(metric_values_slider_dict, outfile)
+        """
+
+        return metric_values_slider_dict
 
 class Scores(Resource):
     def get(self):
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
         scores_men = s[ix_men].tolist()
         scores_women = s[ix_women].tolist()
-        return {"scores_men": scores_men, "scores_women": scores_women}
+
+        scores = {"scores_men": scores_men, "scores_women": scores_women}
+
+        """
+        # # navigate to http://127.0.0.1:5000/scores in the browser
+        # use this once to move the data to the frontend more easily.
+        # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
+        with open('frontend/src/data_static/scores.json', 'w') as outfile:
+            json.dump(scores, outfile)
+        """
+
+        return scores
 
 class FairnessMetricsAndSliderValues(Resource):
 
@@ -51,7 +92,17 @@ class FairnessMetricsAndSliderValues(Resource):
         #parse slider value from string to float
         slider_value = float(slider_value)
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
-        return {"metric_values_slider_dict": metric_values_slider_dict[fairness_label][slider_value]}
+        data_for_label_and_slider = {"metric_values_slider_dict": metric_values_slider_dict[fairness_label][slider_value]}
+
+        """
+        # # navigate to http://127.0.0.1:5000/fairnessmetrics/tpr/0.1 in the browser
+        # use this once to move the data to the frontend more easily.
+        # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
+        with open('frontend/src/data_static/results_for_all_metrics_and_all_sliders.json', 'w') as outfile:
+            json.dump(metric_values_slider_dict, outfile)
+        """
+
+        return data_for_label_and_slider
 
     """
     def put(self, metric):
