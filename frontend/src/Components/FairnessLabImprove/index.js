@@ -4,7 +4,7 @@ import axios from 'axios'
 import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
 
-function FairnessLabMakeFair() {
+function FairnessLabImprove() {
     return(
       <div className="FairnessLabImprove">
         <Header title="Fairness Lab: Improve"/>
@@ -119,4 +119,4 @@ function FairnessLabMakeFair() {
     );
   }
   
-  export default FairnessLabMakeFair;
+  export default FairnessLabImprove;

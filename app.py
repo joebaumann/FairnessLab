@@ -3,7 +3,7 @@ from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 
 from api.Home import Home
-from api.FairnessMetrics import BaseRates, Fingerprint, Scores, FairnessMetricsAndSliderValues
+from api.FairnessMetrics import Shares, BaseRates, Fingerprint, Scores, FairnessMetricsAndSliderValues
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
@@ -14,6 +14,7 @@ def serve(path):
     return send_from_directory(app.static_folder,'index.html')
 
 api.add_resource(Home,'/' , '/home')
+api.add_resource(Shares, '/shares')
 api.add_resource(BaseRates, '/baserates')
 api.add_resource(Fingerprint, '/fingerprint')
 api.add_resource(Scores, '/scores')

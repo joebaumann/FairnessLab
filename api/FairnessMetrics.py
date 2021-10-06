@@ -15,13 +15,20 @@ def load_data():
 
     return data, metric_values_slider_dict, ix_women, ix_men, s
 
+class Shares(Resource):
+    def get(self):
+        data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
+        share_women = len(data['y_test'][ix_women])/len(data['y_test'])
+        share_men = len(data['y_test'][ix_men])/len(data['y_test'])
+        shares = {"statistic": [share_women, share_men], "labels": ["Women", "Men"]}
+        return shares
 
 class BaseRates(Resource):
     def get(self):
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
         base_rate_women = (data['y_test'][ix_women] == 1).mean()
         base_rate_men = (data['y_test'][ix_men] == 1).mean()
-        base_rates = {"base_rate_women": base_rate_women, "base_rate_men": base_rate_men}
+        base_rates = {"statistic": [base_rate_women, base_rate_men], "labels": ["Women", "Men"]}
         return base_rates
 
 

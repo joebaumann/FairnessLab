@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
+import Statistics from '../Statistics';
 
 function FairnessLabAudit() {
     return(
@@ -36,6 +37,10 @@ function FairnessLabAudit() {
     function getBaseRates() {
       return axios.get('http://localhost:5000/baserates');
     }
+
+    function getShares() {
+      return axios.get('http://localhost:5000/shares');
+    }
     
     function getFingerprint() {
       return axios.get('http://localhost:5000/fingerprint');
@@ -48,11 +53,11 @@ function FairnessLabAudit() {
       setLoading(true);
 
       
-      Promise.all([getBaseRates(), getFingerprint()])
+      Promise.all([getBaseRates(), getShares(), getFingerprint()])
       .then(response => {
         console.log("funktionierts!", response.status)
         console.log("funktionierts?", response)
-        setGetData({"baseRates": response[0], "fingerprint": response[1]})
+        setGetData({"baseRates": response[0], "shares": response[1], "fingerprint": response[2]})
       })
       .then(() => setLoading(false))
       .catch(error => {
@@ -64,23 +69,27 @@ function FairnessLabAudit() {
     if (loading) return <h1>Loading...</h1>;  
   
     if (getData) {
-      let fairness;
-      let utility;
+      let fairness, utility;
+      let base_rates, base_rates_labels;
+      let shares, shares_labels;
       if (getData.fingerprint.status === 200) {
         fairness = getData.fingerprint.data.metric_values_slider_dict.fairness;
-        utility = getData.fingerprint.data.metric_values_slider_dict.utility
+        utility = getData.fingerprint.data.metric_values_slider_dict.utility;
+      }
+      if (getData.baseRates.status === 200) {
+        base_rates = getData.baseRates.data.statistic;
+        base_rates_labels = getData.baseRates.data.labels;
+      }
+      if (getData.shares.status === 200) {
+        shares = getData.shares.data.statistic;
+        shares_labels = getData.shares.data.labels;
       }
 
       return (
 
         <div>
-          {getData.baseRates.status === 200 ? 
-            <div>
-              <h3>Stats</h3>
-              base rates: {JSON.stringify(getData.baseRates.data)}
-              {/* <ComparisonPlot labels={["Women", "Men"]} data={getData.baseRates.data} ylabel={'Base rate'}/> */}
-            </div> 
-            
+          {getData.baseRates.status === 200 && getData.shares.status == 200 ? 
+            <Statistics base_rates={base_rates} base_rates_labels={base_rates_labels} shares={shares} shares_labels={shares_labels} />
           :
           <p>Base rates failed with status: {getData.baseRates.status}</p>}
 
