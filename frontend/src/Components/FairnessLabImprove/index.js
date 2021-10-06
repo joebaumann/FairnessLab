@@ -4,6 +4,9 @@ import axios from 'axios'
 import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
 
+// the following imports are used to access the static data instead of fetching it dynamically from the backend
+import results_for_all_metrics_and_all_sliders from '../../data_static/results_for_all_metrics_and_all_sliders.json';
+
 function FairnessLabImprove() {
     return(
       <div className="FairnessLabImprove">
@@ -13,8 +16,9 @@ function FairnessLabImprove() {
     )
   }
   
-  function MetricSelected({fairnessMetric, sliderValue}) {
+  function MetricSelected(props) {
 
+    /*
     // test the connection
     const [testMessage, setTestMessage] = useState({});
     useEffect(()=>{
@@ -28,6 +32,7 @@ function FairnessLabImprove() {
         console.log(error)
       })
     }, [])
+    */
 
     // get the data for selected fairness metric and slider value
     const [loading, setLoading] = useState(false);
@@ -37,10 +42,15 @@ function FairnessLabImprove() {
       // uncomment if login is required
       // if (!login) return;
       setLoading(true);
-      let url = 'http://localhost:5000/fairnessmetrics/' + fairnessMetric + '/' + sliderValue;
+
+
+      /*
+
+      // use this block to fetch the data dynamically from the backend
+      
+      let url = 'http://localhost:5000/fairnessmetrics/' + props.fairnessMetric + '/' + props.sliderValue;
       axios.get(url)
       .then(response => {
-        console.log("funktionierts!", response.status)
         console.log("funktionierts?", response)
         setGetData(response)
       })
@@ -48,8 +58,17 @@ function FairnessLabImprove() {
       .catch(error => {
         console.log(error)
       })
+
+      */
+      
+      // use these three lines to load the static data from the frontend
+      var mySliderValue = parseFloat(props.sliderValue).toFixed(1);
+      let static_response_data = {metric_values_slider_dict: results_for_all_metrics_and_all_sliders[props.fairnessMetric][mySliderValue]}
+      setGetData({status: 200, data: static_response_data})
+      setLoading(false)
   
-    }, [fairnessMetric, sliderValue])
+
+    }, [props.fairnessMetric, props.sliderValue])
     
     if (loading) return <h1>Loading...</h1>;  
   
@@ -86,6 +105,7 @@ function FairnessLabImprove() {
   
     useEffect(() => {
       console.log(`Fairness metric chosen: ${fairnessMetric}!`);
+      // TODO: changing the fairness metric does not rerender the MetricSelected component!
     }, [fairnessMetric]);
     
     useEffect(() => {
