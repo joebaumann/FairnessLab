@@ -41,6 +41,10 @@ function FairnessLabAudit() {
     const [loading, setLoading] = useState(false);
     const [getData, setGetData] = useState(null);
   
+
+    /*
+
+    // use this block to fetch the data dynamically from the backend
     function getBaseRates() {
       return axios.get('http://localhost:5000/baserates');
     }
@@ -52,6 +56,8 @@ function FairnessLabAudit() {
     function getFingerprint() {
       return axios.get('http://localhost:5000/fingerprint');
     }
+
+    */
     
 
     useEffect(()=>{
