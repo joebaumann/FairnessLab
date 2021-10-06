@@ -5,6 +5,11 @@ import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
 import Statistics from '../Statistics';
 
+// the following imports are used to access the static data instead of fetching it dynamically from the backend
+import base_rates from '../../data_static/base_rates.json';
+import shares from '../../data_static/shares.json';
+import fingerprint from '../../data_static/fingerprint.json';
+
 function FairnessLabAudit() {
     return(
       <div className="FairnessLabAudit">
@@ -16,6 +21,7 @@ function FairnessLabAudit() {
   
   function FairnessAudit({fairnessMetric, sliderValue}) {
 
+    /* 
     // test the connection
     const [testMessage, setTestMessage] = useState({});
     useEffect(()=>{
@@ -29,6 +35,7 @@ function FairnessLabAudit() {
         console.log(error)
       })
     }, [])
+    */
 
     // get the data for selected fairness metric and slider value
     const [loading, setLoading] = useState(false);
@@ -52,10 +59,12 @@ function FairnessLabAudit() {
       // if (!login) return;
       setLoading(true);
 
+      /*
+
+      // use this block to fetch the data dynamically from the backend
       
       Promise.all([getBaseRates(), getShares(), getFingerprint()])
       .then(response => {
-        console.log("funktionierts!", response.status)
         console.log("funktionierts?", response)
         setGetData({"baseRates": response[0], "shares": response[1], "fingerprint": response[2]})
       })
@@ -63,6 +72,13 @@ function FairnessLabAudit() {
       .catch(error => {
         console.log(error)
       })
+
+      */
+      
+     // use these two lines to load the static data from the frontend
+     setGetData({"baseRates": {status: 200, data: base_rates}, "shares": {status: 200, data: shares}, "fingerprint": {status: 200, data: fingerprint}})
+     setLoading(false)
+     
   
     }, [fairnessMetric, sliderValue])
     
