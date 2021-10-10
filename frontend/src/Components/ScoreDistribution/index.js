@@ -11,15 +11,16 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
            color: "rgba(98, 182, 239, 0.4)",
         },
       };
-      const trace2 = {
+    const trace2 = {
         x: scores[1],
         type: "histogram",
         name: labels[1],
         marker: {
            color: "rgba(255, 177, 101, 0.4)",
         },
-      };
-
+    };
+    const data = [trace1, trace2];
+    
       const threshold1 = {
         type: 'line',
         x0: thresholds[0],
@@ -45,8 +46,7 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
           dash: 'dot'
         }
       }
-      
-      const data = [trace1, trace2];
+
       const layout = {
           barmode: "overlay", 
           title: "Score Distribution",
