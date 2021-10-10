@@ -102,13 +102,15 @@ function FairnessLabImprove() {
     const [fairnessMetric, setFairnessMetric] = useState('acceptance');
     const [sliderValue, setSliderValue] = useState(0);
     const [sliderMoving, setSliderMoving] = useState(false);
+    const [subcomponentKey, setSubcomponentKey] = useState(0);
   
     useEffect(() => {
-      console.log(`Fairness metric chosen: ${fairnessMetric}!`);
-      // TODO: changing the fairness metric does not rerender the MetricSelected component!
+      // Fairness metric from fropdown chosen
+      setSubcomponentKey(subcomponentKey + 1);
     }, [fairnessMetric]);
     
     useEffect(() => {
+      // slider value moved
       console.log(`Slider value chosen ${sliderValue} !`);
     }, [sliderValue]);
     
@@ -131,7 +133,7 @@ function FairnessLabImprove() {
         </label>
 
         {!sliderMoving
-          ? <MetricSelected fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
+          ? <MetricSelected key={subcomponentKey} fairnessMetric={fairnessMetric} sliderValue={sliderValue}/>
           : <h1>Please pick a slider value</h1>
         }
 
