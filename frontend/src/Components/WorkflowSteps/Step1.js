@@ -30,7 +30,7 @@ export function Step1(props) {
   return (
     <div className="Step1">
 
-      'Please select or add a dataset:'
+      Please select or add a dataset:
       <br />
       Selected: {props.dataset}
       <br />
@@ -44,13 +44,13 @@ export function Step1(props) {
           onChange={handleChange}
           label="Dataset"
         >
-          <MenuItem value="">
+          {/* <MenuItem value="">
             <em>None</em>
-          </MenuItem>
+          </MenuItem> */}
           {/* TODO: use available datasets as selection items */}
-          <MenuItem value={"dataset1"}>dataset1</MenuItem>
-          <MenuItem value={"dataset2"}>dataset2</MenuItem>
-          <MenuItem value={"dataset3"}>dataset3</MenuItem>
+          <MenuItem value={"HR"}>HR</MenuItem>
+          <MenuItem value={"Kreditvergabe"}>Kreditvergabe</MenuItem>
+          <MenuItem value={"Kindeswohlschutz"}>Kindeswohlschutz</MenuItem>
         </Select>
       </FormControl>
     </div>
