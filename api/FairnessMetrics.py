@@ -41,7 +41,7 @@ class BaseRates(Resource):
         base_rates = {"statistic": [base_rate_women, base_rate_men], "labels": ["Women", "Men"]}
 
         """
-        # # navigate to http://127.0.0.1:5000/base_rates in the browser
+        # # navigate to http://127.0.0.1:5000/baserates in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
         with open('frontend/src/data_static/base_rates.json', 'w') as outfile:
