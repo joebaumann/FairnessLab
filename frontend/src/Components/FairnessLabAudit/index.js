@@ -6,9 +6,9 @@ import FairnessFingerprint from '../FairnessFingerprint';
 import Statistics from '../Statistics';
 
 // the following imports are used to access the static data instead of fetching it dynamically from the backend
-import base_rates from '../../data_static/base_rates.json';
-import shares from '../../data_static/shares.json';
-import fingerprint from '../../data_static/fingerprint.json';
+import base_rates from '../../data_static/hr/base_rates.json';
+import shares from '../../data_static/hr/shares.json';
+import fingerprint from '../../data_static/hr/fingerprint.json';
 
 function FairnessLabAudit() {
     return(

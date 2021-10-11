@@ -3,15 +3,17 @@ import pickle
 import json
 
 
+folder = "hr"
+
 def load_data():
-    with open('data/metric_values_slider_dict_PPV.txt', 'rb') as fp:
+    with open('data/' + folder + '/metric_values_slider_dict_PPV.txt', 'rb') as fp:
         metric_values_slider_dict = pickle.load(fp)
     
-    with open('data/y_pred_aware.txt', 'rb') as fp:
+    with open('data/' + folder + '/y_pred_aware.txt', 'rb') as fp:
         data = pickle.load(fp)
     
-    ix_women = data['X_test']['gender'] == 0
-    ix_men = data['X_test']['gender'] == 1
+    ix_women = data['X_test']['Gender'] == 0
+    ix_men = data['X_test']['Gender'] == 1
     s = data['s_test']
 
     return data, metric_values_slider_dict, ix_women, ix_men, s
@@ -23,13 +25,13 @@ class Shares(Resource):
         share_men = len(data['y_test'][ix_men])/len(data['y_test'])
         shares = {"statistic": [share_women, share_men], "labels": ["Women", "Men"]}
 
-        """
+        
         # navigate to http://127.0.0.1:5000/shares in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
-        with open('frontend/src/data_static/shares.json', 'w') as outfile:
+        with open('frontend/src/data_static/' + folder + '/shares.json', 'w') as outfile:
             json.dump(shares, outfile)
-        """
+        
         
         return shares
 
@@ -44,9 +46,9 @@ class BaseRates(Resource):
         # # navigate to http://127.0.0.1:5000/baserates in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
-        with open('frontend/src/data_static/base_rates.json', 'w') as outfile:
+        with open('frontend/src/data_static/' + folder + '/base_rates.json', 'w') as outfile:
             json.dump(base_rates, outfile)
-        """
+        
         
         return base_rates
 
@@ -58,13 +60,13 @@ class Fingerprint(Resource):
 
         metric_values_slider_dict = {"metric_values_slider_dict": metric_values_slider_dict["acceptance"][0.0]}
 
-        """
+        
         # # navigate to http://127.0.0.1:5000/fingerprint in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
-        with open('frontend/src/data_static/fingerprint.json', 'w') as outfile:
+        with open('frontend/src/data_static/' + folder + '/fingerprint.json', 'w') as outfile:
             json.dump(metric_values_slider_dict, outfile)
-        """
+        
 
         return metric_values_slider_dict
 
@@ -76,13 +78,13 @@ class Scores(Resource):
 
         scores = {"scores_men": scores_men, "scores_women": scores_women}
 
-        """
+        
         # # navigate to http://127.0.0.1:5000/scores in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
-        with open('frontend/src/data_static/scores.json', 'w') as outfile:
+        with open('frontend/src/data_static/' + folder + '/scores.json', 'w') as outfile:
             json.dump(scores, outfile)
-        """
+        
 
         return scores
 
@@ -94,13 +96,13 @@ class FairnessMetricsAndSliderValues(Resource):
         data, metric_values_slider_dict, ix_women, ix_men, s = load_data()
         data_for_label_and_slider = {"metric_values_slider_dict": metric_values_slider_dict[fairness_label][slider_value]}
 
-        """
+        
         # # navigate to http://127.0.0.1:5000/fairnessmetrics/tpr/0.1 in the browser
         # use this once to move the data to the frontend more easily.
         # Then also make sure the the frontend uses this data directly instead of requesting it dynamically from the backend.
-        with open('frontend/src/data_static/results_for_all_metrics_and_all_sliders.json', 'w') as outfile:
+        with open('frontend/src/data_static/' + folder + '/results_for_all_metrics_and_all_sliders.json', 'w') as outfile:
             json.dump(metric_values_slider_dict, outfile)
-        """
+        
 
         return data_for_label_and_slider
 
