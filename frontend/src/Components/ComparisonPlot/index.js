@@ -67,7 +67,16 @@ class ComparisonPlot extends Component {
     render() {
       return (
         <MDBContainer className="ComparisonPlot">
-          <h3 className="mt-5">{this.props.ylabel}</h3>
+          {this.props.ylabel == "acceptance" ?
+            <h3 className="mt-5">Statistical Parity</h3>
+            :
+            [
+              this.props.ylabel == "Base rate" | this.props.ylabel == "Shares of" ?
+              <h3 className="mt-5">{this.props.ylabel}</h3>
+              :
+              <h3 className="mt-5" style={{textTransform: 'uppercase'}}>{this.props.ylabel}</h3>
+            ]
+          }
           <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
         </MDBContainer>
       );
