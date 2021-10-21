@@ -8,10 +8,8 @@ const FairnessFingerprint = ({utility, fairness, labels}) => {
     return (
         <div>
             <div className="Metrics">
-                {Object.keys(config).map((metricName, i) =>
-                {true &&
-                    <ComparisonPlot labels={labels} data={fairness[metricName]} ylabel={config[metricName]["visible"]} explanation={config[metricName]["explanations"]["hr"]["de"]} key={metricName}/>
-                }
+                {["acceptance", "tpr"].map((metricName, i) =>
+                    <ComparisonPlot labels={labels} data={fairness[metricName]} ylabel={config[metricName]["label"]} explanation={config[metricName]["explanations"]["hr"]["de"]} key={metricName}/>
                 )}
                 <UtilityPlot utility={utility}/>
             </div>
