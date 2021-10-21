@@ -7,10 +7,9 @@
 
 .ComparisonPlot {
     margin: 12px;
-    margin-top: 15vh;
     display: inline-block;
     width: 14.9999%;
-    height: 50vh;
+    height: 30vh;
 }
   
 @media only screen and (max-width: 850px) {
@@ -32,7 +31,7 @@
 @media only screen and (max-width: 500px) {
     .ComparisonPlot {
       width: 100%;
-      margin: 6px 0 6px 0;
+      margin: 5vh 0 5vh 0;
     }
 }
 

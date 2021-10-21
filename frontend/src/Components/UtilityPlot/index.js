@@ -57,7 +57,8 @@ class UtilityPlot extends Component {
     render() {
       return (
         <MDBContainer className="UtilityPlot">
-          <h3 className="mt-5">Utility</h3>
+          <h3 className="mt-5">Accuracy</h3>
+          <span>Zeigt den Anteil an korrekten Vorhersagen</span>
           <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
         </MDBContainer>
       );

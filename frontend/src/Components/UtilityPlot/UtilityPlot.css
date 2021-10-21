@@ -30,6 +30,6 @@
 @media only screen and (max-width: 500px) {
     .UtilityPlot {
       width: 100%;
-      margin: 6px 0 6px 0;
+      margin: 5vh 0 5vh 0;
     }
 }
