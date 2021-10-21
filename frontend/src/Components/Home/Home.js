@@ -1,5 +1,6 @@
 import React from "react";
 import Header from '../Header';
+import './Home.css'
 
 function Home() {
   return (
@@ -18,7 +19,17 @@ function Home() {
         <br/>
         <b>Improve</b>:
         <br/>
-        Hier kannst Du die Entscheidungsregel selbst verändern indem Du eine Group-Fairness-Metrik wählst, welche erfüllt werden soll. Zudem kannst due eine Equalization Rate wählen: <b>0</b> heisst, dass die Metrik gar nicht erfüllt werden muss (was equivalent ist mit dem Utility-maximierenden Algorithmus). <b>1</b> heisst, dass die Metrik für beide Gruppen exakt gleich sein muss (in diesem Fall wird die Utility maximinert unter der Nebenbedingung, dass die Gleichheit der Fairness Metrik erfüllt ist).
+        Hier kannst Du die Entscheidungsregel selbst verändern indem Du eine Group-Fairness-Metrik wählst, welche erfüllt werden soll.
+        <br/>
+        Zudem kannst du eine Equalization Rate wählen:
+        <ul>
+          <li>
+            <b>0</b> heisst, dass die Metrik gar nicht erfüllt werden muss (was equivalent ist mit dem Utility-maximierenden Algorithmus).
+          </li>
+          <li>
+            <b>1</b> heisst, dass die Metrik für beide Gruppen exakt gleich sein muss (in diesem Fall wird die Utility maximinert unter der Bedingung, dass die Gleichheit der Fairnessmetrik erfüllt ist).
+          </li>
+        </ul>
       </p>
       <p>
 

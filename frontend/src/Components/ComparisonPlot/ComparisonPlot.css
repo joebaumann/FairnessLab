@@ -4,18 +4,20 @@
     height: 20vh;
 } */
 
+
 .ComparisonPlot {
     margin: 12px;
+    margin-top: 15vh;
     display: inline-block;
     width: 14.9999%;
-    height: 30vh;
+    height: 50vh;
 }
   
 @media only screen and (max-width: 850px) {
     .ComparisonPlot {
       width: 29.99999%;
       margin: 6px;
-      margin-top: 5vh;
+      margin-top: 15vh;
     }
 }
 
@@ -32,4 +34,12 @@
       width: 100%;
       margin: 6px 0 6px 0;
     }
+}
+
+/* .Bar {
+  height: 50vh;
+} */
+
+.FirstRow {
+  margin-top: 0vh !important;
 }

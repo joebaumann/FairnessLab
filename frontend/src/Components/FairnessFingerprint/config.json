@@ -1,0 +1,49 @@
+{
+    "acceptance": {
+        "label": "Statistical parity",
+        "explanations": {
+            "hr": {
+                "en": "Compares rates of women and men who are selected in the first round",
+                "de": "Vergleicht die Raten, mit denen Frauen und Männer in die Vorselektion kommen."
+            }
+        },
+        "visible": true
+    },
+    "tpr": {
+        "label": "Equality of opportunity",
+        "explanations": {
+            "hr": {
+                "en": "Compares rates of qualified women and men who are selected in the first round",
+                "de": "Vergleicht die Raten, mit denen Frauen und Männer, die gute Kandidat*innen wären, in die Vorselektion kommen."
+            }
+        },
+        "visible": true
+    },
+    "fpr": {
+        "label": "Equality of FPRs",
+        "explanations": {
+            "hr": {
+                "de": "Vergleicht die Raten, mit denen Frauen und Männer, die keine guten Kandidat*innen wären, in die Vorselektion kommen."
+            }
+        },
+        "visible": false
+    },
+    "ppv": {
+        "label": "Equality of PPVs",
+        "explanations": {
+            "hr": {
+                "de": "Vergleicht die Raten, zu denen Frauen und Männer, die in die Vorselektion kommen, gute Kandidat*innen sind."
+            }
+        },
+        "visible": false
+    },
+    "for": {
+        "label": "Equality of FORs",
+        "explanations": {
+            "hr": {
+                "de": "Vergleicht die Raten, zu denen Frauen und Männer, die nicht in die Vorselektion kommen, gute Kandidat*innen gewesen wären."
+            }
+        },
+        "visible": false
+    }
+}
