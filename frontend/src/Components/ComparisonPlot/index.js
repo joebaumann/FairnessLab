@@ -52,7 +52,9 @@ class ComparisonPlot extends Component {
                       color: "rgba(0, 0, 0, 0.1)"
                     },
                     ticks: {
-                      beginAtZero: true
+                      beginAtZero: true,
+                      min: 0,
+                      max: 1
                     }
                   }
                 ]
