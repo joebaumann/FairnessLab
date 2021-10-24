@@ -4,7 +4,7 @@
         "explanations": {
             "hr": {
                 "en": "Compares rates of women and men who are selected in the first round",
-                "de": "Vergleicht die Anteile an Frauen und Männern, die in die Vorselektion kommen."
+                "de": "Welcher Anteil an Frauen und Männern kommt in die Vorselektion von HR?"
             }
         },
         "visible": true
@@ -14,7 +14,7 @@
         "explanations": {
             "hr": {
                 "en": "Compares rates of qualified women and men who are selected in the first round",
-                "de": "Wir schauen uns nur qualifizierte Bewerber an: Welcher Anteil an Frauen und Männern kommt in die Vorselektion?"
+                "de": "Wir schauen uns nur Bewerber an, die eine gute Performance-Beurteilung erhielten: Welcher Anteil an Frauen und Männern kommt in die Vorselektion von HR?"
             }
         },
         "visible": true
