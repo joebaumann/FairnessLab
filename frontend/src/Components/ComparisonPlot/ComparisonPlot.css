@@ -24,14 +24,14 @@
     .ComparisonPlot {
       width: 45.99999%;
       margin: 6px;
-      margin-top: 5vh;
+      margin-top: 20vh;
     }
 }
   
 @media only screen and (max-width: 500px) {
     .ComparisonPlot {
       width: 100%;
-      margin: 5vh 0 5vh 0;
+      margin: 5vh 0 10vh 0;
     }
 }
 
