@@ -11,7 +11,7 @@
     height: 30vh;
 }
   
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 900px) {
     .UtilityPlot {
       width: 29.99999%;
       margin: 6px;
