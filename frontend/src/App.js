@@ -30,8 +30,8 @@ function App() {
             <Route path="/FairnessLab/workflow" component={Workflow}/> */}
             <Route path="/FairnessLab/audit" component={FairnessLabAudit}/>
             <Route path="/FairnessLab/improve" component={FairnessLabMakeFair}/>
-            {/* <Route path="/FairnessLab/about" component={About}/>
-            <Route path="/FairnessLab/contact" component={Contact}/> */}
+            <Route path="/FairnessLab/about" component={About}/>
+            <Route path="/FairnessLab/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
           </Switch>
         
