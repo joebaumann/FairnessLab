@@ -13,7 +13,7 @@
         "label": "Equality of opportunity (=TPR)",
         "explanations": {
             "hr": {
-                "en": "We just look at applicants who received a good performance evaluation. To what shares are women and men selected?",
+                "en": "We just look at applicants who received a good performance evaluation: What shares of women and men are selected?",
                 "de": "Wir schauen uns nur Bewerber an, die eine gute Performance-Beurteilung erhielten: Welcher Anteil an Frauen und Männern kommt in die Vorselektion von HR?"
             }
         },
@@ -23,7 +23,7 @@
         "label": "Equality of FPRs",
         "explanations": {
             "hr": {
-                "en": "We just look at applicants who did not received a good performance evaluation. To what shares are women and men selected?",
+                "en": "We just look at applicants who did not receive a good performance evaluation: What shares of women and men are selected?",
                 "de": "Vergleicht die Raten, mit denen Frauen und Männer, die keine guten Kandidat*innen wären, in die Vorselektion kommen."
             }
         },
@@ -33,7 +33,7 @@
         "label": "Equality of PPVs",
         "explanations": {
             "hr": {
-                "en": "We just look at applicants who are selected. To what shares did women and men receive a good performance evaluation?",
+                "en": "We just look at applicants who are selected: What shares of women and men received a good performance evaluation?",
                 "de": "Vergleicht die Raten, zu denen Frauen und Männer, die in die Vorselektion kommen, gute Kandidat*innen sind."
             }
         },
@@ -43,7 +43,7 @@
         "label": "Equality of FORs",
         "explanations": {
             "hr": {
-                "en": "We just look at applicants who are not selected. To what shares did women and men receive a good performance evaluation?",
+                "en": "We just look at applicants who are not selected: What shares of women and men received a good performance evaluation?",
                 "de": "Vergleicht die Raten, zu denen Frauen und Männer, die nicht in die Vorselektion kommen, gute Kandidat*innen gewesen wären."
             }
         },

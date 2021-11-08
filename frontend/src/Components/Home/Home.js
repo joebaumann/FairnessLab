@@ -49,10 +49,10 @@ function Home() {
         In addition to that, you can choose to what extent the chosen metric should be satisfied by changing the equalization rate:
         <ul>
           <li>
-            <b>Equalization rate=0</b> means, that the chosen metric does not need to be satisfied at all (this is equivalent to the utility-maximizing algorithm).
+            <b>Equalization rate=0</b> means that the chosen metric does not need to be satisfied at all (this is equivalent to the utility-maximizing algorithm).
           </li>
           <li>
-            <b>Equalization rate=1</b> means, that the chosen metric must be fully satisfied. Hence, the compared rates must be equal for both groups. In this case the utility is satisfied subject to the fairness constraint.
+            <b>Equalization rate=1</b> means that the chosen metric must be fully satisfied. Hence, the compared rates must be equal for both groups. In this case the utility is satisfied subject to the fairness constraint.
           </li>
         </ul>
       </p>

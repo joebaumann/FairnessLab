@@ -11,7 +11,7 @@ class UtilityPlot extends Component {
               labels: ["Decision-maker"],
               datasets: [
                 {
-                  label: "in CHF",
+                  label: "in %",
                   data: [props.utility],
                   backgroundColor: [
                     "rgba(113, 205, 205,0.4)"

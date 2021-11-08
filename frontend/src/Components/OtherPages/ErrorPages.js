@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+import './Pages.css'
 
 export function Error404() {
   let location = useLocation();
