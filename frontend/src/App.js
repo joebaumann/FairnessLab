@@ -1,5 +1,6 @@
 import './App.css';
 import {
+  HashRouter,
   BrowserRouter as Router,
   Switch,
   Route,
@@ -19,7 +20,7 @@ function App() {
 
   return (
     <div>
-      <Router>
+      <HashRouter>
 
         <Navbar/>
 
@@ -36,7 +37,7 @@ function App() {
           </Switch>
         
         </div>
-      </Router>
+      </HashRouter>
     </div>
   );
 }
