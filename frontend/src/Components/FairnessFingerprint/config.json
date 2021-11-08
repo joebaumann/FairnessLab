@@ -3,17 +3,17 @@
         "label": "Statistical parity",
         "explanations": {
             "hr": {
-                "en": "Compares rates of women and men who are selected in the first round",
+                "en": "Compares rates of women and men who are selected in the first round.",
                 "de": "Welcher Anteil an Frauen und Männern kommt in die Vorselektion von HR?"
             }
         },
         "visible": true
     },
     "tpr": {
-        "label": "Equality of opportunity",
+        "label": "Equality of opportunity (=TPR)",
         "explanations": {
             "hr": {
-                "en": "Compares rates of qualified women and men who are selected in the first round",
+                "en": "We just look at applicants who received a good performance evaluation. To what shares are women and men selected?",
                 "de": "Wir schauen uns nur Bewerber an, die eine gute Performance-Beurteilung erhielten: Welcher Anteil an Frauen und Männern kommt in die Vorselektion von HR?"
             }
         },
@@ -23,27 +23,30 @@
         "label": "Equality of FPRs",
         "explanations": {
             "hr": {
+                "en": "We just look at applicants who did not received a good performance evaluation. To what shares are women and men selected?",
                 "de": "Vergleicht die Raten, mit denen Frauen und Männer, die keine guten Kandidat*innen wären, in die Vorselektion kommen."
             }
         },
-        "visible": false
+        "visible": true
     },
     "ppv": {
         "label": "Equality of PPVs",
         "explanations": {
             "hr": {
+                "en": "We just look at applicants who are selected. To what shares did women and men receive a good performance evaluation?",
                 "de": "Vergleicht die Raten, zu denen Frauen und Männer, die in die Vorselektion kommen, gute Kandidat*innen sind."
             }
         },
-        "visible": false
+        "visible": true
     },
     "for": {
         "label": "Equality of FORs",
         "explanations": {
             "hr": {
+                "en": "We just look at applicants who are not selected. To what shares did women and men receive a good performance evaluation?",
                 "de": "Vergleicht die Raten, zu denen Frauen und Männer, die nicht in die Vorselektion kommen, gute Kandidat*innen gewesen wären."
             }
         },
-        "visible": false
+        "visible": true
     }
 }

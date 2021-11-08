@@ -9,7 +9,7 @@ const FairnessFingerprint = ({utility, fairness, labels}) => {
         <div>
             <div className="Metrics">
                 {Object.keys(config).map((metricName, i) =>
-                    <ComparisonPlot labels={labels} data={fairness[metricName]} ylabel={config[metricName]["label"]} explanation={config[metricName]["explanations"]["hr"]["de"]} key={metricName}/>
+                    <ComparisonPlot labels={labels} data={fairness[metricName]} ylabel={config[metricName]["label"]} explanation={config[metricName]["explanations"]["hr"]["en"]} key={metricName}/>
                 )}
                 <UtilityPlot utility={utility}/>
             </div>

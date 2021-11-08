@@ -5,9 +5,10 @@ import './Home.css'
 function Home() {
   return (
     <div>
-      <Header title="Welcome to the Fairness Lab :)"/>
+      {/* <Header title="Welcome to the Fairness Lab :)"/> */}
+      <Header title="Fairness Lab @ Applied ML Days EPFL 2021"/>
       {/* This tool is built to help you evaluate the fairness of your tool and improve it. */}
-      <h2>Vielen Dank für Deine Teilnahme an unserer Studie!</h2>
+      {/* <h2>Vielen Dank für Deine Teilnahme an unserer Studie!</h2>
       <p>
         In der Navigationsleiste findest Du zwei Sektionen:
         <br/>
@@ -30,9 +31,30 @@ function Home() {
             <b>1</b> heisst, dass die Metrik für beide Gruppen exakt gleich sein muss (in diesem Fall wird die Utility maximinert unter der Bedingung, dass die Gleichheit der Fairnessmetrik erfüllt ist).
           </li>
         </ul>
-      </p>
+      </p> */}
+      <h2>Thanks for joining today's online workshop!</h2>
       <p>
-
+        In the navigation bar you find the following two sections:
+        <br/>
+        <br/>
+        <b>Audit</b>:
+        <br/>
+        This page visualizes the results of the various fairness metrics assuming that the HR team applies a utility-maximizing algorithm.
+        <br/>
+        <br/>
+        <b>Improve</b>:
+        <br/>
+        On this page, you can adjust the decision rule by choosing a fairness metric that should be satisfied.
+        <br/>
+        In addition to that, you can choose to what extent the chosen metric should be satisfied by changing the equalization rate:
+        <ul>
+          <li>
+            <b>Equalization rate=0</b> means, that the chosen metric does not need to be satisfied at all (this is equivalent to the utility-maximizing algorithm).
+          </li>
+          <li>
+            <b>Equalization rate=1</b> means, that the chosen metric must be fully satisfied. Hence, the compared rates must be equal for both groups. In this case the utility is satisfied subject to the fairness constraint.
+          </li>
+        </ul>
       </p>
 
     </div>
