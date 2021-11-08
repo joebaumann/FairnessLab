@@ -7,7 +7,7 @@ export function Error404() {
     <div>
       <h1>Resource not found at {location.pathname}</h1>
       <p>
-        <Link to="/FairnessLab">Go home</Link>
+        <Link to="/">Go home</Link>
       </p>
     </div>
   );
