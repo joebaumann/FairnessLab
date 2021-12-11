@@ -32,7 +32,7 @@ function Home() {
           </li>
         </ul>
       </p> */}
-      <h2>Thanks for joining today's online workshop!</h2>
+      <h2>Thanks for joining today's Sounding Board meeting!</h2>
       <p>
         In the navigation bar you find the following two sections:
         <br/>
@@ -52,7 +52,7 @@ function Home() {
             <b>Equalization rate=0</b> means that the chosen metric does not need to be satisfied at all (this is equivalent to the utility-maximizing algorithm).
           </li>
           <li>
-            <b>Equalization rate=1</b> means that the chosen metric must be fully satisfied. Hence, the compared rates must be equal for both groups. In this case the utility is satisfied subject to the fairness constraint.
+            <b>Equalization rate=1</b> means that the chosen metric must be fully satisfied. Hence, the compared rates must be equal for both groups. In this case the utility is maximized subject to the fairness constraint.
           </li>
         </ul>
       </p>
