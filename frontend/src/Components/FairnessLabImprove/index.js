@@ -125,9 +125,9 @@ function FairnessLabImprove() {
           <select className="Dropdown" defaultValue={'acceptance'} onChange={(e) => setFairnessMetric(e.target.value)}>
             <option value="acceptance">Statistical Parity</option>
             <option value="tpr">Equality of opportunity</option>
-            <option value="fpr">FPR</option>
+            {/* <option value="fpr">FPR</option>
             <option value="ppv">PPV</option>
-            <option value="for">FOR</option>
+            <option value="for">FOR</option> */}
           </select>
         </label>
 
