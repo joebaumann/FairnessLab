@@ -6,7 +6,7 @@ function Home() {
   return (
     <div>
       {/* <Header title="Welcome to the Fairness Lab :)"/> */}
-      <Header title="Fairness Lab @ Applied ML Days EPFL 2021"/>
+      <Header title="Fairness Lab @ Sounding Board 2021"/>
       {/* This tool is built to help you evaluate the fairness of your tool and improve it. */}
       {/* <h2>Vielen Dank für Deine Teilnahme an unserer Studie!</h2>
       <p>
