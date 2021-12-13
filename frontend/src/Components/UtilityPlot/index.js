@@ -12,7 +12,7 @@ class UtilityPlot extends Component {
               datasets: [
                 {
                   label: "in %",
-                  data: [props.utility],
+                  data: [Math.round(props.utility * 10000)/100],
                   backgroundColor: [
                     "rgba(113, 205, 205,0.4)"
                   ],
@@ -44,7 +44,7 @@ class UtilityPlot extends Component {
                     ticks: {
                       beginAtZero: true,
                       min: 0,
-                      max: 1
+                      max: 100
                     }
                   }
                 ]

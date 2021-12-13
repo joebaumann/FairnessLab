@@ -12,7 +12,7 @@ class ComparisonPlot extends Component {
                 datasets: [
                   {
                     label: "in %",
-                    data: props.data,
+                    data: [Math.round(props.data[0] * 10000)/100, Math.round(props.data[1] * 10000)/100],
                     backgroundColor: [
                       "rgba(98,  182, 239,0.4)",
                       "rgba(255, 177, 101,0.4)",
@@ -54,7 +54,7 @@ class ComparisonPlot extends Component {
                     ticks: {
                       beginAtZero: true,
                       min: 0,
-                      max: 1
+                      max: 100
                     }
                   }
                 ]
@@ -69,6 +69,7 @@ class ComparisonPlot extends Component {
     render() {
       return (
         <MDBContainer className="ComparisonPlot">
+          {console.log([Math.round(this.props.data[0] * 10000)/100, Math.round(this.props.data[1] * 10000)/100])}
             <h3 className="mt-5">{this.props.ylabel}</h3>
             <span>{this.props.explanation}</span>
             <Bar className="Bar" data={this.state.dataBar} options={this.state.barChartOptions} />
