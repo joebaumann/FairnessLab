@@ -61,7 +61,7 @@ class UtilityPlot extends Component {
         <MDBContainer className="UtilityPlot">
           <h3 className="mt-5">Accuracy</h3>
           {/* <span>Zeigt den Anteil korrekter Vorhersagen über die Performance-Beurteilungen.</span> */}
-          <span>Share of correct classifications.</span>
+          <span>Share of correct classifications: {this.props.utility * 100}%</span>
           <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
         </MDBContainer>
       );
