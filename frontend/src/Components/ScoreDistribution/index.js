@@ -48,8 +48,7 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
       }
 
       const layout = {
-          barmode: "overlay", 
-          title: "Score Distribution",
+          barmode: "overlay",
           shapes: [threshold1, threshold2],
           xaxis: {
               type: 'histogram',
@@ -61,10 +60,13 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
         }
     };
     return (
-        <Plot className='ScoreDistribution'
+      <div className='ScoreDistribution'>
+        <h1>Score distribution</h1>
+        <Plot
             data={data}
             layout={layout}
         />
+      </div>
       );
 }
 
