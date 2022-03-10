@@ -5,7 +5,17 @@ import decisionmaker_utility from '../../data_static/compas/static_pareto/decisi
 import fairness_score from '../../data_static/compas/static_pareto/fairness_score.json';
 import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selectedPoints, setSelectedPoints}) => {
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+  
+
+const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selectedPoints, setSelectedPoints, colors, setColors}) => {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -16,8 +26,6 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
     const [suTN, setSuTN] = useState(0);
     const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('');
-
-    const [colors, setColors] = useState(Array(decisionmaker_utility.length).fill('#4e87ad'));
     
     return (
         <div className='ParetoPlot'>
@@ -95,7 +103,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
                             newColors[selectedPoint] = '#4e87ad'
                         } else {
                             selectedPoints.push(selectedPoint)
-                            newColors[selectedPoint] = '#C54C82'
+                            newColors[selectedPoint] = getRandomColor()
                         }
                         console.log(selectedPoints)
                         setColors(newColors)

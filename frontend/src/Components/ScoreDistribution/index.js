@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
 import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-const ScoreDistribution = ({scores, selectedPoints, labels}) => {
+const ScoreDistribution = ({scores, selectedPoints, labels, colors}) => {
     const trace1 = {
         y: scores[0],
         type: "histogram",
@@ -32,6 +32,7 @@ const ScoreDistribution = ({scores, selectedPoints, labels}) => {
     
     for (let s=0; s < selectedPoints.length; s++) {
       var selectedPoint = selectedPoints[s]
+      var color = colors[selectedPoint]
       var threshold1 = {
         type: 'line',
         y0: threshold_tuples[selectedPoint][0],
@@ -39,7 +40,7 @@ const ScoreDistribution = ({scores, selectedPoints, labels}) => {
         y1: threshold_tuples[selectedPoint][0],
         x1: 200,
         line: {
-          color: "rgba(98, 182, 239, 0.6)",
+          color: color,
           width: 1.5,
           dash: 'dot'
         }
@@ -53,7 +54,7 @@ const ScoreDistribution = ({scores, selectedPoints, labels}) => {
         y1: threshold_tuples[selectedPoint][1],
         x1: 200,
         line: {
-          color: "rgba(255, 177, 101, 0.6)",
+          color: color,
           width: 1.5,
           dash: 'dot'
         }
