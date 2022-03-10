@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
-import ScoreDistribution from '../ScoreDistribution';
-import scores from '../../data_static/hr/scores.json';
+// import ScoreDistribution from '../ScoreDistribution';
+// import scores from '../../data_static/hr/scores.json';
 
 // the following imports are used to access the static data instead of fetching it dynamically from the backend
 import results_for_all_metrics_and_all_sliders from '../../data_static/hr/results_for_all_metrics_and_all_sliders.json';
@@ -92,7 +92,7 @@ function FairnessLabImprove() {
               <FairnessFingerprint utility={utility} fairness={fairness} labels={["Women", "Men"]} />            
             :
             <p>Fairness fingerprint failed with status: {getData.fingerprint.status}</p>}
-            <ScoreDistribution scores={[scores["scores_women"], scores["scores_men"]]} thresholds={thresholds} labels={["Women", "Men"]}/>
+            {/* <ScoreDistribution scores={[scores["scores_women"], scores["scores_men"]]} thresholds={thresholds} labels={["Women", "Men"]}/> */}
           </div>
         </div>
     
