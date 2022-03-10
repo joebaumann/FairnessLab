@@ -80,7 +80,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
 
                     layout={ {
                         width: 1000,
-                        height: 1000,
+                        height: 500,
                         xaxis: { title: 'Fairness score' },
                         yaxis: { title: 'Decision-maker\'s utility' },
                         hovermode:'closest',
