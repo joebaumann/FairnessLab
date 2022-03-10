@@ -3,8 +3,9 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import decisionmaker_utility from '../../data_static/compas/static_pareto/decisionmaker_utility.json';
 import fairness_score from '../../data_static/compas/static_pareto/fairness_score.json';
+import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2}) => {
+const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selectedPoints, setSelectedPoints}) => {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -17,7 +18,6 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2}) => {
     const [subjectsCurrency, setSubjectsCurrency] = useState('');
 
     const [colors, setColors] = useState(Array(decisionmaker_utility.length).fill('#4e87ad'));
-    const [selectedPoints, setSelectedPoints] = useState([]);
     
     return (
         <div className='ParetoPlot'>
@@ -93,11 +93,13 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2}) => {
                         if (indexOfSelectedPoint > -1) {
                             selectedPoints.splice(indexOfSelectedPoint, 1)
                             newColors[selectedPoint] = '#4e87ad'
-                         } else {
-                             selectedPoints.push(selectedPoint)
-                             newColors[selectedPoint] = '#C54C82'
-                         }
-                        setColors(newColors);
+                        } else {
+                            selectedPoints.push(selectedPoint)
+                            newColors[selectedPoint] = '#C54C82'
+                        }
+                        console.log(selectedPoints)
+                        setColors(newColors)
+                        setSelectedPoints([...selectedPoints]);
                       }}
                 />
             </div>
