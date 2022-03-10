@@ -92,7 +92,7 @@ function FairnessLabImprove() {
               <FairnessFingerprint utility={utility} fairness={fairness} labels={["Women", "Men"]} />            
             :
             <p>Fairness fingerprint failed with status: {getData.fingerprint.status}</p>}
-            {/* <ScoreDistribution scores={[scores["scores_women"], scores["scores_men"]]} thresholds={thresholds} labels={["Women", "Men"]}/> */}
+            <ScoreDistribution scores={[scores["scores_women"], scores["scores_men"]]} thresholds={thresholds} labels={["Women", "Men"]}/>
           </div>
         </div>
     

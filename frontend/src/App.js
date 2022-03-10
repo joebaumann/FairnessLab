@@ -12,6 +12,7 @@ import Workflow from "./Components/Workflow";
 import Data from "./Components/Data";
 import FairnessLabAudit from "./Components/FairnessLabAudit";
 import FairnessLabMakeFair from "./Components/FairnessLabImprove";
+import FairnessLabPareto from "./Components/FairnessLabPareto";
 import About from "./Components/OtherPages/About";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";
@@ -31,6 +32,7 @@ function App() {
             <Route path="/workflow" component={Workflow}/> */}
             <Route path="/audit" component={FairnessLabAudit}/>
             <Route path="/improve" component={FairnessLabMakeFair}/>
+            <Route path="/pareto" component={FairnessLabPareto}/>
             <Route path="/about" component={About}/>
             <Route path="/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
