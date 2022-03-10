@@ -7,3 +7,7 @@
 .Slider {
     width: 50%;
 }
+
+input {
+    margin-left: 10px;
+}
