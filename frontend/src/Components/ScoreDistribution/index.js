@@ -26,7 +26,7 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
         x0: thresholds[0],
         y0: 0,
         x1: thresholds[0],
-        y1: 400,
+        y1: 200,
         line: {
           color: "rgba(98, 182, 239, 0.6)",
           width: 1.5,
@@ -39,7 +39,7 @@ const ScoreDistribution = ({scores, thresholds, labels}) => {
         x0: thresholds[1],
         y0: 0,
         x1: thresholds[1],
-        y1: 400,
+        y1: 200,
         line: {
           color: "rgba(255, 177, 101, 0.6)",
           width: 1.5,

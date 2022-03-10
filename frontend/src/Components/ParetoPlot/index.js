@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-const ParetoPlot = ({scores, labels}) => {
+const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2}) => {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -13,6 +13,7 @@ const ParetoPlot = ({scores, labels}) => {
     const [suTN, setSuTN] = useState(0);
     const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('');
+    
     return (
         <div className='ParetoConfiguration'>
             <h1>Configuration</h1>
@@ -44,6 +45,18 @@ const ParetoPlot = ({scores, labels}) => {
             <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="FN: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
             <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="TN: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
+            <h3>Pattern of Justice</h3>
+
+            <div>We will, for now, just assume that equality is our pattern of choice.</div>
+
+            <h3>Socio-demographic groups</h3>
+            <h5>Which socio-demographic groups do you want to compare?</h5>
+
+            <label for="group1">Group 1</label>
+            <input type="text" id="group1" value={group1} onChange={(e) => setGroup1(e.target.value)}/>
+            <br/>
+            <label for="group2">Group 2</label>
+            <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
         </div>
       );
 }
