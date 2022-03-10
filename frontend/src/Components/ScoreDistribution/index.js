@@ -121,6 +121,11 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
         type: 'histogram',
         title: 'Estimated repayment probability',
         range: [0, 1]
+      },
+      showlegend: true,
+      legend: {
+        x: 0,
+        y: 1
       }
     };
 
@@ -138,6 +143,10 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
         type: 'histogram',
         title: 'Estimated repayment probability',
         range: [0, 1]
+      },
+      legend: {
+        x: 1,
+        y: 1
       }
     };
 
