@@ -85,7 +85,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
         x1: 100,
         line: {
           color: color,
-          width: 1.5,
+          width: 3,
           dash: 'dot'
         }
       }
@@ -99,7 +99,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
         x1: 80,
         line: {
           color: color,
-          width: 1.5,
+          width: 3,
           dash: 'dot'
         }
       }
