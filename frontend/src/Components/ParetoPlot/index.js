@@ -5,17 +5,7 @@ import decisionmaker_utility from '../../data_static/compas/static_pareto/decisi
 import fairness_score from '../../data_static/compas/static_pareto/fairness_score.json';
 import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-  
-
-const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selectedPoints, setSelectedPoints, colors, setColors}) => {
+const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors}) => {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -26,11 +16,26 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
     const [suTN, setSuTN] = useState(0);
     const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('');
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function deselectAll() {
+        setSelectedPoints([])
+        setColors(Array(decisionmaker_utility.length).fill('#4e87ad'))
+    }
     
     return (
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
                 <h1>Configuration</h1>
+
                 <h2>Decision-maker utility</h2>
                 <h5>How much utility does the decision-maker derive from the decisions?</h5>
 
@@ -74,6 +79,8 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
             </div>
             <div className="ParetoPlots">
                 <h1>Pareto plots</h1>
+                <label>Number of thresholds</label>
+                <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
 
                 <Plot
                     data={[
@@ -82,15 +89,19 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
                         y: decisionmaker_utility,
                         mode: 'markers',
                         marker:{color: colors},
-                        type: 'scatter'
+                        type: 'scatter',
+                        hovertemplate: '<b>Decision-maker\'s utility</b>: %{y:.2f}' +
+                        '<br><b>Fairness score</b>: %{x}<br>' +
+                        '<b>Thresholds</b>: %{text}',
+                        text: threshold_tuples,
                     },
                     ]}
 
                     layout={ {
                         width: 1000,
                         height: 500,
-                        xaxis: { title: 'Fairness score' },
-                        yaxis: { title: 'Decision-maker\'s utility' },
+                        xaxis: { title: `Fairness score<br>1 - |utility(${group1}) - utility(${group2})|<br>where utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN)` },
+                        yaxis: { title: `Decision-maker's utility` },
                         hovermode:'closest',
                     } }
 
@@ -110,6 +121,12 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, selec
                         setSelectedPoints([...selectedPoints]);
                       }}
                 />
+
+                <div>
+                    <button onClick={deselectAll}>
+                        Deselect all points
+                    </button>
+                </div>
             </div>
         </div>
       );

@@ -13,11 +13,12 @@ function FairnessLabPareto() {
   const [group2, setGroup2] = useState('Men');
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [colors, setColors] = useState(Array(decisionmaker_utility.length).fill('#4e87ad'));
+  const [numThresholds, setNumThresholds] = useState(11)
 
   return(
     <div className="FairnessLabPareto">
       <Header title="Fairness Lab: Pareto"/>
-      <ParetoPlot scores={[scores["scores_group1"], scores["scores_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} colors={colors} setColors={setColors} />
+      <ParetoPlot scores={[scores["scores_group1"], scores["scores_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} colors={colors} setColors={setColors} />
       <ScoreDistribution scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} selectedPoints={selectedPoints} labels={[group1, group2]} colors={colors}/>
       <SubjectsUtility scores={[scores["scores_group1"], scores["scores_group2"]]} group1={group1} group2={group2} selectedPoints={selectedPoints} colors={colors} />
     </div>

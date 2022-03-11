@@ -37,8 +37,8 @@ function App() {
             <Route path="/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
           </Switch>
-        
         </div>
+
       </HashRouter>
     </div>
   );
