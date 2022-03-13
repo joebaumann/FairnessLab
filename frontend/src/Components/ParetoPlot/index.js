@@ -34,16 +34,27 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
     return (
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
+                <h1>Terminology</h1>
+                <b>Y</b>: The "ground truth"; not known at prediction time.
+                <br/>
+                <b>D</b>: The decision in question; relies on Y to make this decision.
+                <br/><br/>
+                
+                <b>Decision maker</b>: The people or organization designing the algorithm, deciding on its design and thereby ultimately taking the decisions in question.
+                <br/>
+                <b>Decision subjects</b>: The people subjected to the decisions of the algorithm. They may or may not be aware that this algorithm is being deployed and used to make decisions about them.
+                
+
                 <h1>Configuration</h1>
 
-                <h2>Decision-maker utility</h2>
-                <h5>How much utility does the decision-maker derive from the decisions?</h5>
+                <h2>Decision maker's utility</h2>
+                <h5>How much utility does the decision maker derive from the decisions?</h5>
 
-                <h3>Currency of the decision-maker</h3>
-                <label for="currency">In what unit do you want to measure the utility of the decision-maker?</label>
+                <h3>Currency of the decision maker</h3>
+                <label for="currency">In what unit do you want to measure the utility of the decision maker?</label>
                 <input type="text" id="currency" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
-                <h3>Quantification of the decision-maker's utility</h3>
+                <h3>Quantification of the decision maker's utility</h3>
 
                 <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="TP: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
                 <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="FP: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
@@ -51,13 +62,13 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
                 <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="TN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
                 <h2>Fairness score</h2>
-                <h5>How much utility do the people affected by the decisions derive from these decisions?</h5>
+                <h5>How should the utility of the decision subjects (i.e., the people subjected to the decisions) be distributed?</h5>
 
-                <h3>Currency of justice</h3>
-                <label for="currency">In what unit do you want to measure the utility of the people subjected to the decisions?</label>
+                <h3>Currency of decision subjects</h3>
+                <label for="currency">In what unit do you want to measure the utility of the decision subjects?</label>
                 <input type="text" id="currency" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
-                <h3>Quantification of the affected individuals' utility</h3>
+                <h3>Quantification of the decision subjects' utility</h3>
 
                 <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="TP: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
                 <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="FP: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
@@ -90,7 +101,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
                         mode: 'markers',
                         marker:{color: colors},
                         type: 'scatter',
-                        hovertemplate: '<b>Decision-maker\'s utility</b>: %{y:.2f}' +
+                        hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
                         '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: threshold_tuples,
@@ -101,7 +112,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
                         width: 1000,
                         height: 500,
                         xaxis: { title: `Fairness score<br>1 - |utility(${group1}) - utility(${group2})|<br>where utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN)` },
-                        yaxis: { title: `Decision-maker's utility` },
+                        yaxis: { title: `Decision maker's utility` },
                         hovermode:'closest',
                     } }
 

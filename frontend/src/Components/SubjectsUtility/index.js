@@ -25,7 +25,7 @@ const ParetoPlot = ({scores, labels, group1, group2, selectedPoints, colors}) =>
     
     return (
         <div className='SubjectsUtility'>
-            <h1>Subjects' utility for fairness score calculation</h1>
+            <h1>Decision subjects' utility for fairness score calculation</h1>
             <Plot
                 data={[
                 {
@@ -35,6 +35,13 @@ const ParetoPlot = ({scores, labels, group1, group2, selectedPoints, colors}) =>
                     type: 'bar',
                 },
                 ]}
+
+                layout = {
+                    {
+                        title: 'Decision subjects\' utilities',
+                    }
+
+                }
             />
             <Plot
                 data={[
@@ -45,6 +52,13 @@ const ParetoPlot = ({scores, labels, group1, group2, selectedPoints, colors}) =>
                     type: 'bar',
                 },
                 ]}
+
+                layout = {
+                    {
+                        title: 'Calculated fairness score',
+                    }
+
+                }
             />
         </div>
       );
