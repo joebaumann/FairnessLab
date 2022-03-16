@@ -187,7 +187,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
             </div>
             <div className="ParetoPlots">
-                <h1>Pareto plots</h1>
+                <h1>Pareto plot</h1>
                 <label>Number of thresholds</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
 
@@ -209,7 +209,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 500,
-                        xaxis: { title: `Fairness score<br>Difference in utility (in ${subjectsCurrency})<br>1 - |utility(${group1}) - utility(${group2})|<br>where utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN)` },
+                        xaxis: { title: `Fairness score<br>Difference in average utility (in ${subjectsCurrency})<br>1 - |average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
                         yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
                         hovermode:'closest',
                     } }
