@@ -240,7 +240,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
       );
 }
 
-const UtilityQuantifier = ({value, setSliderValue, updateThresholdCalculations, label, unit}) => {
+function UtilityQuantifier({value, setSliderValue, label, unit}) {
     return (
         <div>
             <label>{label}</label>
