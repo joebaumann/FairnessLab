@@ -211,6 +211,10 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h1>Pareto plot</h1>
                 With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the unfairness score. For each decision rule, we then plot the associated decision maker’s utility and unfairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
+                <b>Decision maker's utility</b>: Higher is better
+                <br/>
+                <b>Unfairness score</b>: Lower is better<br/>
+                <br/>
                 <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
                 <br/><br/>
@@ -219,6 +223,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         Deselect all points
                     </button>
                 </div>
+
 
                 <Plot
                     data={[
