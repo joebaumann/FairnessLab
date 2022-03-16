@@ -152,7 +152,8 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     return (
       <div className='ScoreDistribution'>
         <h1>Score distribution</h1>
-        <p>Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.</p>
+        Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.
+        <br/>
         <Plot className='LeftPlot'
             data={dataGroup1}
             layout={layoutGroup1}
