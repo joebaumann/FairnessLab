@@ -24,6 +24,10 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
     return (
         <div className='SubjectsUtility'>
             <h1>Decision subjects' utility for fairness score calculation</h1>
+            {selectedPoints.length === 0 && 
+            <b>Select at least one point in the pareto plot to see something.</b>
+            }
+            <p>Here you can see a direct comparison of the decision subjects' average utilities scores for the selected points.</p>
             <Plot
                 data={[
                 {
@@ -41,6 +45,7 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
 
                 }
             />
+            <p>Here you can see a direct comparison of the fairness scores for the selected points.</p>
             <Plot
                 data={[
                 {

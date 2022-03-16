@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, subjectsUtility, setSubjectsUtility, fairnessScores, setFairnessScores}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, subjectsUtility, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -13,8 +14,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [suTN, setSuTN] = useState(0);
     const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
-    const [thresholdTuples, setThresholdTuples] = useState([]);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
+    const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
+    const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
 
     function getRandomColor() {
         let letters = '0123456789ABCDEF';
@@ -120,14 +122,38 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         setFairnessScores(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, differenceTo1, [suTP, suFP, suFN, suTN]))
         setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
     }
-
+   
+    function updateParetoFront() {
+        let points = fairnessScores.map(function(f, i) {
+            return [f, decisionMakerUtility[i]];
+        });
+        let paretoOptimalPoints = pf.getParetoFrontier(points)
+        let paretoX = paretoOptimalPoints.map(function(p, i) {
+            return p[0];
+        })
+        setParetoOptimalPointsX(paretoX)
+        let paretoY = paretoOptimalPoints.map(function(p, i) {
+            return p[1];
+        })
+        setParetoOptimalPointsY(paretoY)
+        console.log(paretoOptimalPointsX)
+    }
+    
     useEffect(() => {
         updateThresholdCalculations()
     }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, numThresholds]);
 
     useEffect(() => {
+        updateParetoFront()
+    }, [fairnessScores, decisionMakerUtility]);
+
+    useEffect(() => {
         deselectAllPoints()
     }, [numThresholds]);
+
+    useEffect(() => {
+        updateParetoFront()
+    }, []);
 
     return (
         <div className='ParetoPlot'>
@@ -173,10 +199,6 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="FN: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
                 <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="TN: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
-                <h3>Pattern of Justice</h3>
-
-                <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice.</div>
-
                 <h3>Socio-demographic groups</h3>
                 <h5>Which socio-demographic groups do you want to compare?</h5>
 
@@ -185,14 +207,25 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <br/>
                 <label for="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
+                
+                <h3>Pattern of Justice</h3>
+                <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice. This means that we expect that the average utility of {group1} is equal to the average utility of {group2}.</div>
             </div>
             <div className="ParetoPlots">
                 <h1>Pareto plot</h1>
-                <label>Number of thresholds</label>
+                <p>With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.</p>
+                <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
 
                 <Plot
                     data={[
+                    {
+                        x: paretoOptimalPointsX,
+                        y: paretoOptimalPointsY,
+                        mode: 'lines',
+                        name: 'Pareto front',
+                        marker:{color: '#a61b62'}
+                    },
                     {
                         x: fairnessScores,
                         y: decisionMakerUtility,
@@ -203,6 +236,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
+                        name: 'Decision rules'
                     },
                     ]}
 
@@ -216,6 +250,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
                     onClick={(data) => {
                         var newColors = [...colors];
+                        console.log(data)
                         var selectedPoint = data.points[0].pointIndex
                         var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
                         if (indexOfSelectedPoint > -1) {

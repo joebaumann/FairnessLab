@@ -1,9 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
-import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
+const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, colors}) => {
     var indices_of_Y0_for_group1 = [];
     var indices_of_Y1_for_group1 = [];
     for(let i = 0; i < y[0].length; i++)
@@ -79,9 +78,9 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
       var color = colors[selectedPoint]
       var threshold1 = {
         type: 'line',
-        y0: threshold_tuples[selectedPoint][0],
+        y0: thresholdTuples[selectedPoint][0],
         x0: 0,
-        y1: threshold_tuples[selectedPoint][0],
+        y1: thresholdTuples[selectedPoint][0],
         x1: 100,
         line: {
           color: color,
@@ -93,9 +92,9 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
 
       var threshold2 = {
         type: 'line',
-        y0: threshold_tuples[selectedPoint][1],
+        y0: thresholdTuples[selectedPoint][1],
         x0: 0,
-        y1: threshold_tuples[selectedPoint][1],
+        y1: thresholdTuples[selectedPoint][1],
         x1: 80,
         line: {
           color: color,
@@ -119,7 +118,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
       },
       yaxis: {
         type: 'histogram',
-        title: 'Estimated repayment probability',
+        title: 'Probability score',
         range: [0, 1]
       },
       showlegend: true,
@@ -153,6 +152,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, labels, colors}) => {
     return (
       <div className='ScoreDistribution'>
         <h1>Score distribution</h1>
+        <p>Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.</p>
         <Plot className='LeftPlot'
             data={dataGroup1}
             layout={layoutGroup1}
