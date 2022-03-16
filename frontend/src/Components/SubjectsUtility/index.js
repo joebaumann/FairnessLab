@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
-import subjects_utility from '../../data_static/compas/static_pareto/subjects_utility.json';
-import fairness_score from '../../data_static/compas/static_pareto/fairness_score.json';
 
-const ParetoPlot = ({scores, labels, group1, group2, selectedPoints, colors}) => {
+const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors}) => {
     const selectedUtilities = [];
     const colorsUtilities = []
     const groupLabels = []
@@ -12,9 +10,9 @@ const ParetoPlot = ({scores, labels, group1, group2, selectedPoints, colors}) =>
     const colorsFairnessScore = []
     const labelsFairnessScore = []
     selectedPoints.forEach(i => {
-        selectedUtilities.push(subjects_utility[i][0])
-        selectedUtilities.push(subjects_utility[i][1])
-        selectedFairnessScore.push(fairness_score[i])
+        selectedUtilities.push(subjectsUtility[i][0])
+        selectedUtilities.push(subjectsUtility[i][1])
+        selectedFairnessScore.push(fairnessScores[i])
         colorsUtilities.push(colors[i])
         colorsUtilities.push(colors[i])
         colorsFairnessScore.push(colors[i])

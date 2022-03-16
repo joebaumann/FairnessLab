@@ -1,11 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
-import decisionmaker_utility from '../../data_static/compas/static_pareto/decisionmaker_utility.json';
-import fairness_score from '../../data_static/compas/static_pareto/fairness_score.json';
-import threshold_tuples from '../../data_static/compas/static_pareto/threshold_tuples.json';
 
-const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors}) => {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, subjectsUtility, setSubjectsUtility, fairnessScores, setFairnessScores}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -15,22 +12,123 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
     const [suFN, setSuFN] = useState(0);
     const [suTN, setSuTN] = useState(0);
     const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
-    const [subjectsCurrency, setSubjectsCurrency] = useState('');
+    const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
+    const [thresholdTuples, setThresholdTuples] = useState([]);
+    const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
 
     function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
     }
 
-    function deselectAll() {
+    function deselectAllPoints() {
         setSelectedPoints([])
-        setColors(Array(decisionmaker_utility.length).fill('#4e87ad'))
+        setColors(Array(numThresholds * numThresholds).fill('#4e87ad'))
     }
-    
+
+    function countConfusion(decisions_array, decisions_value, y_array, y_value) {
+        let count = 0;
+        for(let i = 0; i < decisions_array.length; i++){
+            if(decisions_array[i] === decisions_value && y_array[i] === y_value)
+                count++;
+        }
+        return count
+    }
+
+    function averageUtility(scores, threshold, y, parameter_calculation) {
+        let decisions = []
+        for(let i = 0; i < scores.length; i++){
+            if(scores[i] >= threshold)
+                decisions.push(1)
+            else
+                decisions.push(0)
+        }
+        let tp = countConfusion(decisions, 1, y, 1)
+        let fp = countConfusion(decisions, 1, y, 0)
+        let fn = countConfusion(decisions, 0, y, 1)
+        let tn = countConfusion(decisions, 0, y, 0)
+
+        let [ w_tp, w_fp, w_fn, w_tn ] = parameter_calculation
+        let value = w_tp * tp + w_fp * fp + w_fn * fn + w_tn * tn
+
+        value = value / decisions.length
+
+        return value
+    }
+
+    function threshold(scores, threshold, y, parameter_calculation) {
+        return threshold
+    }
+
+    function weightedSum(value_A, value_B, share_A, share_B) {
+        let sum = value_A * share_A + value_B * share_B
+        return sum
+    }
+
+    function differenceTo1(value_A, value_B, share_A, share_B) {
+        let diff = 1 - Math.abs(value_A - value_B)
+        return diff
+    }
+
+    function tuple(value_A, value_B, share_A, share_B) {
+        return [value_A, value_B]
+    }
+
+    function calculateValues(numThresholds, scores, y, calculate_group_value, parameter_calculation) {
+        let values = []
+        for (let r = 0; r < numThresholds; r++) {
+            let t = toThreshold(r, numThresholds)
+            let value = calculate_group_value(scores, t, y, parameter_calculation)
+            values.push(value)
+        }
+        return values
+    }
+
+    function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation) {
+        let { share_A, share_B } = getShares(scores_A, scores_B)
+        let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation)
+        let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation)
+        let values = []
+        for (let r_A = 0; r_A < numThresholds; r_A++) {
+            for (let r_B = 0; r_B < numThresholds; r_B++) {
+                let value = combine_group_values(values_A[r_A], values_B[r_B], share_A, share_B)
+                values.push(value)
+            }
+        }
+        return values
+    }
+
+    function getShares(scores_A, scores_B) {
+        let total_length = scores_A.length + scores_B.length
+        let share_A = scores_A.length / total_length
+        let share_B = scores_B.length / total_length
+        return { share_A, share_B }
+    }
+
+    function toThreshold(r, numThresholds) {
+        let threshold = (1/(numThresholds-1)) * r
+        return Math.round((threshold + Number.EPSILON) * 100) / 100
+    }
+
+    function updateThresholdCalculations() {
+        setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
+        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, weightedSum, [dmuTP, dmuFP, dmuFN, dmuTN]))
+        setFairnessScores(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, differenceTo1, [suTP, suFP, suFN, suTN]))
+        setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
+    }
+
+    useEffect(() => {
+        updateThresholdCalculations()
+    }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, numThresholds]);
+
+    useEffect(() => {
+        deselectAllPoints()
+    }, [numThresholds]);
+
     return (
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
@@ -77,7 +175,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
 
                 <h3>Pattern of Justice</h3>
 
-                <div>For now, we will simply assume that egalitarianism is our pattern of choice.</div>
+                <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice.</div>
 
                 <h3>Socio-demographic groups</h3>
                 <h5>Which socio-demographic groups do you want to compare?</h5>
@@ -96,23 +194,23 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
                 <Plot
                     data={[
                     {
-                        x: fairness_score,
-                        y: decisionmaker_utility,
+                        x: fairnessScores,
+                        y: decisionMakerUtility,
                         mode: 'markers',
                         marker:{color: colors},
                         type: 'scatter',
                         hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
                         '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
-                        text: threshold_tuples,
+                        text: thresholdTuples,
                     },
                     ]}
 
                     layout={ {
                         width: 1000,
                         height: 500,
-                        xaxis: { title: `Fairness score<br>1 - |utility(${group1}) - utility(${group2})|<br>where utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN)` },
-                        yaxis: { title: `Decision maker's utility` },
+                        xaxis: { title: `Fairness score<br>Difference in utility (in ${subjectsCurrency})<br>1 - |utility(${group1}) - utility(${group2})|<br>where utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN)` },
+                        yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
                         hovermode:'closest',
                     } }
 
@@ -127,14 +225,13 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
                             selectedPoints.push(selectedPoint)
                             newColors[selectedPoint] = getRandomColor()
                         }
-                        console.log(selectedPoints)
                         setColors(newColors)
                         setSelectedPoints([...selectedPoints]);
                       }}
                 />
 
                 <div>
-                    <button onClick={deselectAll}>
+                    <button onClick={deselectAllPoints}>
                         Deselect all points
                     </button>
                 </div>
@@ -143,7 +240,7 @@ const ParetoPlot = ({scores, labels, group1, setGroup1, group2, setGroup2, numTh
       );
 }
 
-const UtilityQuantifier = ({value, setSliderValue, label, unit}) => {
+const UtilityQuantifier = ({value, setSliderValue, updateThresholdCalculations, label, unit}) => {
     return (
         <div>
             <label>{label}</label>
