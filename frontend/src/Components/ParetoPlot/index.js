@@ -41,7 +41,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         return count
     }
 
-    function averageUtility(scores, threshold, y, parameter_calculation) {
+    function utility(scores, threshold, y, parameter_calculation) {
         let decisions = []
         for(let i = 0; i < scores.length; i++){
             if(scores[i] >= threshold)
@@ -57,8 +57,12 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         let [ w_tp, w_fp, w_fn, w_tn ] = parameter_calculation
         let value = w_tp * tp + w_fp * fp + w_fn * fn + w_tn * tn
 
-        value = value / decisions.length
+        return value
+    }
 
+    function averageUtility(scores, threshold, y, parameter_calculation) {
+        let value = utility(scores, threshold, y, parameter_calculation)
+        value = value / scores.length
         return value
     }
 
@@ -66,17 +70,17 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         return threshold
     }
 
-    function weightedSum(value_A, value_B, share_A, share_B) {
-        let sum = value_A * share_A + value_B * share_B
+    function sum(value_A, value_B) {
+        let sum = value_A + value_B
         return sum
     }
 
-    function differenceTo1(value_A, value_B, share_A, share_B) {
-        let diff = 1 - Math.abs(value_A - value_B)
+    function absoluteDifference(value_A, value_B) {
+        let diff = Math.abs(value_A - value_B)
         return diff
     }
 
-    function tuple(value_A, value_B, share_A, share_B) {
+    function tuple(value_A, value_B) {
         return [value_A, value_B]
     }
 
@@ -91,24 +95,16 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     }
 
     function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation) {
-        let { share_A, share_B } = getShares(scores_A, scores_B)
         let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation)
         let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation)
         let values = []
         for (let r_A = 0; r_A < numThresholds; r_A++) {
             for (let r_B = 0; r_B < numThresholds; r_B++) {
-                let value = combine_group_values(values_A[r_A], values_B[r_B], share_A, share_B)
+                let value = combine_group_values(values_A[r_A], values_B[r_B])
                 values.push(value)
             }
         }
         return values
-    }
-
-    function getShares(scores_A, scores_B) {
-        let total_length = scores_A.length + scores_B.length
-        let share_A = scores_A.length / total_length
-        let share_B = scores_B.length / total_length
-        return { share_A, share_B }
     }
 
     function toThreshold(r, numThresholds) {
@@ -118,8 +114,8 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
     function updateThresholdCalculations() {
         setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, weightedSum, [dmuTP, dmuFP, dmuFN, dmuTN]))
-        setFairnessScores(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, differenceTo1, [suTP, suFP, suFN, suTN]))
+        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN]))
+        setFairnessScores(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN]))
         setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
     }
    
@@ -127,7 +123,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         let points = fairnessScores.map(function(f, i) {
             return [f, decisionMakerUtility[i]];
         });
-        let paretoOptimalPoints = pf.getParetoFrontier(points)
+        let paretoOptimalPoints = pf.getParetoFrontier(points, {optimize: 'topLeft'})
         let paretoX = paretoOptimalPoints.map(function(p, i) {
             return p[0];
         })
@@ -185,7 +181,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="FN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
                 <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="TN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
-                <h2>Fairness score</h2>
+                <h2>Unfairness score</h2>
                 <h5>How should the utility of the decision subjects (i.e., the people subjected to the decisions) be distributed?</h5>
 
                 <h3>Currency of decision subjects</h3>
@@ -213,7 +209,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
             </div>
             <div className="ParetoPlots">
                 <h1>Pareto plot</h1>
-                With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
+                With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the unfairness score. For each decision rule, we then plot the associated decision maker’s utility and unfairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
                 <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
@@ -240,7 +236,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         marker:{color: colors},
                         type: 'scatter',
                         hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
-                        '<br><b>Fairness score</b>: %{x}<br>' +
+                        '<br><b>Unfairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
                         name: 'Decision rules'
@@ -250,7 +246,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 800,
-                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>1 - |average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
+                        xaxis: { title: `Unfairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
                         yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
                         hovermode:'closest',
                     } }
