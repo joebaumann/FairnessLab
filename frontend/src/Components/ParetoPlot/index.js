@@ -3,7 +3,7 @@ import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, subjectsUtility, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -211,7 +211,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h1>Pareto plot</h1>
                 With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the unfairness score. For each decision rule, we then plot the associated decision maker’s utility and unfairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
-                <b>Decision maker's utility</b>: Higher is better
+                <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)
                 <br/>
                 <b>Unfairness score</b>: Lower is better<br/>
                 <br/>

@@ -35,7 +35,7 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
             {selectedPoints.length === 0 && 
             <b>Select at least one point in the pareto plot to see something.<br/><br/></b>
             }
-            <span>Here you can see a direct comparison of the decision subjects' average utilities scores for the selected points.</span>
+            <span>Here you can see a direct comparison of the decision subjects' average utilities for the selected points.</span>
             <br/>
             <Plot
                 data={tracesUtilities}
@@ -48,7 +48,7 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
                 }
             />
             <br/>
-            <span>Here you can see a direct comparison of the unfairness scores for the selected points.</span>
+            <span>Here you can see a direct comparison of the unfairness scores for the selected points. The higher the score, the less fair the decision rule is considered to be.</span>
             <br/>
             <Plot
                 data={tracesFairnessScores}
