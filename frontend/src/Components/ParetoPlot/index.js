@@ -209,7 +209,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 500,
-                        xaxis: { title: `Fairness score<br>Difference in average utility (in ${subjectsCurrency})<br>1 - |average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
+                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>1 - |average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
                         yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
                         hovermode:'closest',
                     } }

@@ -8,8 +8,8 @@ import scores from '../../data_static/compas/scores.json';
 import y from '../../data_static/compas/y.json';
 
 function FairnessLabPareto() {
-  const [group1, setGroup1] = useState('Men');
-  const [group2, setGroup2] = useState('Women and non-binary people');
+  const [group1, setGroup1] = useState('men');
+  const [group2, setGroup2] = useState('women and non-binary people');
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [numThresholds, setNumThresholds] = useState(11)
   const [subjectsUtility, setSubjectsUtility] = useState([])
