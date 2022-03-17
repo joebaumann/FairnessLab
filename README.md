@@ -1,5 +1,7 @@
 # FairnessLab
 
+![Continuous Deployment](https://github.com/joebaumann/FairnessLab/workflows/Deploy/badge.svg)
+
 The app is publicly available at [https://joebaumann.github.io/FairnessLab](https://joebaumann.github.io/FairnessLab/).
 
 ## Run WebApp locally:
