@@ -12,7 +12,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [suFP, setSuFP] = useState(1);
     const [suFN, setSuFN] = useState(0);
     const [suTN, setSuTN] = useState(0);
-    const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
+    const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('* 10k CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
@@ -176,8 +176,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h5>How much utility does the decision maker derive from the decisions?</h5>
 
                 <h3>Currency of the decision maker</h3>
-                <label for="currency">In what unit do you want to measure the utility of the decision maker?</label>
-                <input type="text" id="currency" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
+                <div>In what unit do you want to measure the utility of the decision maker?</div>
+                <span>Note: Start with '*' to increase the range of the scale.</span>
+                <input type="text" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision maker's utility</h3>
 
@@ -190,8 +191,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h5>How much utility do the decision subjects derive from the decisions?</h5>
 
                 <h3>Currency of decision subjects</h3>
-                <label for="currency">In what unit do you want to measure the utility of the decision subjects?</label>
-                <input type="text" id="currency" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
+                <div>In what unit do you want to measure the utility of the decision subject?</div>
+                <span>Note: Start with '*' to increase the range of the scale.</span>
+                <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision subjects' utility</h3>
 
@@ -259,8 +261,8 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 800,
-                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
-                        yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
+                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
+                        yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
                         hovermode:'closest',
                     } }
 
@@ -285,6 +287,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 }
 
 function UtilityQuantifier({value, setSliderValue, label, unit}) {
+    var numberRegex = /\d+/;
+    var unitRegex = /[^\d+]+$/;
+    var multiplierRegex = /^\*\s*\d+/;
     return (
         <div>
             <label>{label}</label>
@@ -314,6 +319,8 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
                 <option>10</option>
             </datalist>
             <span>{value} {unit}</span>
+            {unit.match(multiplierRegex) !== null && 
+            <span> = {Math.round(value * unit.match(numberRegex) * 100) / 100}{unit.match(unitRegex)}</span>}
         </div>
       );
 }
