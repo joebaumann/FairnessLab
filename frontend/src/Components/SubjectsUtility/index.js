@@ -17,7 +17,7 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
         };
         tracesUtilities.push(traceUtilities)
         let traceFairnessScores = {
-            x: [`Unfairness score (${i})`],
+            x: [`Fairness score (${i})`],
             y: [fairnessScores[i]],
             marker:{
               color: [colors[i]]
@@ -31,7 +31,7 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
     
     return (
         <div className='SubjectsUtility'>
-            <h1>Decision subjects' utility for unfairness score calculation</h1>
+            <h1>Decision subjects' utility for fairness score calculation</h1>
             {selectedPoints.length === 0 && 
             <b>Select at least one point in the pareto plot to see something.<br/><br/></b>
             }
@@ -48,14 +48,14 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
                 }
             />
             <br/>
-            <span>Here you can see a direct comparison of the unfairness scores for the selected points. The higher the score, the less fair the decision rule is considered to be.</span>
+            <span>Here you can see a direct comparison of the fairness scores for the selected points. The higher the score, the less fair the decision rule is considered to be.</span>
             <br/>
             <Plot
                 data={tracesFairnessScores}
 
                 layout = {
                     {
-                        title: 'Calculated unfairness score',
+                        title: 'Calculated fairness score',
                     }
 
                 }

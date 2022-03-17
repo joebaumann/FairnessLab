@@ -115,7 +115,13 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     function updateThresholdCalculations() {
         setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
         setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN]))
-        setFairnessScores(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN]))
+        const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN])
+        const maxUnfairness = Math.max(...unfairnessScores)
+        console.log(maxUnfairness)
+        let fairnessScores = unfairnessScores.map(function(s, i) {
+            return maxUnfairness - s;
+        });
+        setFairnessScores(fairnessScores)
         setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
     }
    
@@ -123,7 +129,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         let points = fairnessScores.map(function(f, i) {
             return [f, decisionMakerUtility[i]];
         });
-        let paretoOptimalPoints = pf.getParetoFrontier(points, {optimize: 'topLeft'})
+        let paretoOptimalPoints = pf.getParetoFrontier(points)
         let paretoX = paretoOptimalPoints.map(function(p, i) {
             return p[0];
         })
@@ -132,7 +138,6 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
             return p[1];
         })
         setParetoOptimalPointsY(paretoY)
-        console.log(paretoOptimalPointsX)
     }
     
     useEffect(() => {
@@ -181,8 +186,8 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="FN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
                 <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="TN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
-                <h2>Unfairness score</h2>
-                <h5>How should the utility of the decision subjects (i.e., the people subjected to the decisions) be distributed?</h5>
+                <h2>Decision subjects' utility</h2>
+                <h5>How much utility do the decision subjects derive from the decisions?</h5>
 
                 <h3>Currency of decision subjects</h3>
                 <label for="currency">In what unit do you want to measure the utility of the decision subjects?</label>
@@ -195,8 +200,11 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="FN: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
                 <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="TN: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
+                <h2>Fairness score</h2>
+                <h5>How should the utility of the decision subjects be distributed?</h5>
+                
                 <h3>Socio-demographic groups</h3>
-                <h5>Which socio-demographic groups do you want to compare?</h5>
+                <div>Which socio-demographic groups do you want to compare?</div>
 
                 <label for="group1">Group 1</label>
                 <input type="text" id="group1" value={group1} onChange={(e) => setGroup1(e.target.value)}/>
@@ -209,11 +217,11 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
             </div>
             <div className="ParetoPlots">
                 <h1>Pareto plot</h1>
-                With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the unfairness score. For each decision rule, we then plot the associated decision maker’s utility and unfairness score in a 2D plot. We use group-specific thresholds as decision rules.
+                With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)
                 <br/>
-                <b>Unfairness score</b>: Lower is better<br/>
+                <b>Fairness score</b>: Lower is better<br/>
                 <br/>
                 <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
@@ -241,7 +249,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         marker:{color: colors},
                         type: 'scatter',
                         hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
-                        '<br><b>Unfairness score</b>: %{x}<br>' +
+                        '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
                         name: 'Decision rules'
@@ -251,14 +259,13 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 800,
-                        xaxis: { title: `Unfairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
+                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
                         yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency})` },
                         hovermode:'closest',
                     } }
 
                     onClick={(data) => {
                         var newColors = [...colors];
-                        console.log(data)
                         var selectedPoint = data.points[0].pointIndex
                         var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
                         if (indexOfSelectedPoint > -1) {
