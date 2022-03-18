@@ -17,6 +17,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
+    const [pattern, setPattern] = useState('egalitarianism');
+    const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0);
+    const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
         let letters = '0123456789ABCDEF';
@@ -30,6 +33,23 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     function deselectAllPoints() {
         setSelectedPoints([])
         setColors(Array(numThresholds * numThresholds).fill('#4e87ad'))
+    }
+
+    function patternMapper(pattern) {
+        let combination = null
+        if (pattern === 'egalitarianism') {
+            combination = absoluteDifference
+        }
+        if (pattern === 'maximin') {
+            combination = Math.min
+        } 
+        if (pattern === 'prioritarianism') {
+            combination = prioritarianSum
+        }
+        if (pattern === 'sufficientarianism') {
+            combination = aboveThreshold
+        }
+        return combination
     }
 
     function countConfusion(decisions_array, decisions_value, y_array, y_value) {
@@ -80,6 +100,22 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         return diff
     }
 
+    function prioritarianSum(value_A, value_B) {
+        if (value_A <= value_B) {
+            return value_A * prioritarianismWeight + value_B
+        }
+        return value_A + value_B * prioritarianismWeight
+    }
+
+    function aboveThreshold(value_A, value_B) {
+        let groups_above_threshold = 0
+        if (value_A >= sufficientarianismThreshold)
+            groups_above_threshold++
+        if (value_B >= sufficientarianismThreshold)
+            groups_above_threshold++
+        return groups_above_threshold
+    }
+
     function tuple(value_A, value_B) {
         return [value_A, value_B]
     }
@@ -115,13 +151,19 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     function updateThresholdCalculations() {
         setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
         setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN]))
-        const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN])
-        const maxUnfairness = Math.max(...unfairnessScores)
-        console.log(maxUnfairness)
-        let fairnessScores = unfairnessScores.map(function(s, i) {
-            return maxUnfairness - s;
-        });
-        setFairnessScores(fairnessScores)
+        if (pattern === 'egalitarianism') {
+            const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN])
+            const maxUnfairness = Math.max(...unfairnessScores)
+            let fairnessScores = unfairnessScores.map(function(s, i) {
+                return maxUnfairness - s;
+            });
+            setFairnessScores(fairnessScores)
+        }
+        else {
+            let combineFunction = patternMapper(pattern)
+            let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP, suFP, suFN, suTN])
+            setFairnessScores(fairnessScores)
+        }
         setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
     }
    
@@ -142,7 +184,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     
     useEffect(() => {
         updateThresholdCalculations()
-    }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, numThresholds]);
+    }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
 
     useEffect(() => {
         updateParetoFront()
@@ -215,7 +257,36 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
                 
                 <h3>Pattern of Justice</h3>
-                <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice. This means that we expect that the average utility of {group1} is equal to the average utility of {group2}.</div>
+                {/* <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice. This means that we expect that the average utility of {group1} is equal to the average utility of {group2}.</div> */}
+                
+                <div>How should the currency be distributed between the socio-demographic groups?</div><br/>
+                <div><b>Egalitarianism</b>: Requires equality and measures some function of inequality.</div>
+                <div><b>Prioritarianism</b>: A weighted version of utilitarianism. Prioritarianism says that benefits to the worst-off matter more than benefits to the better off.</div>
+                <div><b>Maximin</b>: Demands that the currency of the worst-off group is maximized.</div>
+                <div><b>Sufficientarianism</b>: Decide on a threshold for the minimum average utility and try to bring as many groups as possible above this threshold.</div>
+                <br/>
+
+                <label for="pattern">Choose a pattern:</label>
+                <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
+                <option value="egalitarianism">egalitarian</option>
+                <option value="maximin">maximin</option>
+                <option value="sufficientarianism">sufficientarian</option>
+                <option value="prioritarianism">prioritarian</option>
+                </select>
+
+                {pattern === 'sufficientarianism' &&
+                    <div>
+                        <label for="sufficientarianismThreshold">Minimum average group utility</label>
+                        <input type="number" id="sufficientarianismThreshold" value={sufficientarianismThreshold} onChange={(e) => setSufficientarianismThreshold(e.target.value)}/>
+                    </div>
+                }
+
+                {pattern === 'prioritarianism' &&
+                    <div>
+                        <label for="prioritarianismWeight">Weight for worst-off group</label>
+                        <input type="number" id="prioritarianismWeight" value={prioritarianismWeight} onChange={(e) => setPrioritarianismWeight(e.target.value)}/>
+                    </div>
+                }
             </div>
             <div className="ParetoPlots">
                 <h1>Pareto plot</h1>
