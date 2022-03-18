@@ -261,9 +261,9 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 
                 <div>How should the currency be distributed between the socio-demographic groups?</div><br/>
                 <div><b>Egalitarianism</b>: Requires equality and measures some function of inequality.</div>
-                <div><b>Prioritarianism</b>: A weighted version of utilitarianism. Prioritarianism says that benefits to the worst-off matter more than benefits to the better off.</div>
                 <div><b>Maximin</b>: Demands that the currency of the worst-off group is maximized.</div>
                 <div><b>Sufficientarianism</b>: Decide on a threshold for the minimum average utility and try to bring as many groups as possible above this threshold.</div>
+                <div><b>Prioritarianism</b>: A weighted version of utilitarianism. Prioritarianism says that benefits to the worst-off matter more than benefits to the better off.</div>
                 <br/>
 
                 <label for="pattern">Choose a pattern:</label>
