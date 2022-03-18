@@ -18,7 +18,8 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [pattern, setPattern] = useState('egalitarianism');
-    const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0);
+    const [xAxisLabel, setXAxisLabel] = useState(null);
+    const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0.5);
     const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
@@ -181,6 +182,23 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         })
         setParetoOptimalPointsY(paretoY)
     }
+
+    function updateXAxisLabel() {
+        let xaxislabel = 'Fairness score<br>'
+        if (pattern === 'egalitarianism') {
+            xaxislabel += `Maximum difference in average utility - absolute difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
+        }
+        if (pattern === 'maximin') {
+            xaxislabel += `Minimum average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
+        }
+        if (pattern === 'sufficientarianism') {
+            xaxislabel += `Number of groups with average utility above threshold (min: 0 groups, max: 2 groups)`
+        }
+        if (pattern === 'prioritarianism') {
+            xaxislabel += `Weighted sum of average utilities of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
+        }
+        setXAxisLabel(xaxislabel)
+    }
     
     useEffect(() => {
         updateThresholdCalculations()
@@ -189,6 +207,10 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     useEffect(() => {
         updateParetoFront()
     }, [fairnessScores, decisionMakerUtility]);
+
+    useEffect(() => {
+        updateXAxisLabel()
+    }, [pattern]);
 
     useEffect(() => {
         deselectAllPoints()
@@ -332,7 +354,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                     layout={ {
                         width: 1000,
                         height: 800,
-                        xaxis: { title: `Fairness score<br>Difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})<br>|average_utility(${group1}) - average_utility(${group2})|<br>where average_utility=(${suTP} * #TP + ${suFP} * #FP + ${suFN} * #FN + ${suTN} * #TN) / group_size` },
+                        xaxis: { title: xAxisLabel},
                         yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
                         hovermode:'closest',
                     } }
