@@ -259,11 +259,11 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h3>Pattern of Justice</h3>
                 {/* <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice. This means that we expect that the average utility of {group1} is equal to the average utility of {group2}.</div> */}
                 
-                <div>How should the currency be distributed between the socio-demographic groups?</div><br/>
-                <div><b>Egalitarianism</b>: Requires equality and measures some function of inequality.</div>
-                <div><b>Maximin</b>: Demands that the currency of the worst-off group is maximized.</div>
+                <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
+                <div><b>Egalitarianism</b>: Requires equality between the average utilities.</div>
+                <div><b>Maximin</b>: Demands that the average utility of the worst-off group is maximized.</div>
                 <div><b>Sufficientarianism</b>: Decide on a threshold for the minimum average utility and try to bring as many groups as possible above this threshold.</div>
-                <div><b>Prioritarianism</b>: A weighted version of utilitarianism. Prioritarianism says that benefits to the worst-off matter more than benefits to the better off.</div>
+                <div><b>Prioritarianism</b>: Sum of the average utilities, where the utility of the worst-off group is weighted. Prioritarianism says that benefits for the worse off matter more than benefits for the better off.</div>
                 <br/>
 
                 <label for="pattern">Choose a pattern:</label>
