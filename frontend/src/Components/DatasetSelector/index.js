@@ -19,7 +19,7 @@ function DatasetSelector({setScores, setY}) {
         }
     }
 
-    const [datasetSelection, setDatasetSelection] = useState('Credit');
+    const [datasetSelection, setDatasetSelection] = useState('COMPAS');
 
     useEffect(() => {
         setScores(datasets[datasetSelection]['scores'])
@@ -29,9 +29,9 @@ function DatasetSelector({setScores, setY}) {
     return(
         <div className="DatasetSelector">
         <h1>Dataset</h1>
-        <label for="datasetSelection">Choose a dataset:</label>
-        <select name="datasetSelection" id="pattern" onChange={(e) => setDatasetSelection(e.target.value)}>
-            <option value="Credit" selected>Credit</option>
+        <label htmlFor="datasetSelection">Choose a dataset:</label>
+        <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
+            <option value="Credit">Credit</option>
             <option value="HR">HR</option>
             <option value="COMPAS">COMPAS</option>
         </select>

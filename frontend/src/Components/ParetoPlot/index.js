@@ -272,10 +272,10 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <h3>Socio-demographic groups</h3>
                 <div>Which socio-demographic groups do you want to compare?</div>
 
-                <label for="group1">Group 1</label>
+                <label htmlFor="group1">Group 1</label>
                 <input type="text" id="group1" value={group1} onChange={(e) => setGroup1(e.target.value)}/>
                 <br/>
-                <label for="group2">Group 2</label>
+                <label htmlFor="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
                 
                 <h3>Pattern of Justice</h3>
@@ -288,7 +288,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <div><b>Prioritarianism</b>: Sum of the average utilities, where the utility of the worst-off group is weighted. Prioritarianism says that benefits for the worse off matter more than benefits for the better off.</div>
                 <br/>
 
-                <label for="pattern">Choose a pattern:</label>
+                <label htmlFor="pattern">Choose a pattern:</label>
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
                 <option value="egalitarianism">egalitarian</option>
                 <option value="maximin">maximin</option>
@@ -298,14 +298,14 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
                 {pattern === 'sufficientarianism' &&
                     <div>
-                        <label for="sufficientarianismThreshold">Minimum average group utility</label>
+                        <label htmlFor="sufficientarianismThreshold">Minimum average group utility</label>
                         <input type="number" id="sufficientarianismThreshold" value={sufficientarianismThreshold} onChange={(e) => setSufficientarianismThreshold(e.target.value)}/>
                     </div>
                 }
 
                 {pattern === 'prioritarianism' &&
                     <div>
-                        <label for="prioritarianismWeight">Weight for worst-off group</label>
+                        <label htmlFor="prioritarianismWeight">Weight for worst-off group</label>
                         <input type="number" id="prioritarianismWeight" value={prioritarianismWeight} onChange={(e) => setPrioritarianismWeight(e.target.value)}/>
                     </div>
                 }
@@ -318,7 +318,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <br/>
                 <b>Fairness score</b>: Lower is better<br/>
                 <br/>
-                <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
+                <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 1, max: 101)</label>
                 <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)} min="1" max="101"/>
                 <br/><br/>
                 <div>
