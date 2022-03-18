@@ -297,7 +297,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <b>Fairness score</b>: Lower is better<br/>
                 <br/>
                 <label>Number of thresholds: How many thresholds do you want to test for each group?</label>
-                <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)}/>
+                <input type="text" value={numThresholds} onChange={(e) => setNumThresholds(e.target.value)} min="1" max="101"/>
                 <br/><br/>
                 <div>
                     <button onClick={deselectAllPoints}>
