@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
 
-const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors}) => {
+const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors, idOfSelectedPoints}) => {
     let tracesUtilities = []
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
@@ -13,7 +13,7 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
               color: [colors[i], colors[i]]
             },
             type: 'bar',
-            name: `point ${i}`
+            name: 'Selection ' + idOfSelectedPoints[i].id
         };
         tracesUtilities.push(traceUtilities)
         let traceFairnessScores = {
@@ -23,7 +23,7 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
               color: [colors[i]]
             },
             type: 'bar',
-            name: `point ${i}`
+            name: 'Selection ' + idOfSelectedPoints[i].id
         };
         tracesFairnessScores.push(traceFairnessScores)
     })

@@ -1,10 +1,5 @@
 #title {
-    text-align: center;
     font-family: arial, sans-serif;
-}
-
-#nothingSelected {
-    text-align: center;
 }
   
 #selectedPoints {
@@ -12,12 +7,12 @@
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     border: 3px solid #ddd;
-    width: 100%;
+    max-width: 50%;
 }
   
 #selectedPoints td, #selectedPoints th {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 1px;
 }
   
 #selectedPoints tr:nth-child(even){background-color: #f2f2f2;}
@@ -25,9 +20,9 @@
 #selectedPoints tr:hover {background-color: #ddd;}
   
 #selectedPoints th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     text-align: center;
-    background-color: #4CAF50;
+    background-color: #4e87ad;
     color: white;
 }

@@ -2,34 +2,20 @@ import React, {useState, useEffect} from 'react';
 import './SelectedPointsTable.css';
 
 
-function SelectedPointsTable({selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints}) {
+function SelectedPointsTable({selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, labels}) {
 
   const tableDate = Object.values(idOfSelectedPoints).sort(function(a, b){
     return a.id-b.id
   })
-
-  function renderTableHeader() {
-    let header = Object.keys(tableDate[0])
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>
-    })
-  }
-
     
   function renderTableData() {
-
-    console.log("testtt 2")
-    console.log(selectedPoints)
-    console.log("testtt 3")
-    console.log(tableDate)
     
     return tableDate.map((tableRow, index) => {
       const { id, thresholdGroup0, thresholdGroup1, decisionMakerUtility, fairnessScore } = tableRow //destructuring
       return (
           <tr key={id}>
             <td>{id}</td>
-            <td>{thresholdGroup0}</td>
-            <td>{thresholdGroup1}</td>
+            <td>{labels[0]}: {thresholdGroup0} ; {labels[1]}: {thresholdGroup1}</td>
             <td>{decisionMakerUtility}</td>
             <td>{fairnessScore}</td>
           </tr>
@@ -45,7 +31,12 @@ function SelectedPointsTable({selectedPoints, setSelectedPoints, idOfSelectedPoi
       return (
         <table id='selectedPoints'>
         <tbody>
-          <tr>{renderTableHeader()}</tr>
+          <tr>
+            <th>Selection</th>
+            <th>Thresholds</th>
+            <th>Decision maker's utility</th>
+            <th>Fairness score</th>
+          </tr>
           {renderTableData()}
         </tbody>
         </table>
