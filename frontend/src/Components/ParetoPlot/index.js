@@ -3,7 +3,7 @@ import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -33,6 +33,8 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
     function deselectAllPoints() {
         setSelectedPoints([])
+        setIdOfSelectedPoints({})
+        setIncrementalSelectionId(1)
         setColors(Array(numThresholds * numThresholds).fill('#4e87ad'))
     }
 
@@ -357,7 +359,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
-                        name: 'Decision rules'
+                        name: ''
                     },
                     ]}
 
@@ -374,14 +376,28 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                         var selectedPoint = data.points[0].pointIndex
                         var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
                         if (indexOfSelectedPoint > -1) {
+                            // deselect point and remove from list
                             selectedPoints.splice(indexOfSelectedPoint, 1)
+                            delete idOfSelectedPoints[selectedPoint]
                             newColors[selectedPoint] = '#4e87ad'
                         } else {
+                            // select point and add to list
                             selectedPoints.push(selectedPoint)
+
+                            idOfSelectedPoints[selectedPoint] = {
+                                id: incrementalSelectionId,
+                                thresholdGroup0: thresholdTuples[selectedPoint][0],
+                                thresholdGroup1: thresholdTuples[selectedPoint][1],
+                                decisionMakerUtility: decisionMakerUtility[selectedPoint],
+                                fairnessScore: fairnessScores[selectedPoint]
+                            }
+                            
+                            setIncrementalSelectionId(incrementalSelectionId + 1)
                             newColors[selectedPoint] = getRandomColor()
                         }
                         setColors(newColors)
                         setSelectedPoints([...selectedPoints]);
+                        setIdOfSelectedPoints(idOfSelectedPoints);
                       }}
                 />
             </div>

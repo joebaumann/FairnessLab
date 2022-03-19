@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
 
-const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors}) => {
+const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors}) => {
     let tracesUtilities = []
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
@@ -64,4 +64,4 @@ const ParetoPlot = ({subjectsUtility, fairnessScores, group1, group2, selectedPo
       );
 }
 
-export default ParetoPlot;
+export default SubjectsUtility;

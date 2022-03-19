@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Header from '../Header';
 import DatasetSelector from '../DatasetSelector';
 import ParetoPlot from '../ParetoPlot';
+import SelectedPointsTable from '../SelectedPointsTable';
 import ScoreDistribution from '../ScoreDistribution';
 import SubjectsUtility from '../SubjectsUtility';
 import compas_scores from '../../data_static/compas/scores.json';
@@ -12,6 +13,8 @@ function FairnessLabPareto() {
   const [group1, setGroup1] = useState('men');
   const [group2, setGroup2] = useState('women and non-binary people');
   const [selectedPoints, setSelectedPoints] = useState([]);
+  const [idOfSelectedPoints, setIdOfSelectedPoints] = useState({});
+  const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);
   const [numThresholds, setNumThresholds] = useState(11)
   const [subjectsUtility, setSubjectsUtility] = useState([])
   const [fairnessScores, setFairnessScores] = useState([])
@@ -25,7 +28,8 @@ function FairnessLabPareto() {
       <Header title="Fairness Lab: Pareto"/>
       <div className="FairnessLabPareto-Content">
         <DatasetSelector setScores={setScores} setY={setY}/>
-        <ParetoPlot scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} />
+        <ParetoPlot scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} />
+        <SelectedPointsTable selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} />
         <ScoreDistribution scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} selectedPoints={selectedPoints} labels={[group1, group2]} colors={colors} thresholdTuples={thresholdTuples} />
         <SubjectsUtility subjectsUtility={subjectsUtility} fairnessScores={fairnessScores} group1={group1} group2={group2} selectedPoints={selectedPoints} colors={colors} />
       </div>
