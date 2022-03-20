@@ -1,14 +1,17 @@
 import React from "react";
 import Header from '../Header';
-import './Home.css'
+import './Home.css';
+import AMLD_workshop_picture_v1 from "./AMLD_workshop_picture_v1.png";
+import AMLD_workshop_picture_v2 from "./AMLD_workshop_picture_v2.png";
 
 function Home() {
   return (
     <div>
       {/* <Header title="Welcome to the Fairness Lab :)"/> */}
-      <Header title="Fairness Lab @ Sounding Board 2021"/>
+      {/* <Header title="Fairness Lab @ Sounding Board 2021"/> */}
       {/* This tool is built to help you evaluate the fairness of your tool and improve it. */}
-      {/* <h2>Vielen Dank für Deine Teilnahme an unserer Studie!</h2>
+      {/*
+      <h2>Vielen Dank für Deine Teilnahme an unserer Studie!</h2>
       <p>
         In der Navigationsleiste findest Du zwei Sektionen:
         <br/>
@@ -31,7 +34,8 @@ function Home() {
             <b>1</b> heisst, dass die Metrik für beide Gruppen exakt gleich sein muss (in diesem Fall wird die Utility maximinert unter der Bedingung, dass die Gleichheit der Fairnessmetrik erfüllt ist).
           </li>
         </ul>
-      </p> */}
+      </p>
+      
       <h2>Thanks for joining today's Sounding Board meeting!</h2>
       <p>
         In the navigation bar you find the following two sections:
@@ -56,7 +60,20 @@ function Home() {
           </li>
         </ul>
       </p>
+      */}
 
+      <Header title="Fairness Lab @ AMLD EPFL 2022 (March 27)"/>
+      <img src={AMLD_workshop_picture_v1} alt="Workshop Picture" width="40%" height="1%" />
+      <h2>Thank you for joining today's workshop!</h2>
+      <p style={{textAlign: 'center'}}>
+        In the navigation bar you find the section <b>Pareto</b>. Choose a dataset to explore and follow the instructions to derive an optimal decision rule that also satisfies a morally appropriate definition of fairness.
+        <br/>
+        <br/>
+        <a href="https://appliedmldays.org/events/amld-epfl-2022/workshops/how-to-develop-fair-algorithms-using-the-fairness-lab-tool" target="_blank">Link to the workshop website</a>
+        <br/>
+        <br/>
+        <i>TODO: Provide additional info and link to matierials...</i>
+      </p>
     </div>
   );
 }
