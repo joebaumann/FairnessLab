@@ -12,7 +12,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [suFP, setSuFP] = useState(1);
     const [suFN, setSuFN] = useState(0);
     const [suTN, setSuTN] = useState(0);
-    const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('* 10k CHF');
+    const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
     const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
