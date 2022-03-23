@@ -2,16 +2,20 @@ import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
 import compas_scores from '../../data_static/compas/scores.json';
 import compas_y from '../../data_static/compas/y.json';
+import credit_scores from '../../data_static/credit/scores.json';
+import credit_y from '../../data_static/credit/y.json';
+import hr_scores from '../../data_static/hr/scores.json';
+import hr_y from '../../data_static/hr/y.json';
 
 function DatasetSelector({setScores, setY}) {
     const datasets = {
         'Credit': {
-        'scores': compas_scores,
-        'y': compas_y
+        'scores': credit_scores,
+        'y': credit_y
         },
         'HR': {
-        'scores': compas_scores,
-        'y': compas_y
+        'scores': hr_scores,
+        'y': hr_y
         },
         'COMPAS': {
         'scores': compas_scores,
