@@ -7,7 +7,7 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
         let traceUtilities = {
-            x: [`${group1} (${i})`, `${group2} (${i})`],
+            x: [`${group1} (${idOfSelectedPoints[i].id})`, `${group2} (${idOfSelectedPoints[i].id})`],
             y: subjectsUtility[i],
             marker:{
               color: [colors[i], colors[i]]
@@ -17,7 +17,7 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
         };
         tracesUtilities.push(traceUtilities)
         let traceFairnessScores = {
-            x: [`Fairness score (${i})`],
+            x: [`Fairness score (${idOfSelectedPoints[i].id})`],
             y: [fairnessScores[i]],
             marker:{
               color: [colors[i]]
