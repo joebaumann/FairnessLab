@@ -21,8 +21,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       marker: {
         color: "rgba(30, 132, 201, 0.4)",
       },
-      xaxis: 'x1',
-      yaxis: 'y1',
     };
     const trace_group1_Y0 = {
       y: group1_Y0,
@@ -31,8 +29,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       marker: {
           color: "rgba(98, 182, 239, 0.4)",
       },
-      xaxis: 'x1',
-      yaxis: 'y1',
     };
     const dataGroup1 = [trace_group1_Y1, trace_group1_Y0]
     
@@ -55,8 +51,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
         marker: {
            color: "rgba(207, 122, 37, 0.4)",
         },
-        xaxis: 'x2',
-        yaxis: 'y2',
     };
     const trace_group2_Y0 = {
       y: group2_Y0,
@@ -65,8 +59,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       marker: {
          color: "rgba(255, 177, 101, 0.4)",
       },
-      xaxis: 'x2',
-      yaxis: 'y2',
     };
     const dataGroup2 = [trace_group2_Y1, trace_group2_Y0]
 
@@ -81,7 +73,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
         y0: thresholdTuples[selectedPoint][0],
         x0: 0,
         y1: thresholdTuples[selectedPoint][0],
-        x1: 100,
+        x1: scores[0].length/30,
         line: {
           color: color,
           width: 3,
@@ -95,7 +87,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
         y0: thresholdTuples[selectedPoint][1],
         x0: 0,
         y1: thresholdTuples[selectedPoint][1],
-        x1: 80,
+        x1: scores[1].length/60,
         line: {
           color: color,
           width: 3,
@@ -117,9 +109,9 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           autorange: 'reversed',
       },
       yaxis: {
-        type: 'histogram',
+        // type: 'histogram',
         title: 'Probability score',
-        range: [0, 1]
+        range: [-0.05, 1.05]
       },
       showlegend: true,
       legend: {
@@ -139,10 +131,11 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           title: 'Frequency'
       },
       yaxis: {
-        type: 'histogram',
-        title: 'Estimated repayment probability',
-        range: [0, 1]
+        // type: 'histogram',
+        title: 'Probability score',
+        range: [-0.05, 1.05]
       },
+      showlegend: true,
       legend: {
         x: 1,
         y: 1
