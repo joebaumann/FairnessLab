@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './SelectedPointsTable.css';
 
 
-function SelectedPointsTable({selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, labels}) {
+function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerCurrency, subjectsUtility, labels}) {
 
   const tableDate = Object.values(idOfSelectedPoints).sort(function(a, b){
     return a.id-b.id
@@ -15,9 +15,9 @@ function SelectedPointsTable({selectedPoints, setSelectedPoints, idOfSelectedPoi
       return (
           <tr key={id}>
             <td>{id}</td>
-            <td>{labels[0]}: {thresholdGroup0} ; {labels[1]}: {thresholdGroup1}</td>
-            <td>{decisionMakerUtility}</td>
-            <td>{fairnessScore}</td>
+            <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
+            <td>{decisionMakerUtility} {decisionMakerCurrency}</td>
+            <td>{fairnessScore.toFixed(4)}</td>
           </tr>
       )
     })

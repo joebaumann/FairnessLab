@@ -3,7 +3,7 @@ import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -12,8 +12,6 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [suFP, setSuFP] = useState(1);
     const [suFN, setSuFN] = useState(0);
     const [suTN, setSuTN] = useState(0);
-    const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
-    const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
