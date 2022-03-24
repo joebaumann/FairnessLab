@@ -4,10 +4,10 @@ import axios from 'axios'
 import Header from '../Header';
 import FairnessFingerprint from '../FairnessFingerprint';
 // import ScoreDistribution from '../ScoreDistribution';
-// import scores from '../../data_static/hr/scores.json';
+// import scores from '../../data_static/hr_old/scores.json';
 
 // the following imports are used to access the static data instead of fetching it dynamically from the backend
-import results_for_all_metrics_and_all_sliders from '../../data_static/hr/results_for_all_metrics_and_all_sliders.json';
+import results_for_all_metrics_and_all_sliders from '../../data_static/hr_old/results_for_all_metrics_and_all_sliders.json';
 
 function FairnessLabImprove() {
     return(

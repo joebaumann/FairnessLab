@@ -2,28 +2,44 @@ import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
 import compas_scores from '../../data_static/compas/scores.json';
 import compas_y from '../../data_static/compas/y.json';
-// import credit_scores from '../../data_static/credit/scores.json';
-// import credit_y from '../../data_static/credit/y.json';
-// import hr_scores from '../../data_static/hr/scores.json';
-// import hr_y from '../../data_static/hr/y.json';
+// import credit_scores from '../../data_static/credit_old/scores.json';
+// import credit_y from '../../data_static/credit_old/y.json';
+// import hr_scores from '../../data_static/hr_old/scores.json';
+// import hr_y from '../../data_static/hr_old/y.json';
+
+// datasets used for the AMLD@EPFL workshop
+import credit_lending_scores from '../../data_static/credit_lending/scores.json';
+import credit_lending_y from '../../data_static/credit_lending/y.json';
+import algorithmic_hiring_scores from '../../data_static/algorithmic_hiring/scores.json';
+import algorithmic_hiring_y from '../../data_static/algorithmic_hiring/y.json';
 
 function DatasetSelector({setScores, setY}) {
     const datasets = {
-        'Credit': {
-        'scores': compas_y,
-        'y': compas_y
+        'Credit Lending': {
+        'scores': credit_lending_scores,
+        'y': credit_lending_y
         },
-        'HR': {
-        'scores': compas_y,
-        'y': compas_y
+        'Algorithmic Hiring': {
+        'scores': algorithmic_hiring_scores,
+        'y': algorithmic_hiring_y
         },
+
+        // 'Credit': {
+        // 'scores': credit_scores,
+        // 'y': credit_y
+        // },
+        // 'HR': {
+        // 'scores': hr_scores,
+        // 'y': hr_y
+        // },
+
         'COMPAS': {
         'scores': compas_scores,
         'y': compas_y
         }
     }
 
-    const [datasetSelection, setDatasetSelection] = useState('COMPAS');
+    const [datasetSelection, setDatasetSelection] = useState('Credit Lending');
 
     useEffect(() => {
         setScores(datasets[datasetSelection]['scores'])
@@ -35,8 +51,8 @@ function DatasetSelector({setScores, setY}) {
         <h1>Dataset</h1>
         <label htmlFor="datasetSelection">Choose a dataset:</label>
         <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
-            <option value="Credit">Credit</option>
-            <option value="HR">HR</option>
+            <option value="Credit Lending">Credit Lending</option>
+            <option value="Algorithmic Hiring">Algorithmic Hiring</option>
             <option value="COMPAS">COMPAS</option>
         </select>
         </div>
