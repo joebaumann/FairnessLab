@@ -70,10 +70,11 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       var color = colors[selectedPoint]
       var threshold1 = {
         type: 'line',
+        xref: 'paper',
         y0: thresholdTuples[selectedPoint][0],
-        x0: 0,
+        x0: 0.05,
         y1: thresholdTuples[selectedPoint][0],
-        x1: scores[0].length/30,
+        x1: 1,
         line: {
           color: color,
           width: 3,
@@ -84,10 +85,11 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
       var threshold2 = {
         type: 'line',
+        xref: 'paper',
         y0: thresholdTuples[selectedPoint][1],
         x0: 0,
         y1: thresholdTuples[selectedPoint][1],
-        x1: scores[1].length/60,
+        x1: 0.95,
         line: {
           color: color,
           width: 3,
@@ -109,7 +111,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           autorange: 'reversed',
       },
       yaxis: {
-        // type: 'histogram',
         title: 'Probability score',
         range: [-0.05, 1.05]
       },
@@ -117,7 +118,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       legend: {
         x: 0,
         y: 1
-      },
+      }
     };
 
     const layoutGroup2 = {
@@ -131,7 +132,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           title: 'Frequency'
       },
       yaxis: {
-        // type: 'histogram',
         title: 'Probability score',
         range: [-0.05, 1.05]
       },
