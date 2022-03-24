@@ -31,7 +31,6 @@ function DatasetSelector({setScores, setY}) {
 
     function handleFile(e) {
         const content = e.target.result;
-        console.log('file content',  content)
         const text = (e.target.result)
         const jsonScores = JSON.parse(text)
         setFileScores(jsonScores)
