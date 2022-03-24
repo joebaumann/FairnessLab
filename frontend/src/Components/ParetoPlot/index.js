@@ -21,7 +21,11 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
-        return `hsla(${~~(360 * Math.random())},80%,50%,0.8)`
+        let hue = ~~(360 * Math.random())
+        while (hue >= 51 && hue <= 60) {
+            hue = ~~(360 * Math.random())
+        }
+        return `hsla(${hue},80%,50%,0.8)`
     }
 
     function deselectAllPoints() {
