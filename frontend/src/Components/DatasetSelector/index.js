@@ -8,29 +8,28 @@ import credit_lending_y from '../../data_static/credit_lending/y.json';
 import algorithmic_hiring_scores from '../../data_static/algorithmic_hiring/scores.json';
 import algorithmic_hiring_y from '../../data_static/algorithmic_hiring/y.json';
 
-function DatasetSelector({setScores, setY}) {
+function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY}) {
     const datasets = {
         'Credit Lending': {
-        'scores': credit_lending_scores,
-        'y': credit_lending_y
+            'scores': credit_lending_scores,
+            'y': credit_lending_y
         },
         'Algorithmic Hiring': {
-        'scores': algorithmic_hiring_scores,
-        'y': algorithmic_hiring_y
+            'scores': algorithmic_hiring_scores,
+            'y': algorithmic_hiring_y
         },
         'COMPAS': {
-        'scores': compas_scores,
-        'y': compas_y
+            'scores': compas_scores,
+            'y': compas_y
         }
     }
 
-    const [datasetSelection, setDatasetSelection] = useState('Credit Lending');
 	const [fileName, setFileName] = useState(null);
-    const [fileScores, setFileScores] = useState(null)
+    const [fileScores, setFileScores] = useState(null);
     const [fileError, setFileError] = useState(false);
+    const [localDatasetSelection, setLocalDatasetSelection] = useState(datasetSelection);
 
     function handleFile(e) {
-        const content = e.target.result;
         const text = (e.target.result)
         const jsonScores = JSON.parse(text)
         setFileScores(jsonScores)
@@ -54,30 +53,30 @@ function DatasetSelector({setScores, setY}) {
     }
 
     useEffect(() => {
-        setScores(datasets[datasetSelection]['scores'])
-        setY(datasets[datasetSelection]['y'])
-        setFileError(true)
-    }, [datasetSelection]);
-
+        setY(datasets[localDatasetSelection]['y'])
+        setDatasetSelection(localDatasetSelection)
+    }, [localDatasetSelection]);
+    
     useEffect(() => {
         if (fileScores !== null
             && fileScores.hasOwnProperty('scores_group1')
-            && fileScores['scores_group1'].length === datasets[datasetSelection]['y']['y_group1'].length
+            && fileScores['scores_group1'].length === datasets[localDatasetSelection]['y']['y_group1'].length
             && fileScores.hasOwnProperty('scores_group2')
-            && fileScores['scores_group2'].length === datasets[datasetSelection]['y']['y_group2'].length) {
-            setScores(fileScores)
-            setFileError(false)
-        }
+            && fileScores['scores_group2'].length === datasets[localDatasetSelection]['y']['y_group2'].length) {
+                setScores(fileScores)
+                setFileError(false)
+            }
         else {
+            setScores(datasets[localDatasetSelection]['scores'])
             setFileError(true)
         }
-    }, [fileScores]);
+    }, [fileScores, localDatasetSelection]);
 
     return(
         <div className="DatasetSelector">
         <h1>Dataset</h1>
         <label htmlFor="datasetSelection">Choose a dataset</label>
-        <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
+        <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setLocalDatasetSelection(e.target.value)}>
             <option value="Credit Lending">Credit Lending</option>
             <option value="Algorithmic Hiring">Algorithmic Hiring</option>
             <option value="COMPAS">COMPAS</option>

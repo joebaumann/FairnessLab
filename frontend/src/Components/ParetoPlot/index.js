@@ -3,7 +3,7 @@ import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 
-function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -34,6 +34,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         setIdOfSelectedPoints({})
         setIncrementalSelectionId(1)
         setColors(Array(numThresholds * numThresholds).fill('#4e87ad'))
+        console.log('deselected all points')
     }
 
     function patternMapper(pattern) {
@@ -199,6 +200,14 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
         }
         setXAxisLabel(xaxislabel)
     }
+
+    useEffect(() => {
+        console.log('selection changed to ' + datasetSelection)
+        console.log(scores)
+        deselectAllPoints()
+        setNumThresholds(11)
+        updateThresholdCalculations()
+    }, [datasetSelection]);
     
     useEffect(() => {
         updateThresholdCalculations()
