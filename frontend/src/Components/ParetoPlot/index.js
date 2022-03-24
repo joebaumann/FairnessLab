@@ -313,7 +313,6 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
                 <br/>
                 <b>Fairness score</b>: Lower is better<br/>
                 <br/>
-                <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 1, max: 101)</label>
                 <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
                 <br/><br/>
                 <div>
@@ -431,6 +430,8 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
 function ThresholdInput({numThresholds, setNumThresholds}) {
     const [currentNumThresholds, setCurrentNumThresholds] = useState(numThresholds)
     return (
+        <>
+        <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 1, max: 101)</label>
         <input type="text" min="1" max="101" value={currentNumThresholds} onChange={(e) => setCurrentNumThresholds(e.target.value)} onBlur={(e) => {
             if (e.target.value < 1) {
                 setCurrentNumThresholds(1)
@@ -440,6 +441,7 @@ function ThresholdInput({numThresholds, setNumThresholds}) {
             }
             setNumThresholds(currentNumThresholds)
         }}/>
+        </>
       );
 }
 
