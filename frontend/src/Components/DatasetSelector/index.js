@@ -2,11 +2,6 @@ import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
 import compas_scores from '../../data_static/compas/scores.json';
 import compas_y from '../../data_static/compas/y.json';
-// import credit_scores from '../../data_static/credit_old/scores.json';
-// import credit_y from '../../data_static/credit_old/y.json';
-// import hr_scores from '../../data_static/hr_old/scores.json';
-// import hr_y from '../../data_static/hr_old/y.json';
-
 // datasets used for the AMLD@EPFL workshop
 import credit_lending_scores from '../../data_static/credit_lending/scores.json';
 import credit_lending_y from '../../data_static/credit_lending/y.json';
@@ -23,16 +18,6 @@ function DatasetSelector({setScores, setY}) {
         'scores': algorithmic_hiring_scores,
         'y': algorithmic_hiring_y
         },
-
-        // 'Credit': {
-        // 'scores': credit_scores,
-        // 'y': credit_y
-        // },
-        // 'HR': {
-        // 'scores': hr_scores,
-        // 'y': hr_y
-        // },
-
         'COMPAS': {
         'scores': compas_scores,
         'y': compas_y
