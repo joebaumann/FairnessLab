@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
@@ -399,14 +399,15 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 }
 
 function UtilityQuantifier({value, setSliderValue, label, unit}) {
-    var numberRegex = /\d+/;
+    var numberRegex = /[-+]?[0-9]+\.?[0-9]+/
     var unitRegex = /[^\d+]+$/;
     var multiplierRegex = /^\*\s*\d+/;
+    const [currentSliderValue, setCurrentSliderValue] = useState(value)
     return (
         <div>
             <label>{label}</label>
             <br/>
-            <input className="Slider" type="range" min="-10" max="10" step="0.1" value={value} onChange={(e) => setSliderValue(e.target.value)} list="ticks" />
+            <input className="Slider" type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
             <datalist id="ticks">
                 <option>-10</option>
                 <option>-9</option>
@@ -430,9 +431,9 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
                 <option>9</option>
                 <option>10</option>
             </datalist>
-            <span>{value} {unit}</span>
+            <span>{currentSliderValue} {unit}</span>
             {unit.match(multiplierRegex) !== null && 
-            <span> = {Math.round(value * unit.match(numberRegex) * 100) / 100}{unit.match(unitRegex)}</span>}
+            <span> = {Math.round(currentSliderValue * unit.match(numberRegex) * 100) / 100}{unit.match(unitRegex)}</span>}
         </div>
       );
 }
