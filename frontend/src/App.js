@@ -30,8 +30,8 @@ function App() {
             <Route exact path="/" component={Home}/>
             {/* <Route path="/data" component={Data}/>
             <Route path="/workflow" component={Workflow}/> */}
-            <Route path="/audit" component={FairnessLabAudit}/>
-            <Route path="/improve" component={FairnessLabMakeFair}/>
+            {/* <Route path="/audit" component={FairnessLabAudit}/>
+            <Route path="/improve" component={FairnessLabMakeFair}/> */}
             <Route path="/pareto" component={FairnessLabPareto}/>
             <Route path="/about" component={About}/>
             <Route path="/contact" component={Contact}/>

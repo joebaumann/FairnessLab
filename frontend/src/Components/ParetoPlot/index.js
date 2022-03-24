@@ -23,12 +23,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+        return `hsla(${~~(360 * Math.random())},80%,50%,0.8)`
     }
 
     function deselectAllPoints() {

@@ -66,7 +66,7 @@ function Home() {
       <img src={AMLD_workshop_picture_v1} alt="Workshop Picture" width="40%" height="1%" />
       <h2>Thank you for joining today's workshop!</h2>
       <p style={{textAlign: 'center'}}>
-        In the navigation bar you find the section <b>Pareto</b>. Choose a dataset to explore and follow the instructions to derive an optimal decision rule that also satisfies a morally appropriate definition of fairness.
+        In the navigation bar you find the section <b>model evaluation</b>. Choose a dataset to explore and follow the instructions to derive an optimal decision rule that also satisfies a morally appropriate definition of fairness.
         <br/>
         <br/>
         <a href="https://appliedmldays.org/events/amld-epfl-2022/workshops/how-to-develop-fair-algorithms-using-the-fairness-lab-tool" target="_blank">Link to the workshop website</a>
