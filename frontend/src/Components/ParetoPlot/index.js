@@ -236,7 +236,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
                 <h3>Currency of the decision maker</h3>
                 <div>In what unit do you want to measure the utility of the decision maker?</div>
-                <span>Note: Start with '*' to increase the range of the scale.</span>
+                <span>N.B.: Start with '*' to increase the range of the scale.</span>
                 <input type="text" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision maker's utility</h3>
@@ -251,7 +251,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
 
                 <h3>Currency of decision subjects</h3>
                 <div>In what unit do you want to measure the utility of the decision subject?</div>
-                <span>Note: Start with '*' to increase the range of the scale.</span>
+                <span>N.B.: Start with '*' to increase the range of the scale.</span>
                 <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision subjects' utility</h3>

@@ -6,8 +6,8 @@ import ParetoPlot from '../ParetoPlot';
 import SelectedPointsTable from '../SelectedPointsTable';
 import ScoreDistribution from '../ScoreDistribution';
 import SubjectsUtility from '../SubjectsUtility';
-import compas_scores from '../../data_static/compas/scores.json';
-import compas_y from '../../data_static/compas/y.json';
+import credit_lending_scores from '../../data_static/credit_lending/scores.json';
+import credit_lending_y from '../../data_static/credit_lending/y.json';
 
 function FairnessLabPareto() {
   const [group1, setGroup1] = useState('men');
@@ -22,8 +22,8 @@ function FairnessLabPareto() {
   const [fairnessScores, setFairnessScores] = useState([])
   const [thresholdTuples, setThresholdTuples] = useState([]);
   const [colors, setColors] = useState(Array(numThresholds * numThresholds).fill('#4e87ad'));
-  const [scores, setScores] = useState(compas_scores);
-  const [y, setY] = useState(compas_y);
+  const [scores, setScores] = useState(credit_lending_scores);
+  const [y, setY] = useState(credit_lending_y);
 
   return(
     <div className="FairnessLabPareto">
