@@ -21,6 +21,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, numThresho
     const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
+        // get a random color while avoiding yellow and colors that are too light
         let hue = ~~(360 * Math.random())
         while (hue >= 51 && hue <= 60) {
             hue = ~~(360 * Math.random())

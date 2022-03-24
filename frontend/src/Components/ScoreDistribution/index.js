@@ -125,7 +125,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
       legend: {
         x: 0,
         y: 1
-      }
+      },
     };
 
     const layoutGroup2 = {
