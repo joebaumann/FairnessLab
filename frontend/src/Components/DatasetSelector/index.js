@@ -8,7 +8,7 @@ import credit_lending_y from '../../data_static/credit_lending/y.json';
 import algorithmic_hiring_scores from '../../data_static/algorithmic_hiring/scores.json';
 import algorithmic_hiring_y from '../../data_static/algorithmic_hiring/y.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY}) {
+function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY}) {
     const datasets = {
         'Credit Lending': {
             'scores': credit_lending_scores,
@@ -66,10 +66,11 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 setScores(fileScores)
                 setFileError(false)
             }
-        else {
-            setScores(datasets[localDatasetSelection]['scores'])
-            setFileError(true)
-        }
+            else {
+                setScores(datasets[localDatasetSelection]['scores'])
+                setFileError(true)
+            }
+            setFileID(++fileID)
     }, [fileScores, localDatasetSelection]);
 
     return(

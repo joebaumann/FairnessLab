@@ -4,11 +4,16 @@
     position: fixed;
     top: 0;
     width: 100%;
-    padding: px;
     z-index: 100;
-    height: 9vh;
+    height: 10vh;
   }
   
+@media (min-height: 800px), screen and (orientation: portrait) { 
+  .Navbar {
+    height: 8vh;
+  }
+}
+
   .Navbar-icon {
     background-color: transparent;
     border: none;
