@@ -255,10 +255,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision maker's utility</h3>
 
-                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="TP: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="FP: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
-                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="FN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="TN: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="u11: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="u10: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
                 <h2>Decision subjects' utility</h2>
                 <h5>How much utility do the decision subjects derive from the decisions?</h5>
@@ -270,10 +270,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision subjects' utility</h3>
 
-                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="TP: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="FP: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="FN: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="TN: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="u11 How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
                 <h2>Fairness score</h2>
                 <h5>How should the utility of the decision subjects be distributed?</h5>
@@ -288,21 +288,17 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
                 
                 <h3>Pattern of Justice</h3>
-                {/* <div>For now, we will simply assume that <i>egalitarianism</i> is our pattern of choice. This means that we expect that the average utility of {group1} is equal to the average utility of {group2}.</div> */}
-                
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
-                <div><b>Egalitarianism</b>: Requires equality between the average utilities.</div>
-                <div><b>Maximin</b>: Demands that the average utility of the worst-off group is maximized.</div>
-                <div><b>Sufficientarianism</b>: Decide on a threshold for the minimum average utility and try to bring as many groups as possible above this threshold.</div>
-                <div><b>Prioritarianism</b>: Sum of the average utilities, where the utility of the worst-off group is weighted. Prioritarianism says that benefits for the worse off matter more than benefits for the better off.</div>
+                <div><b>Egalitarianism</b>: Fairness is if individuals in both groups are expected to derive the same utility from the decision rule. Equality in itself is valued.</div>
+                <div>→ Measured as: <b>How close are the average utilities to being equal?</b></div>
+                <div><b>Maximin</b>: Fairness is if the average utility of the worst-off group is maximized by the decision rule. Inequalities are okay if they benefit the worst-off group.</div>
+                <div>→ Measured as: <b>What’s the lowest average utility?</b></div>
                 <br/>
 
                 <label htmlFor="pattern">Choose a pattern:</label>
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
-                <option value="egalitarianism">egalitarian</option>
+                <option value="egalitarianism">egalitarianism</option>
                 <option value="maximin">maximin</option>
-                <option value="sufficientarianism">sufficientarian</option>
-                <option value="prioritarianism">prioritarian</option>
                 </select>
 
                 {pattern === 'sufficientarianism' &&
