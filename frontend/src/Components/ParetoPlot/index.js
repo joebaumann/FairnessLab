@@ -255,10 +255,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision maker's utility</h3>
 
-                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="u11: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="u10: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
-                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="DM_u11: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="DM_u10: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="DM_u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="DM_u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
                 <h2>Decision subjects' utility</h2>
                 <h5>How much utility do the decision subjects derive from the decisions?</h5>
@@ -270,10 +270,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision subjects' utility</h3>
 
-                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="u11 How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
                 <h2>Fairness score</h2>
                 <h5>How should the utility of the decision subjects be distributed?</h5>
