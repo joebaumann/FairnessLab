@@ -102,6 +102,13 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     const layoutGroup1 = {
       width: 400,
       height: 400,
+      margin: {
+        l: 50,
+        r: 0,
+        b: 50,
+        t: 80,
+        pad: 4
+      },
       title: labels[0],
       barmode: "overlay",
       shapes: threshold_lines1,
@@ -124,6 +131,13 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     const layoutGroup2 = {
       width: 400,
       height: 400,
+      margin: {
+        l: 0,
+        r: 50,
+        b: 50,
+        t: 80,
+        pad: 4
+      },
       title: labels[1],
       barmode: "overlay",
       shapes: threshold_lines2,
@@ -132,7 +146,6 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           title: 'Frequency'
       },
       yaxis: {
-        title: 'Probability score',
         range: [-0.05, 1.05]
       },
       showlegend: true,

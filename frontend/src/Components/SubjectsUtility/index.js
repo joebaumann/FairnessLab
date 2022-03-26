@@ -43,6 +43,9 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
                 layout = {
                     {
                         title: 'Decision subjects\' utilities',
+                        xaxis: {
+                            automargin: true,
+                        }
                     }
 
                 }
@@ -56,6 +59,9 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
                 layout = {
                     {
                         title: 'Calculated fairness score',
+                        xaxis: {
+                            automargin: true,
+                        }
                     }
 
                 }

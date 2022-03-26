@@ -1,4 +1,10 @@
 .Content {
   text-align: center;
-  margin-top: 9vh;
+  margin-top: 10vh;
+}
+
+@media (min-height: 800px), screen and (orientation: portrait) { 
+  .Content {
+    margin-top: 8vh;
+  }
 }
