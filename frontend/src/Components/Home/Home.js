@@ -72,7 +72,7 @@ function Home() {
         <a href="https://appliedmldays.org/events/amld-epfl-2022/workshops/how-to-develop-fair-algorithms-using-the-fairness-lab-tool" target="_blank">Link to the workshop website</a>
         <br/>
         <br/>
-        <i>TODO: Provide additional info and link to matierials...</i>
+        <a href="https://github.com/joebaumann/AMLD-EPFL2022-workshop-fair-algorithms" target="_blank">Link to the Jupyter Notebooks for the hands-on exercises</a>
       </p>
     </div>
   );
