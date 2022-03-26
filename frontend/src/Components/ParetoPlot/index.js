@@ -33,7 +33,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         setSelectedPoints([])
         setIdOfSelectedPoints({})
         setIncrementalSelectionId(1)
-        setColors(Array(numThresholds * numThresholds).fill('#4e87ad'))
+        setColors(Array(numThresholds * numThresholds).fill('#ffffff'))
         console.log('deselected all points')
     }
 
@@ -343,19 +343,26 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                         y: paretoOptimalPointsY,
                         mode: 'lines',
                         name: 'Pareto front',
-                        marker:{color: '#a61b62'}
+                        marker: {color: '#a61b62'}
                     },
                     {
                         x: fairnessScores,
                         y: decisionMakerUtility,
                         mode: 'markers',
-                        marker:{color: colors},
+                        marker: {
+                            color: colors,
+                            size: 7,
+                            line: {
+                                color: '#000000',
+                                width: 1
+                            }
+                        },
                         type: 'scatter',
                         hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
                         '<br><b>Fairness score</b>: %{x}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
-                        name: ''
+                        name: 'Decision rule'
                     },
                     ]}
 
@@ -375,7 +382,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                             // deselect point and remove from list
                             selectedPoints.splice(indexOfSelectedPoint, 1)
                             delete idOfSelectedPoints[selectedPoint]
-                            newColors[selectedPoint] = '#4e87ad'
+                            newColors[selectedPoint] = '#ffffff'
                         } else {
                             // select point and add to list
                             selectedPoints.push(selectedPoint)
