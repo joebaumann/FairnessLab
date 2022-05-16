@@ -3,6 +3,7 @@ import Header from '../Header';
 import './Home.css';
 import AMLD_workshop_picture_v1 from "./AMLD_workshop_picture_v1.png";
 import AMLD_workshop_picture_v2 from "./AMLD_workshop_picture_v2.png";
+import UZH_logo from "./UZH_logo.svg";
 
 function Home() {
   return (
@@ -62,17 +63,17 @@ function Home() {
       </p>
       */}
 
-      <Header title="Fairness Lab @ AMLD EPFL 2022 (March 27)"/>
-      <img src={AMLD_workshop_picture_v1} alt="Workshop Picture" width="40%" height="1%" />
-      <h2>Thank you for joining today's workshop!</h2>
+      <Header title="Fairness Lab @ Informatics, Ethics and Society"/>
+      <img src={UZH_logo} alt="Workshop Picture" width="40%" height="1%" />
+      <h2>Thank you for joining today's lecture!</h2>
       <p style={{textAlign: 'center'}}>
-        In the navigation bar you find the section <b>model evaluation</b>. Choose a dataset to explore and follow the instructions to derive an optimal decision rule that also satisfies a morally appropriate definition of fairness.
-        <br/>
+        In the navigation bar you can find the section <b>model evaluation</b>. Choose a dataset to explore and follow the instructions to derive an optimal decision rule that also satisfies a morally appropriate definition of fairness.
+        {/* <br/>
         <br/>
         <a href="https://appliedmldays.org/events/amld-epfl-2022/workshops/how-to-develop-fair-algorithms-using-the-fairness-lab-tool" target="_blank">Link to the workshop website</a>
         <br/>
         <br/>
-        <a href="https://github.com/joebaumann/AMLD-EPFL2022-workshop-fair-algorithms" target="_blank">Link to the Jupyter Notebooks for the hands-on exercises</a>
+        <a href="https://github.com/joebaumann/AMLD-EPFL2022-workshop-fair-algorithms" target="_blank">Link to the Jupyter Notebooks for the hands-on exercises</a> */}
       </p>
     </div>
   );

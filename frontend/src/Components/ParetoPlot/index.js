@@ -299,6 +299,8 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
                 <option value="egalitarianism">egalitarianism</option>
                 <option value="maximin">maximin</option>
+                <option value="prioritarianism">prioritarianism</option>
+                <option value="sufficientarianism">sufficientarianism</option>
                 </select>
 
                 {pattern === 'sufficientarianism' &&
