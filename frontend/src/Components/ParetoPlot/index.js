@@ -219,7 +219,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
     useEffect(() => {
         updateXAxisLabel()
-    }, [pattern]);
+    }, [pattern, group1, group2]);
 
     useEffect(() => {
         deselectAllPoints()
@@ -249,8 +249,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <h5>How much utility does the decision maker derive from the decisions?</h5>
 
                 <h3>Currency of the decision maker</h3>
-                <div>In what unit do you want to measure the utility of the decision maker?</div>
-                <span>N.B.: Start with '*' to increase the range of the scale.</span>
+                <span>In what unit do you want to measure the utility of the decision maker?</span>
                 <input type="text" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision maker's utility</h3>
@@ -264,8 +263,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <h5>How much utility do the decision subjects derive from the decisions?</h5>
 
                 <h3>Currency of decision subjects</h3>
-                <div>In what unit do you want to measure the utility of the decision subject?</div>
-                <span>N.B.: Start with '*' to increase the range of the scale.</span>
+                <span>In what unit do you want to measure the utility of the decision subject?</span>
                 <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision subjects' utility</h3>
@@ -299,8 +297,8 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
                 <option value="egalitarianism">egalitarianism</option>
                 <option value="maximin">maximin</option>
-                <option value="prioritarianism">prioritarianism</option>
-                <option value="sufficientarianism">sufficientarianism</option>
+                {/* <option value="prioritarianism">prioritarianism</option>
+                <option value="sufficientarianism">sufficientarianism</option> */}
                 </select>
 
                 {pattern === 'sufficientarianism' &&
