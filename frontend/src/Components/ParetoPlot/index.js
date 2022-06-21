@@ -321,7 +321,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <br/><br/>
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)
                 <br/>
-                <b>Fairness score</b>: Lower is better<br/>
+                <b>Fairness score</b>: Higher is better<br/>
                 <br/>
                 <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
                 <br/><br/>
