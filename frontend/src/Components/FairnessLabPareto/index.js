@@ -11,8 +11,8 @@ import credit_lending_y from '../../data_static/credit_lending/y.json';
 
 function FairnessLabPareto() {
   const [datasetSelection, setDatasetSelection] = useState('Credit Lending');
-  const [group1, setGroup1] = useState('men');
-  const [group2, setGroup2] = useState('women');
+  const [group1, setGroup1] = useState('male');
+  const [group2, setGroup2] = useState('female');
   const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
   const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
   const [selectedPoints, setSelectedPoints] = useState([]);

@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
+import '../../config';
 
 function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
     const [dmuTP, setDmuTP] = useState(1);
@@ -208,6 +209,12 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         setNumThresholds(11)
         updateThresholdCalculations()
     }, [datasetSelection, fileID]);
+
+    useEffect(() => {
+        console.log(datasetSelection)
+        setGroup1(global.config.datasets[datasetSelection]['group1'])
+        setGroup2(global.config.datasets[datasetSelection]['group2'])
+    }, [datasetSelection]);
     
     useEffect(() => {
         updateThresholdCalculations()
