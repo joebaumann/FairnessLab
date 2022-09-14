@@ -1,10 +1,10 @@
-h3 {
+.Home h3 {
     margin-left: 50vh;
     margin-right: 50vh;
     text-align: left;
 }
 
-p {
+.Home p {
     margin-left: 50vh;
     margin-right: 50vh;
     text-align: left;

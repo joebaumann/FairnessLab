@@ -4,7 +4,7 @@ import './Home.css';
 
 function Home() {
   return (
-    <div>
+    <div className="Home">
 
       <Header title="FairnessLab"/>
       <h1>Don't just audit your decisions but their consequences</h1>
