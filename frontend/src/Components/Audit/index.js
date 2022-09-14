@@ -1,4 +1,4 @@
-import './FairnessLabPareto.css';
+import './Audit.css';
 import React, {useState} from 'react';
 import Header from '../Header';
 import DatasetSelector from '../DatasetSelector';
@@ -9,7 +9,7 @@ import SubjectsUtility from '../SubjectsUtility';
 import credit_lending_scores from '../../data_static/credit_lending/scores.json';
 import credit_lending_y from '../../data_static/credit_lending/y.json';
 
-function FairnessLabPareto() {
+function Audit() {
   const [datasetSelection, setDatasetSelection] = useState('Credit Lending');
   const [group1, setGroup1] = useState('male');
   const [group2, setGroup2] = useState('female');
@@ -30,9 +30,9 @@ function FairnessLabPareto() {
   const [fileID, setFileID] = useState(0);
 
   return(
-    <div className="FairnessLabPareto">
+    <div className="Audit">
       <Header title="Audit"/>
-      <div className="FairnessLabPareto-Content">
+      <div className="Audit-Content">
         <DatasetSelector fileID={fileID} setFileID={setFileID} datasetSelection={datasetSelection} setDatasetSelection={setDatasetSelection} setScores={setScores} setY={setY}/>
         <ParetoPlot fileID={fileID} datasetSelection={datasetSelection} scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} decisionMakerCurrency={decisionMakerCurrency} setDecisionMakerCurrency={setDecisionMakerCurrency} subjectsCurrency={subjectsCurrency} setSubjectsCurrency={setSubjectsCurrency} />
         <SelectedPointsTable selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} decisionMakerCurrency={decisionMakerCurrency} subjectsCurrency={subjectsCurrency} labels={[group1, group2]} />
@@ -43,4 +43,4 @@ function FairnessLabPareto() {
   )
 }
   
-export default FairnessLabPareto;
+export default Audit;

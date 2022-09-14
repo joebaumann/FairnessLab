@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";
-import FairnessLabPareto from "./Components/FairnessLabPareto";
+import Audit from "./Components/Audit";
 import COMPAS from "./Components/OtherPages/COMPAS";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";
@@ -24,7 +24,7 @@ function App() {
         <div className="Content">
           <Switch>
             <Route exact path="/" component={Home}/>
-            <Route path="/audit" component={FairnessLabPareto}/>
+            <Route path="/audit" component={Audit}/>
             <Route path="/compas" component={COMPAS}/>
             <Route path="/contact" component={Contact}/>
             <Route path="*" component={Error404}/>

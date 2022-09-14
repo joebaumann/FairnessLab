@@ -1,5 +1,9 @@
-.FairnessLabPareto-Content {
+.Audit-Content {
     text-align: left;
     margin-left: 10em;
     margin-right: 10em;
+}
+
+h3 {
+    margin-left: 0vh;
 }
