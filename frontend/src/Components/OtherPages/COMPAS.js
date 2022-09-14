@@ -7,7 +7,7 @@ function COMPAS() {
     <div>
       <Header title="COMPAS case study"/>
       <p>
-        
+        Space for our blog post? Our link to it?
       </p>
     </div>
   );
