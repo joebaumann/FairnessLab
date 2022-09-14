@@ -9,10 +9,14 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
     const [dmuTN, setDmuTN] = useState(1);
-    const [suTP, setSuTP] = useState(1);
-    const [suFP, setSuFP] = useState(1);
-    const [suFN, setSuFN] = useState(0);
-    const [suTN, setSuTN] = useState(0);
+    const [suTP1, setSuTP1] = useState(1);
+    const [suFP1, setSuFP1] = useState(1);
+    const [suFN1, setSuFN1] = useState(0);
+    const [suTN1, setSuTN1] = useState(0);
+    const [suTP2, setSuTP2] = useState(1);
+    const [suFP2, setSuFP2] = useState(1);
+    const [suFN2, setSuFN2] = useState(0);
+    const [suTN2, setSuTN2] = useState(0);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
@@ -133,9 +137,9 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         return values
     }
 
-    function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation) {
-        let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation)
-        let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation)
+    function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation_1, parameter_calculation_2) {
+        let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation_1)
+        let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation_2)
         let values = []
         for (let r_A = 0; r_A < numThresholds; r_A++) {
             for (let r_B = 0; r_B < numThresholds; r_B++) {
@@ -153,9 +157,9 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
     function updateThresholdCalculations() {
         setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN]))
+        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
         if (pattern === 'egalitarianism') {
-            const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN])
+            const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
             const maxUnfairness = Math.max(...unfairnessScores)
             let fairnessScores = unfairnessScores.map(function(s, i) {
                 return maxUnfairness - s;
@@ -164,10 +168,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         }
         else {
             let combineFunction = patternMapper(pattern)
-            let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP, suFP, suFN, suTN])
+            let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
             setFairnessScores(fairnessScores)
         }
-        setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
+        setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
     }
    
     function updateParetoFront() {
@@ -218,7 +222,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     
     useEffect(() => {
         updateThresholdCalculations()
-    }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
+    }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
 
     useEffect(() => {
         updateParetoFront()
@@ -275,10 +279,20 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision subjects' utility</h3>
 
-                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <h4>For the group: {group1}</h4>
+
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+
+                <h4>For the group: {group2}</h4>
+
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+
 
                 <h2>Fairness score</h2>
                 <h5>How should the utility of the decision subjects be distributed?</h5>
