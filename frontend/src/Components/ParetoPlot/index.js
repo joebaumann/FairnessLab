@@ -257,7 +257,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <h1>Configuration</h1>
 
                 <h2>Decision maker's utility</h2>
-                <h5>How much utility does the decision maker derive from the decisions?</h5>
+                <b>How much utility does the decision maker derive from the decisions?</b>
 
                 <h3>Currency of the decision maker</h3>
                 <span>In what unit do you want to measure the utility of the decision maker?</span>
@@ -270,32 +270,9 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="DM_u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
                 <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="DM_u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
-                <h2>Decision subjects' utility</h2>
-                <h5>How much utility do the decision subjects derive from the decisions?</h5>
-
-                <h3>Currency of decision subjects</h3>
-                <span>In what unit do you want to measure the utility of the decision subject?</span>
-                <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
-
-                <h3>Quantification of the decision subjects' utility</h3>
-
-                <h4>For the group: {group1}</h4>
-
-                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
-
-                <h4>For the group: {group2}</h4>
-
-                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
-
 
                 <h2>Fairness score</h2>
-                <h5>How should the utility of the decision subjects be distributed?</h5>
+                <b>How should the utility of the decision subjects be distributed?</b>
                 
                 <h3>Socio-demographic groups</h3>
                 <div>Which socio-demographic groups do you want to compare?</div>
@@ -305,6 +282,29 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <br/>
                 <label htmlFor="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
+
+                <h3>Decision subjects' utility</h3>
+                <div>How much utility do the decision subjects derive from the decisions?</div>
+
+                <h4>Currency of decision subjects</h4>
+                <span>In what unit do you want to measure the utility of the decision subject?</span>
+                <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
+
+                <h4>Quantification of the decision subjects' utility</h4>
+
+                <h5>For the group: {group1}</h5>
+
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+
+                <h5>For the group: {group2}</h5>
+
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
                 
                 <h3>Pattern of Justice</h3>
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
@@ -337,7 +337,8 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 }
             </div>
             <div className="ParetoPlots">
-                <h1>Pareto plot</h1>
+                <h1>Audit</h1>
+                <h2>Pareto plot</h2>
                 With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)

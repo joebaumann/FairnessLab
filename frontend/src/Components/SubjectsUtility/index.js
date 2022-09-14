@@ -31,7 +31,7 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
     
     return (
         <div className='SubjectsUtility'>
-            <h1>Decision subjects' utility for fairness score calculation</h1>
+            <h2>Decision subjects' utility for fairness score calculation</h2>
             {selectedPoints.length === 0 && 
             <b>Select at least one point in the pareto plot to see something.<br/><br/></b>
             }

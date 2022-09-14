@@ -46,7 +46,7 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
 
   return (
     <div>
-        <h1 id='title'>Selected Decision Rules</h1>
+        <h2 id='title'>Selected Decision Rules</h2>
         {renderTable()}
     </div>
   )
