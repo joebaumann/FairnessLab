@@ -9,7 +9,7 @@ import {
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";
 import FairnessLabPareto from "./Components/FairnessLabPareto";
-import About from "./Components/OtherPages/About";
+import COMPAS from "./Components/OtherPages/COMPAS";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";
 
@@ -24,8 +24,8 @@ function App() {
         <div className="Content">
           <Switch>
             <Route exact path="/" component={Home}/>
-            <Route path="/pareto" component={FairnessLabPareto}/>
-            <Route path="/about" component={About}/>
+            <Route path="/audit" component={FairnessLabPareto}/>
+            <Route path="/compas" component={COMPAS}/>
             <Route path="/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
           </Switch>
