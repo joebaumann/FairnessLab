@@ -283,6 +283,9 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <label htmlFor="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
 
+                <h3>Justifier</h3>
+                <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
+
                 <h3>Decision subjects' utility</h3>
                 <div>How much utility do the decision subjects derive from the decisions?</div>
 
