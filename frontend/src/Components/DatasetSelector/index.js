@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 
-function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY}) {
+function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -40,14 +40,40 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
     //     }
     // }
 
-    function splitFileBySensitiveAttribute(file) {
+    function prepareData() {
+        let results = splitFileBySensitiveAttributeAndJustifier(datasets[localDatasetSelection]['file'], justifier)
+        let y = results[0]
+        let scores = results[1]
+        setY(y)
+        setScores(scores)
+        setDatasetSelection(localDatasetSelection)
+        setDatasetSelectionCounter(datasetSelectionCounter + 1)
+    }
+
+    function applyJustifierToRow(row, justifier) {
+        switch(justifier) {
+            case 'no_justifier':
+                return true;
+            case 'y_0':
+                return row['Y'] === 0;
+            case 'y_1':
+                return row['Y'] === 1;
+            case 'd_0':
+                return row['D'] === 0;
+            case 'd_1':
+                return row['D'] === 1;
+        }
+    }
+
+    function splitFileBySensitiveAttributeAndJustifier(file, justifier) {
         let y_group1 = []
         let scores_group1 = []
         let d_group1 = []
         let y_group2 = []
         let scores_group2 = []
         let d_group2 = []
-        file.forEach(function (row, index) {
+        // first rows that are not for selected justifier and then loop through each row in the dataframe
+        file.filter(row => applyJustifierToRow(row, justifier)).forEach(function (row, index) {
             if (row['sensitive-attribute'] === 0) {
                 y_group1.push(row['Y'])
                 scores_group1.push(row['scores'])
@@ -63,23 +89,13 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
 
     useEffect(() => {
         console.log('execute once')
-        let results = splitFileBySensitiveAttribute(datasets[localDatasetSelection]['file'])
-        let y = results[0]
-        let scores = results[1]
-        setY(y)
-        setScores(scores)
-        setDatasetSelection(localDatasetSelection)
+        prepareData()
     }, []);
     
     useEffect(() => {
         console.log('setlocaldatasetselection', localDatasetSelection)
-        let results = splitFileBySensitiveAttribute(datasets[localDatasetSelection]['file'])
-        let y = results[0]
-        let scores = results[1]
-        setY(y)
-        setScores(scores)
-        setDatasetSelection(localDatasetSelection)
-    }, [localDatasetSelection]);
+        prepareData()
+    }, [localDatasetSelection, justifier]);
     
     // useEffect(() => {
     //     if (fileScores !== null
