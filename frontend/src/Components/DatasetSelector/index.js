@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 
-function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY, justifier}) {
+function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -47,6 +47,7 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
         setY(y)
         setScores(scores)
         setDatasetSelection(localDatasetSelection)
+        setDatasetSelectionCounter(datasetSelectionCounter + 1)
     }
 
     function applyJustifierToRow(row, justifier) {
