@@ -4,9 +4,9 @@ module.exports = global.config = {
             'group1': 'Black',
             'group2': 'white'
         },
-        'Test': {
-            'group1': 'Black',
-            'group2': 'white'
+        'German': {
+            'group1': 'female',
+            'group2': 'male'
         }
     }
 };
