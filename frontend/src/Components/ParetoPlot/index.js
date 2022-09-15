@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
+function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -290,6 +290,14 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <h3>Justifier</h3>
                 <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
 
+                <div onChange={(e) => setJustifier(e.target.value)}>
+                    <input type="radio" value="no_justifier" name="justifier" defaultChecked="checked" /> None
+                    <input type="radio" value="y_0" name="justifier" /> Y=0
+                    <input type="radio" value="y_1" name="justifier" /> Y=1
+                    <input type="radio" value="d_0" name="justifier" /> D=0
+                    <input type="radio" value="d_1" name="justifier" /> D=1
+                </div>
+                
                 <h3>Decision subjects' utility</h3>
                 <div>How much utility do the decision subjects derive from the decisions?</div>
 
