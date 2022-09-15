@@ -8,5 +8,10 @@ module.exports = global.config = {
             'group1': 'female',
             'group2': 'male'
         }
+        ,
+        'Own': {
+            'group1': 'group 1',
+            'group2': 'group 2'
+        }
     }
 };
