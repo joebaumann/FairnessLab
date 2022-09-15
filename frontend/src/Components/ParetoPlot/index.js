@@ -156,6 +156,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     }
 
     function updateThresholdCalculations() {
+        console.log(y[0])
         setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
         setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
         if (pattern === 'egalitarianism') {
@@ -209,6 +210,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     useEffect(() => {
         console.log('selection changed to ' + datasetSelection)
         console.log(scores)
+        console.log(y)
         deselectAllPoints()
         setNumThresholds(11)
         updateThresholdCalculations()
@@ -216,8 +218,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
     useEffect(() => {
         console.log(datasetSelection)
-        setGroup1(global.config.datasets[datasetSelection]['group1'])
-        setGroup2(global.config.datasets[datasetSelection]['group2'])
+        if (datasetSelection !== '') {
+            setGroup1(global.config.datasets[datasetSelection]['group1'])
+            setGroup2(global.config.datasets[datasetSelection]['group2'])
+        }
     }, [datasetSelection]);
     
     useEffect(() => {

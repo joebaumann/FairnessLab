@@ -6,11 +6,9 @@ import ParetoPlot from '../ParetoPlot';
 import SelectedPointsTable from '../SelectedPointsTable';
 import ScoreDistribution from '../ScoreDistribution';
 import SubjectsUtility from '../SubjectsUtility';
-import credit_lending_scores from '../../data_static/credit_lending/scores.json';
-import credit_lending_y from '../../data_static/credit_lending/y.json';
 
 function Audit() {
-  const [datasetSelection, setDatasetSelection] = useState('Credit Lending');
+  const [datasetSelection, setDatasetSelection] = useState('');
   const [group1, setGroup1] = useState('male');
   const [group2, setGroup2] = useState('female');
   const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
@@ -23,8 +21,8 @@ function Audit() {
   const [fairnessScores, setFairnessScores] = useState([])
   const [thresholdTuples, setThresholdTuples] = useState([]);
   const [colors, setColors] = useState(Array(numThresholds * numThresholds).fill('#4e87ad'));
-  const [scores, setScores] = useState(credit_lending_scores);
-  const [y, setY] = useState(credit_lending_y);
+  const [scores, setScores] = useState({'scores_group1': [], 'scores_group2': []});
+  const [y, setY] = useState({'y_group1': [], 'y_group2': []});
   // [CH] Dirty hack to get around the issues that checking score upadtes in ParetoPlot and recalculating the thresholds seems to update the scores.
   // [CH] This is awful, we should get rid of this as soon as possible :/
   const [fileID, setFileID] = useState(0);
