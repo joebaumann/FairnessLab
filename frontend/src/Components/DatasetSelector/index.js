@@ -16,7 +16,6 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
 	// const [fileName, setFileName] = useState(null);
     // const [fileScores, setFileScores] = useState(null);
     // const [fileError, setFileError] = useState(false);
-    const [localDatasetSelection, setLocalDatasetSelection] = useState('COMPAS');
 
     // function handleFile(e) {
     //     const text = (e.target.result)
@@ -41,12 +40,11 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
     // }
 
     function prepareData() {
-        let results = splitFileBySensitiveAttributeAndJustifier(datasets[localDatasetSelection]['file'], justifier)
+        let results = splitFileBySensitiveAttributeAndJustifier(datasets[datasetSelection]['file'], justifier)
         let y = results[0]
         let scores = results[1]
         setY(y)
         setScores(scores)
-        setDatasetSelection(localDatasetSelection)
         setDatasetSelectionCounter(datasetSelectionCounter + 1)
     }
 
@@ -93,9 +91,8 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
     }, []);
     
     useEffect(() => {
-        console.log('setlocaldatasetselection', localDatasetSelection)
         prepareData()
-    }, [localDatasetSelection, justifier]);
+    }, [datasetSelection, justifier]);
     
     // useEffect(() => {
     //     if (fileScores !== null
@@ -117,10 +114,11 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
         <div className="DatasetSelector">
         <h1>Dataset</h1>
         <label htmlFor="datasetSelection">Choose a dataset</label>
-        <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setLocalDatasetSelection(e.target.value)}>
-            <option value="COMPAS">COMPAS</option>
-            <option value="German">Credit lending (UCI German Credit)</option>
-        </select>
+        <div onChange={(e) => setDatasetSelection(e.target.value)}>
+            <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked="checked" /> COMPAS
+            <br/>
+            <input name="datasetSelection" type="radio" value="German" /> Credit lending (UCI German Credit)
+        </div>
         {/* <br/>
         <label htmlFor="scoreUpload">Upload your predictions:</label>
         <input type="file" name="file" onChange={selectScoresFile} />

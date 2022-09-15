@@ -8,7 +8,7 @@ import ScoreDistribution from '../ScoreDistribution';
 import SubjectsUtility from '../SubjectsUtility';
 
 function Audit() {
-  const [datasetSelection, setDatasetSelection] = useState('');
+  const [datasetSelection, setDatasetSelection] = useState('COMPAS');
   const [justifier, setJustifier] = useState('no_justifier');
   // the datasetSelectionCounter is incremented every time the datasetSelection or the justifier changes
   // this makes sure that the decision subject utilities are recalculated after the justifier has been applied to the dataset
