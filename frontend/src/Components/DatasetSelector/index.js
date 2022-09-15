@@ -1,14 +1,15 @@
 import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
 import compas_file from '../../data_static/compas/compas.json';
+import german_file from '../../data_static/credit_lending/german.json';
 
 function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY, justifier}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
         },
-        'Test': {
-            'file': compas_file
+        'German': {
+            'file': german_file
         }
     }
 
@@ -117,7 +118,7 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
         <label htmlFor="datasetSelection">Choose a dataset</label>
         <select name="datasetSelection" id="pattern" value={datasetSelection} onChange={(e) => setLocalDatasetSelection(e.target.value)}>
             <option value="COMPAS">COMPAS</option>
-            <option value="Test">Test</option>
+            <option value="German">Credit lending (UCI German Credit)</option>
         </select>
         {/* <br/>
         <label htmlFor="scoreUpload">Upload your predictions:</label>
