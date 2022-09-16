@@ -107,7 +107,20 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 }
             }
         })
-        // TODO: Check if they're all equal in size or 0 and if we have at least scores or D --- if not, throw error
+        let isValid = false
+        if (y_group1.length === scores_group1.length && y_group1.length === d_group1.length 
+            && y_group2.length === scores_group2.length && y_group2.length === d_group2.length) {
+                isValid = true
+        } else if (y_group1.length === scores_group1.length && d_group1.length === 0
+            && y_group2.length === scores_group2.length && d_group2.length === 0) {
+                isValid = true
+        } else if (y_group1.length === d_group1.length && scores_group1.length === 0
+            && y_group2.length === d_group2.length && scores_group2.length === 0) {
+                isValid = true
+        }
+        if (!isValid) {
+            throw 'Incorrect format!'
+        }
         return [{"y_group1": y_group1, "y_group2": y_group2}, {"scores_group1": scores_group1, "scores_group2": scores_group2}]
     }
 
