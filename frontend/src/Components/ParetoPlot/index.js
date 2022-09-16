@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter}) {
+function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -18,9 +18,9 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
     const [suFN2, setSuFN2] = useState(0);
     const [suTN2, setSuTN2] = useState(0);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
-    const [evaluationOfD, setEvaluationOfD] = useState([0, 0]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
+    const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
     const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0.5);
@@ -165,6 +165,7 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
         setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
         let combineFunction = patternMapper(pattern)
         let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
+        // TODO: Add evaluation of D here
         let maxUnfairness = undefined
         if (pattern === "egalitarianism") {
             maxUnfairness = Math.max(...fairnessScores)
@@ -189,7 +190,7 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
             if (pattern === "egalitarianism") {
                 fairnessScore = maxUnfairness - fairnessScore
             }
-            setEvaluationOfD([fairnessScore, decisionMakerUtility])
+            setEvaluationOfD([fairnessScore, decisionMakerUtility, [fairnessValue_A, fairnessValue_B]])
         } else {
             setEvaluationOfD([])
         }
@@ -433,15 +434,17 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
                         mode: 'markers',
                         visible: evaluationOfD.length !== 0,
                         marker: {
-                            color: 'orange',
+                            color: colorOfD,
                             size: 15,
+                            symbol: 'diamond',
                             line: {
                                 color: '#000000',
                                 width: 1
                             }
                         },
                         type: 'scatter',
-                        hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
+                        hovertemplate: '<b>Decisions from dataset</b>' +
+                        '<br><b>Decision maker\'s utility</b>: %{y:.2f}' +
                         '<br><b>Fairness score</b>: %{x:.4f}<br>',
                         name: 'Decisions from dataset'
                     },
@@ -458,20 +461,34 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
                     onClick={(data) => {
                         var newColors = [...colors];
                         console.log(data)
-                        // Make sure that orange point (from D) is not selected
+                        // Orange point (from D) gets index -1, every other points gets their regular index
+                        let selectedPoint = -1
                         if (data.points[0].data.x.length > 1) {
-                            var selectedPoint = data.points[0].pointIndex
-                            var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
-                            console.log('indexOfSelectedPoint', indexOfSelectedPoint)
-                            if (indexOfSelectedPoint > -1) {
-                                // deselect point and remove from list
-                                selectedPoints.splice(indexOfSelectedPoint, 1)
-                                delete idOfSelectedPoints[selectedPoint]
-                                newColors[selectedPoint] = '#ffffff'
+                            selectedPoint = data.points[0].pointIndex
+                        }
+                        var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
+                        console.log('indexOfSelectedPoint', indexOfSelectedPoint)
+                        if (indexOfSelectedPoint > -1) {
+                            // deselect point and remove from list
+                            selectedPoints.splice(indexOfSelectedPoint, 1)
+                            delete idOfSelectedPoints[selectedPoint]
+                            if (selectedPoint === -1) {
+                                setColorOfD('#fff')
                             } else {
-                                // select point and add to list
-                                selectedPoints.push(selectedPoint)
-    
+                                newColors[selectedPoint] = '#ffffff'
+                            }
+                        } else {
+                            // select point and add to list
+                            selectedPoints.push(selectedPoint)
+
+                            if (selectedPoint === -1) {
+                                idOfSelectedPoints[selectedPoint] = {
+                                    id: incrementalSelectionId,
+                                    decisionMakerUtility: evaluationOfD[1],
+                                    fairnessScore: evaluationOfD[0]
+                                }
+                                setColorOfD('orange')
+                            } else {
                                 idOfSelectedPoints[selectedPoint] = {
                                     id: incrementalSelectionId,
                                     thresholdGroup0: thresholdTuples[selectedPoint][0],
@@ -479,14 +496,14 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
                                     decisionMakerUtility: decisionMakerUtility[selectedPoint],
                                     fairnessScore: fairnessScores[selectedPoint]
                                 }
-                                
-                                setIncrementalSelectionId(incrementalSelectionId + 1)
                                 newColors[selectedPoint] = getRandomColor()
                             }
-                            setColors(newColors)
-                            setSelectedPoints([...selectedPoints]);
-                            setIdOfSelectedPoints(idOfSelectedPoints);
+                            
+                            setIncrementalSelectionId(incrementalSelectionId + 1)
                         }
+                        setColors(newColors)
+                        setSelectedPoints([...selectedPoints]);
+                        setIdOfSelectedPoints(idOfSelectedPoints);
                       }}
                 />
             </div>

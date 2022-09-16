@@ -2,15 +2,15 @@ import React, {useState} from 'react';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
 
-const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors, idOfSelectedPoints}) => {
+const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors, idOfSelectedPoints, evaluationOfD}) => {
     let tracesUtilities = []
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
         let traceUtilities = {
             x: [`${group1} (${idOfSelectedPoints[i].id})`, `${group2} (${idOfSelectedPoints[i].id})`],
-            y: subjectsUtility[i],
+            y: i===-1? evaluationOfD[2] : subjectsUtility[i],
             marker:{
-              color: [colors[i], colors[i]]
+              color: i===-1? ['orange', 'orange'] : [colors[i], colors[i]]
             },
             type: 'bar',
             name: 'Selection ' + idOfSelectedPoints[i].id
@@ -18,9 +18,9 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
         tracesUtilities.push(traceUtilities)
         let traceFairnessScores = {
             x: [`Fairness score (${idOfSelectedPoints[i].id})`],
-            y: [fairnessScores[i]],
+            y: i===-1? [evaluationOfD[0]] : [fairnessScores[i]],
             marker:{
-              color: [colors[i]]
+              color: i===-1? ['orange'] : [colors[i]]
             },
             type: 'bar',
             name: 'Selection ' + idOfSelectedPoints[i].id

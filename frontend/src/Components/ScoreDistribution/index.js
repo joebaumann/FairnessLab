@@ -67,36 +67,39 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     
     for (let s=0; s < selectedPoints.length; s++) {
       var selectedPoint = selectedPoints[s]
-      var color = colors[selectedPoint]
-      var threshold1 = {
-        type: 'line',
-        xref: 'paper',
-        y0: thresholdTuples[selectedPoint][0],
-        x0: 0.05,
-        y1: thresholdTuples[selectedPoint][0],
-        x1: 1,
-        line: {
-          color: color,
-          width: 3,
-          dash: 'dot'
+      if (selectedPoint !== -1) {
+        var color = colors[selectedPoint]
+        var threshold1 = {
+          type: 'line',
+          xref: 'paper',
+          y0: thresholdTuples[selectedPoint][0],
+          x0: 0.05,
+          y1: thresholdTuples[selectedPoint][0],
+          x1: 1,
+          line: {
+            color: color,
+            width: 3,
+            dash: 'dot'
+          }
         }
+        threshold_lines1.push(threshold1)
+        
+        var threshold2 = {
+          type: 'line',
+          xref: 'paper',
+          y0: thresholdTuples[selectedPoint][1],
+          x0: 0,
+          y1: thresholdTuples[selectedPoint][1],
+          x1: 0.95,
+          line: {
+            color: color,
+            width: 3,
+            dash: 'dot'
+          }
+        }
+        threshold_lines2.push(threshold2)
       }
-      threshold_lines1.push(threshold1)
 
-      var threshold2 = {
-        type: 'line',
-        xref: 'paper',
-        y0: thresholdTuples[selectedPoint][1],
-        x0: 0,
-        y1: thresholdTuples[selectedPoint][1],
-        x1: 0.95,
-        line: {
-          color: color,
-          width: 3,
-          dash: 'dot'
-        }
-      }
-      threshold_lines2.push(threshold2)
     }
 
     const layoutGroup1 = {
