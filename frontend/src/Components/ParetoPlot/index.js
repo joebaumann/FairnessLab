@@ -457,32 +457,36 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
 
                     onClick={(data) => {
                         var newColors = [...colors];
-                        var selectedPoint = data.points[0].pointIndex
-                        var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
-                        console.log('indexOfSelectedPoint', indexOfSelectedPoint)
-                        if (indexOfSelectedPoint > -1) {
-                            // deselect point and remove from list
-                            selectedPoints.splice(indexOfSelectedPoint, 1)
-                            delete idOfSelectedPoints[selectedPoint]
-                            newColors[selectedPoint] = '#ffffff'
-                        } else {
-                            // select point and add to list
-                            selectedPoints.push(selectedPoint)
-
-                            idOfSelectedPoints[selectedPoint] = {
-                                id: incrementalSelectionId,
-                                thresholdGroup0: thresholdTuples[selectedPoint][0],
-                                thresholdGroup1: thresholdTuples[selectedPoint][1],
-                                decisionMakerUtility: decisionMakerUtility[selectedPoint],
-                                fairnessScore: fairnessScores[selectedPoint]
+                        console.log(data)
+                        // Make sure that orange point (from D) is not selected
+                        if (data.points[0].data.x.length > 1) {
+                            var selectedPoint = data.points[0].pointIndex
+                            var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
+                            console.log('indexOfSelectedPoint', indexOfSelectedPoint)
+                            if (indexOfSelectedPoint > -1) {
+                                // deselect point and remove from list
+                                selectedPoints.splice(indexOfSelectedPoint, 1)
+                                delete idOfSelectedPoints[selectedPoint]
+                                newColors[selectedPoint] = '#ffffff'
+                            } else {
+                                // select point and add to list
+                                selectedPoints.push(selectedPoint)
+    
+                                idOfSelectedPoints[selectedPoint] = {
+                                    id: incrementalSelectionId,
+                                    thresholdGroup0: thresholdTuples[selectedPoint][0],
+                                    thresholdGroup1: thresholdTuples[selectedPoint][1],
+                                    decisionMakerUtility: decisionMakerUtility[selectedPoint],
+                                    fairnessScore: fairnessScores[selectedPoint]
+                                }
+                                
+                                setIncrementalSelectionId(incrementalSelectionId + 1)
+                                newColors[selectedPoint] = getRandomColor()
                             }
-                            
-                            setIncrementalSelectionId(incrementalSelectionId + 1)
-                            newColors[selectedPoint] = getRandomColor()
+                            setColors(newColors)
+                            setSelectedPoints([...selectedPoints]);
+                            setIdOfSelectedPoints(idOfSelectedPoints);
                         }
-                        setColors(newColors)
-                        setSelectedPoints([...selectedPoints]);
-                        setIdOfSelectedPoints(idOfSelectedPoints);
                       }}
                 />
             </div>
@@ -534,10 +538,10 @@ function ThresholdInput({numThresholds, setNumThresholds}) {
     const [currentNumThresholds, setCurrentNumThresholds] = useState(numThresholds)
     return (
         <>
-        <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 1, max: 101)</label>
-        <input type="text" min="1" max="101" value={currentNumThresholds} onChange={(e) => setCurrentNumThresholds(e.target.value)} onBlur={(e) => {
-            if (e.target.value < 1) {
-                setCurrentNumThresholds(1)
+        <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 2, max: 101)</label>
+        <input type="text" min="2" max="101" value={currentNumThresholds} onChange={(e) => setCurrentNumThresholds(e.target.value)} onBlur={(e) => {
+            if (e.target.value < 2) {
+                setCurrentNumThresholds(2)
             }
             if (e.target.value > 101) {
                 setCurrentNumThresholds(101)
