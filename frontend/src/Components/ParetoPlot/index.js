@@ -269,10 +269,10 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
 
                 <h3>Quantification of the decision maker's utility</h3>
 
-                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="DM_u11: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="DM_u10: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
-                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="DM_u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="DM_u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
+                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
 
 
                 <h2>Fairness score</h2>
@@ -313,17 +313,17 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
 
                 <h5>For the group: {group1}</h5>
 
-                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
                 <h5>For the group: {group2}</h5>
 
-                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
                 
                 <h3>Pattern of Justice</h3>
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
