@@ -64,9 +64,16 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
     let threshold_lines1 = []
     let threshold_lines2 = []
+
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    }
     
     for (let s=0; s < selectedPoints.length; s++) {
       var selectedPoint = selectedPoints[s]
+      var linestyle = ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"][getRandomInt(0, 6)]
       if (selectedPoint !== -1) {
         var color = colors[selectedPoint]
         var threshold1 = {
@@ -79,7 +86,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           line: {
             color: color,
             width: 3,
-            dash: 'dot'
+            dash: linestyle
           }
         }
         threshold_lines1.push(threshold1)
@@ -94,7 +101,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
           line: {
             color: color,
             width: 3,
-            dash: 'dot'
+            dash: linestyle
           }
         }
         threshold_lines2.push(threshold2)
