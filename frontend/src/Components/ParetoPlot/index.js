@@ -297,7 +297,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
                     <input type="radio" value="d_0" name="justifier" /> D=0
                     <input type="radio" value="d_1" name="justifier" /> D=1
                 </div>
-                
+
                 <h3>Decision subjects' utility</h3>
                 <div>How much utility do the decision subjects derive from the decisions?</div>
 
@@ -307,19 +307,23 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
 
                 <h4>Quantification of the decision subjects' utility</h4>
 
+                {justifier !== 'no_justifier' &&
+                    <div>Having a justifier means that the utility of some individuals is not considered when evaluating the fairness of the model. Sliders are disabled if their value is not considered for the evaluation.</div>
+                }
+
                 <h5>For the group: {group1}</h5>
 
-                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
                 <h5>For the group: {group2}</h5>
 
-                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
                 
                 <h3>Pattern of Justice</h3>
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
@@ -445,7 +449,7 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
       );
 }
 
-function UtilityQuantifier({value, setSliderValue, label, unit}) {
+function UtilityQuantifier({value, setSliderValue, label, unit, disabled}) {
     var numberRegex = /[-+]?[0-9]+\.?[0-9]+/
     var unitRegex = /[^\d+]+$/;
     var multiplierRegex = /^\*\s*\d+/;
@@ -454,7 +458,7 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
         <div>
             <label>{label}</label>
             <br/>
-            <input className="Slider" type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
+            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
             <datalist id="ticks">
                 <option>-10</option>
                 <option>-9</option>
