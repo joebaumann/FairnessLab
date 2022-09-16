@@ -188,15 +188,15 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 </ul>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="Own" checked={datasetSelection === "Own"} /> Choose your own dataset: 
+            <input name="datasetSelection" type="radio" value="Own" checked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
         </span>
         <input type="file" name="file" onChange={selectFile} />
         <br/>
         {datasetSelection == 'Own' && uploadedData.length === 0 &&
-            <div>Please upload a dataset to audit or choose one of the predefined datasets.</div>
+            <div className="datasetExplanation">Please upload a dataset to audit or choose one of the predefined datasets.</div>
         }
         {datasetSelection == 'Own' && fileError &&
-            <div>Error: The feature labels of the selected file don't match the template. Please upload a dataset with the right feature labels.</div>
+            <div className="datasetExplanation">Error: The feature labels of the selected file don't match the template. Please upload a dataset with the right feature labels.</div>
         }
         </div>
     )
