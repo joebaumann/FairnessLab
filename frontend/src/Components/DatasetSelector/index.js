@@ -136,32 +136,44 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
         <div>Choose a dataset that you want to audit. If you want to upload your own dataset, please make sure that it has (1) a column named 'Y' (only 0 and 1 allowed), (2) a column named 'sensitive-attribute' (only 0 and 1 allowed) and (3) a column named 'scores' (values have to be between 0 and 1) and/or a column named 'D' (only 0 and 1 allowed).</div>
         <br/>
         <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
-            <input name="datasetSelection" type="radio" value="COMPAS" checked={datasetSelection === "COMPAS"} /> COMPAS
-            <div>The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We <a href="https://github.com/propublica/compas-analysis" target="_blank">preprocessed</a> the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.</div>
-            <ul>
-                <li>Y=0: Was arrested within two years</li>
-                <li>Y=1: Was not arrested within two years</li>
-                <li>D=0: Predicted to be rearrested</li>
-                <li>D=1: Predicted not to be rearrested</li>
-            </ul>
+            <input name="datasetSelection" type="radio" value="COMPAS" checked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
+            <div className="datasetExplanation">
+                The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We <a href="https://github.com/propublica/compas-analysis" target="_blank">preprocessed</a> the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.
+                <ul>
+                    <li>Y=0: Was arrested within two years</li>
+                    <li>Y=1: Was not arrested within two years</li>
+                    <li>D=0: Predicted to be rearrested</li>
+                    <li>D=1: Predicted not to be rearrested</li>
+                    <li>Group 1: Black</li>
+                    <li>Group 2: white</li>
+                </ul>
+            </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="German" checked={datasetSelection === "German"} /> Credit lending (UCI German Credit)
-            <div>The German Credit dataset is available in the UCI repository. It is a small dataset of German credit loans from the 1970s. The scores have been predicted with a vanilla logistic regression.</div>
-            <ul>
-                <li>Y=0: Defaulted on the loan</li>
-                <li>Y=1: Repaid the loan</li>
-                <li>D=0: Predicted to default</li>
-                <li>D=1: Predicted to repay</li>
-            </ul>
+            <input name="datasetSelection" type="radio" value="German" checked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
+            <div className="datasetExplanation">
+                The German Credit dataset is available in the UCI repository. It is a small dataset of German credit loans from the 1970s. The scores have been predicted with a vanilla logistic regression.
+                <ul>
+                    <li>Y=0: Defaulted on the loan</li>
+                    <li>Y=1: Repaid the loan</li>
+                    <li>D=0: Predicted to default</li>
+                    <li>D=1: Predicted to repay</li>
+                    <li>Group 1: female</li>
+                    <li>Group 2: male</li>
+                </ul>
+            </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" checked={datasetSelection === "ACSEmploymentCA"} /> ACSEmployment (California)
-            <div>The ACSEmployment dataset is derived from US Census data and is available through the Folktables GitHub repository. It is a large dataset of US adults from California. The task is to predict whether an individual is employed. The scores have been predicted with a vanilla logistic regression.</div>
-            <ul>
-                <li>Y=0: Is not employed</li>
-                <li>Y=1: Is employed</li>
-                <li>D=0: Predicted to be unemployed</li>
-                <li>D=1: Predicted to be employed</li>
-            </ul>
+            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" checked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
+            <div className="datasetExplanation">
+                The ACSEmployment dataset is derived from US Census data and is available through the Folktables GitHub repository. It is a large dataset of US adults from California. The task is to predict whether an individual is employed. The scores have been predicted with a vanilla logistic regression.
+                <ul>
+                    <li>Y=0: Is not employed</li>
+                    <li>Y=1: Is employed</li>
+                    <li>D=0: Predicted to be unemployed</li>
+                    <li>D=1: Predicted to be employed</li>
+                    <li>Group 1: Black</li>
+                    <li>Group 2: white</li>
+                </ul>
+            </div>
             <br/>
             <input name="datasetSelection" type="radio" value="Own" checked={datasetSelection === "Own"} /> Choose your own dataset: 
         </span>
