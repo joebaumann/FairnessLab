@@ -149,7 +149,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
         <div>Choose a dataset that you want to audit. If you want to upload your own dataset, please make sure that it has (1) a column named 'Y' (only 0 and 1 allowed), (2) a column named 'sensitive-attribute' (only 0 and 1 allowed) and (3) a column named 'scores' (values have to be between 0 and 1) and/or a column named 'D' (only 0 and 1 allowed).</div>
         <br/>
         <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
-            <input name="datasetSelection" type="radio" value="COMPAS" checked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
+            <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
             <div className="datasetExplanation">
                 The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We <a href="https://github.com/propublica/compas-analysis" target="_blank">preprocessed</a> the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.
                 <ul>
@@ -162,7 +162,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 </ul>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="German" checked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
+            <input name="datasetSelection" type="radio" value="German" defaultChecked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
             <div className="datasetExplanation">
                 The German Credit dataset is available in the UCI repository. It is a small dataset of German credit loans from the 1970s. The scores have been predicted with a vanilla logistic regression.
                 <ul>
@@ -175,7 +175,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 </ul>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" checked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
+            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" defaultChecked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
             <div className="datasetExplanation">
                 The ACSEmployment dataset is derived from US Census data and is available through the Folktables GitHub repository. It is a large dataset of US adults from California. The task is to predict whether an individual is employed. The scores have been predicted with a vanilla logistic regression.
                 <ul>
@@ -188,7 +188,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
                 </ul>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="Own" checked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
+            <input name="datasetSelection" type="radio" value="Own" defaultChecked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
         </span>
         <input type="file" name="file" onChange={selectFile} />
         <br/>
