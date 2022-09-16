@@ -4,7 +4,7 @@ import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY, setD, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -54,12 +54,15 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
             let results = splitFileBySensitiveAttributeAndJustifier(file, justifier)
             let y = results[0]
             let scores = results[1]
+            let d = results[2]
             setY(y)
             setScores(scores)
+            setD(d)
             setFileError(false)
         } catch (error) {
             setY({'y_group1': [], 'y_group2': []})
             setScores({'scores_group1': [], 'scores_group2': []})
+            setD({'d_group1': [], 'd_group2': []})
             setFileError(true)
         }
         setDatasetSelectionCounter(datasetSelectionCounter + 1)
@@ -121,7 +124,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
         if (!isValid) {
             throw 'Incorrect format!'
         }
-        return [{"y_group1": y_group1, "y_group2": y_group2}, {"scores_group1": scores_group1, "scores_group2": scores_group2}]
+        return [{"y_group1": y_group1, "y_group2": y_group2}, {"scores_group1": scores_group1, "scores_group2": scores_group2}, {"d_group1": d_group1, "d_group2": d_group2}]
     }
 
     useEffect(() => {
