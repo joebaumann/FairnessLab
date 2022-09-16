@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({filteredScores, filteredY, filteredD, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -161,10 +161,10 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
     }
 
     function updateThresholdCalculations() {
-        setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
+        setThresholdTuples(combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], threshold, tuple))
+        setDecisionMakerUtility(combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
         let combineFunction = patternMapper(pattern)
-        let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
+        let fairnessScores = combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
         // TODO: Add evaluation of D here
         let maxUnfairness = undefined
         if (pattern === "egalitarianism") {
@@ -174,17 +174,17 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
             });
         }
         setFairnessScores(fairnessScores)
-        setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
+        setSubjectsUtility(combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
         return maxUnfairness
     }
 
     function updateEvaluationOfD(maxUnfairness) {
-        if (d[0].length !== 0 || d[1].length !== 0) {
-            let decisionMakerUtility_A = calculateUtilityFromDecisions(d[0], y[0], [dmuTP, dmuFP, dmuFN, dmuTN])
-            let decisionMakerUtility_B = calculateUtilityFromDecisions(d[1], y[1], [dmuTP, dmuFP, dmuFN, dmuTN])
+        if (filteredD[0].length !== 0 || filteredD[1].length !== 0) {
+            let decisionMakerUtility_A = calculateUtilityFromDecisions(filteredD[0], filteredY[0], [dmuTP, dmuFP, dmuFN, dmuTN])
+            let decisionMakerUtility_B = calculateUtilityFromDecisions(filteredD[1], filteredY[1], [dmuTP, dmuFP, dmuFN, dmuTN])
             let decisionMakerUtility = sum(decisionMakerUtility_A, decisionMakerUtility_B)
-            let fairnessValue_A = calculateUtilityFromDecisions(d[0], y[0], [suTP1, suFP1, suFN1, suTN1]) / d[0].length
-            let fairnessValue_B = calculateUtilityFromDecisions(d[1], y[1], [suTP2, suFP2, suFN2, suTN2]) / d[1].length
+            let fairnessValue_A = calculateUtilityFromDecisions(filteredD[0], filteredY[0], [suTP1, suFP1, suFN1, suTN1]) / filteredD[0].length
+            let fairnessValue_B = calculateUtilityFromDecisions(filteredD[1], filteredY[1], [suTP2, suFP2, suFN2, suTN2]) / filteredD[1].length
             let combineFunction = patternMapper(pattern)
             let fairnessScore = combineFunction(fairnessValue_A, fairnessValue_B)
             if (pattern === "egalitarianism") {
@@ -230,8 +230,8 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
 
     useEffect(() => {
         console.log('selection changed to ' + datasetSelection + ' with justifier: ' + justifier)
-        console.log(scores)
-        console.log(y)
+        console.log(filteredScores)
+        console.log(filteredY)
         deselectAllPoints()
         setNumThresholds(11)
         const maxUnfairness = updateThresholdCalculations()
@@ -387,7 +387,7 @@ function ParetoPlot({scores, y, d, group1, setGroup1, group2, setGroup2, dataset
                 <h2>Pareto plot</h2>
                 With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
-                <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)
+                <b>Decision maker's utility</b>: Higher is better (total utility for the {filteredScores[0].length + filteredScores[1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better<br/>
                 <br/>

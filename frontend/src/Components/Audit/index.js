@@ -26,18 +26,18 @@ function Audit() {
   const [evaluationOfD, setEvaluationOfD] = useState([0, 0]);
   const [thresholdTuples, setThresholdTuples] = useState([]);
   const [colors, setColors] = useState(Array(numThresholds * numThresholds).fill('#4e87ad'));
-  const [scores, setScores] = useState({'scores_group1': [], 'scores_group2': []});
-  const [y, setY] = useState({'y_group1': [], 'y_group2': []});
-  const [d, setD] = useState({'d_group1': [], 'd_group2': []});
+  const [filteredScores, setFilteredScores] = useState([[],[]]);
+  const [filteredY, setFilteredY] = useState([[], []]);
+  const [filteredD, setFilteredD] = useState([[],[]]);
 
   return(
     <div className="Audit">
       <Header title="Audit"/>
       <div className="Audit-Content">
-        <DatasetSelector datasetSelection={datasetSelection} setDatasetSelection={setDatasetSelection} setScores={setScores} setY={setY} setD={setD} justifier={justifier} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
-        <ParetoPlot datasetSelection={datasetSelection} scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} d={[d["d_group1"], d["d_group2"]]} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} decisionMakerCurrency={decisionMakerCurrency} setDecisionMakerCurrency={setDecisionMakerCurrency} subjectsCurrency={subjectsCurrency} setSubjectsCurrency={setSubjectsCurrency} justifier={justifier} setJustifier={setJustifier} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
+        <DatasetSelector datasetSelection={datasetSelection} setDatasetSelection={setDatasetSelection} setFilteredScores={setFilteredScores} setFilteredY={setFilteredY} setFilteredD={setFilteredD} justifier={justifier} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
+        <ParetoPlot datasetSelection={datasetSelection} filteredScores={filteredScores} filteredY={filteredY} filteredD={filteredD} group1={group1} setGroup1={setGroup1} group2={group2} setGroup2={setGroup2} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} decisionMakerCurrency={decisionMakerCurrency} setDecisionMakerCurrency={setDecisionMakerCurrency} subjectsCurrency={subjectsCurrency} setSubjectsCurrency={setSubjectsCurrency} justifier={justifier} setJustifier={setJustifier} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
         <SelectedPointsTable selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} decisionMakerCurrency={decisionMakerCurrency} subjectsCurrency={subjectsCurrency} labels={[group1, group2]} />
-        <ScoreDistribution scores={[scores["scores_group1"], scores["scores_group2"]]} y={[y["y_group1"], y["y_group2"]]} selectedPoints={selectedPoints} labels={[group1, group2]} colors={colors} thresholdTuples={thresholdTuples} />
+        <ScoreDistribution scores={filteredScores} y={filteredY} selectedPoints={selectedPoints} labels={[group1, group2]} colors={colors} thresholdTuples={thresholdTuples} />
         <SubjectsUtility subjectsUtility={subjectsUtility} fairnessScores={fairnessScores} group1={group1} group2={group2} selectedPoints={selectedPoints} colors={colors} idOfSelectedPoints={idOfSelectedPoints} evaluationOfD={evaluationOfD} />
       </div>
     </div>
