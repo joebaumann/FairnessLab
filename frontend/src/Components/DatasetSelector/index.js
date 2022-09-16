@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 
-function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelection, setScores, setY, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -20,9 +20,13 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
     const [fileError, setFileError] = useState(false);
 
     function handleFile(e) {
-        const text = (e.target.result)
-        const jsonFile = JSON.parse(text)
-        setUploadedData(jsonFile)
+        try {
+            const text = (e.target.result)
+            const jsonFile = JSON.parse(text)
+            setUploadedData(jsonFile)
+        } catch (error) {
+            setFileError(true)
+        }
       }
 
     // // https://medium.com/@miniceo/front-end-shorts-how-to-read-content-from-the-file-input-in-react-17f49b293909
@@ -104,25 +108,29 @@ function DatasetSelector({fileID, setFileID, datasetSelection, setDatasetSelecti
     }, [datasetSelection, justifier]);
     
     useEffect(() => {
-            setFileID(++fileID)
             processData()
     }, [uploadedData, datasetSelection]);
+
+    useEffect(() => {
+        if (uploadedData.length !== 0) {
+            setDatasetSelection('Own')
+        }
+    }, [uploadedData]);
 
     return(
         <div className="DatasetSelector">
         <h1>Dataset</h1>
         <div>Choose a dataset that you want to audit. If you want to upload your own dataset, please make sure that it has a column named 'Y' (only 0 and 1 allowed), a column named 'scores' (values have to be between 0 and 1) and a column named 'sensitive-attribute' (only 0 and 1 allowed).</div>
         <br/>
-        <span onChange={(e) => setDatasetSelection(e.target.value)}>
-            <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked="checked" /> COMPAS
+        <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
+            <input name="datasetSelection" type="radio" value="COMPAS" checked={datasetSelection === "COMPAS"} /> COMPAS
             <br/>
-            <input name="datasetSelection" type="radio" value="German" /> Credit lending (UCI German Credit)
+            <input name="datasetSelection" type="radio" value="German" checked={datasetSelection === "German"} /> Credit lending (UCI German Credit)
             <br/>
-            <input name="datasetSelection" type="radio" value="Own" /> Choose your own dataset: 
+            <input name="datasetSelection" type="radio" value="Own" checked={datasetSelection === "Own"} /> Choose your own dataset: 
         </span>
         <input type="file" name="file" onChange={selectFile} />
         <br/>
-        {/* <input type="file" name="file" onChange={selectScoresFile} /> */}
         {datasetSelection == 'Own' && uploadedData.length === 0 &&
             <div>Please upload a dataset to audit or choose one of the predefined datasets.</div>
         }

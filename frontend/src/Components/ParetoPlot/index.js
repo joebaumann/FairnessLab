@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter}) {
+function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -214,7 +214,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         deselectAllPoints()
         setNumThresholds(11)
         updateThresholdCalculations()
-    }, [datasetSelection, fileID, datasetSelectionCounter]);
+    }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
         console.log(datasetSelection)
