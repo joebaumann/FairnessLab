@@ -327,14 +327,18 @@ function ParetoPlot({scores, y, group1, setGroup1, group2, setGroup2, datasetSel
                 <div>→ Measured as: <b>How close are the average utilities to being equal?</b></div>
                 <div><b>Maximin</b>: Fairness is if the average utility of the worst-off group is maximized by the decision rule. Inequalities are okay if they benefit the worst-off group.</div>
                 <div>→ Measured as: <b>What’s the lowest average utility?</b></div>
+                <div><b>Prioritarianism</b>: Fairness is if the aggregated utility of the groups is maximized by the decision rule, with the utility of the worst-off group being weighted higher than the other groups' utilities.</div>
+                <div>→ Measured as: <b>What’s the aggregated utility with the worst-off group having a higher weight?</b></div>
+                <div><b>Sufficientarianism</b>: Fairness is if all groups' have an average utility that is above the defined threshold. Inequalities are okay if every group is above the defined threshold.</div>
+                <div>→ Measured as: <b>How many groups are above the defined threshold?</b></div>
                 <br/>
 
                 <label htmlFor="pattern">Choose a pattern:</label>
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
                 <option value="egalitarianism">egalitarianism</option>
                 <option value="maximin">maximin</option>
-                {/* <option value="prioritarianism">prioritarianism</option>
-                <option value="sufficientarianism">sufficientarianism</option> */}
+                <option value="prioritarianism">prioritarianism</option>
+                <option value="sufficientarianism">sufficientarianism</option>
                 </select>
 
                 {pattern === 'sufficientarianism' &&
