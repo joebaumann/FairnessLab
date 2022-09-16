@@ -158,16 +158,23 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     return (
       <div className='ScoreDistribution'>
         <h2>Score distribution</h2>
-        Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.
-        <br/>
-        <Plot className='LeftPlot'
-            data={dataGroup1}
-            layout={layoutGroup1}
-        />
-        <Plot className='RightPlot'
-            data={dataGroup2}
-            layout={layoutGroup2}
-        />
+        {scores[0].length === 0 && scores[1].length === 0 ?
+          <>This plot is only available if the audited dataset contains predicted scores. The current dataset does not have a column named 'scores.'</>
+          :
+          <>
+            Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.
+            <br/>
+            <Plot className='LeftPlot'
+                data={dataGroup1}
+                layout={layoutGroup1}
+            />
+            <Plot className='RightPlot'
+                data={dataGroup2}
+                layout={layoutGroup2}
+            />
+          </>
+        
+        }
       </div>
       );
 }

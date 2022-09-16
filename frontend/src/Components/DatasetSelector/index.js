@@ -87,14 +87,23 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setScores, setY
         file.filter(row => applyJustifierToRow(row, justifier)).forEach(function (row, index) {
         if (row['sensitive-attribute'] === 0) {
                 y_group1.push(row['Y'])
-                scores_group1.push(row['scores'])
-                d_group1.push(row['D'])
+                if (row.hasOwnProperty('scores')) {
+                    scores_group1.push(row['scores'])
+                }
+                if (row.hasOwnProperty('D')) {
+                    d_group1.push(row['D'])
+                }
             } else {
                 y_group2.push(row['Y'])
-                scores_group2.push(row['scores'])
-                d_group2.push(row['D'])
+                if (row.hasOwnProperty('scores')) {
+                    scores_group2.push(row['scores'])
+                }
+                if (row.hasOwnProperty('D')) {
+                    d_group2.push(row['D'])
+                }
             }
         })
+        // TODO: Check if they're all equal in size or 0 and if we have at least scores or D --- if not, throw error
         return [{"y_group1": y_group1, "y_group2": y_group2}, {"scores_group1": scores_group1, "scores_group2": scores_group2}]
     }
 
