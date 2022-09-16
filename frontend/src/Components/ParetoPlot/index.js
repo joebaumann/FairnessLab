@@ -482,7 +482,7 @@ function UtilityQuantifier({value, setSliderValue, label, unit, disabled}) {
                 <option>9</option>
                 <option>10</option>
             </datalist>
-            <span>{currentSliderValue} {unit}</span>
+            <span className="sliderSpan">{currentSliderValue} {unit}</span>
             {unit.match(multiplierRegex) !== null && 
             <span> = {Math.round(currentSliderValue * unit.match(numberRegex) * 100) / 100}{unit.match(unitRegex)}</span>}
         </div>

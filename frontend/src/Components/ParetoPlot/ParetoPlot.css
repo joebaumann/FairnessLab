@@ -9,3 +9,7 @@ input {
 select {
     margin-left: 10px;
 }
+
+.sliderSpan {
+    margin-left: 0.8rem;
+}
