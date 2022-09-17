@@ -4,7 +4,7 @@ import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScores, setFilteredY, setFilteredD, setDataForDecisionMaker, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData, setUnfilteredData, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -51,21 +51,15 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScor
             file = datasets[datasetSelection]['file']
         }
         try {
-            let filteredResults = splitFileBySensitiveAttributeAndJustifier(file, justifier)
-            let filteredY = filteredResults[0]
-            let filteredScores = filteredResults[1]
-            let filteredD = filteredResults[2]
-            setFilteredY(filteredY)
-            setFilteredScores(filteredScores)
-            setFilteredD(filteredD)
-            let unfilteredResults = prepareDataForDecisionMaker(file)
-            setDataForDecisionMaker(unfilteredResults)
+            let processedData = splitFileBySensitiveAttributeAndJustifier(file, justifier)
+            let filteredData = processedData['filteredData']
+            setFilteredData(filteredData)
+            let unfilteredData = processedData['unfilteredData']
+            setUnfilteredData(unfilteredData)
             setFileError(false)
         } catch (error) {
-            setFilteredY([[],[]])
-            setFilteredScores([[],[]])
-            setFilteredD([[],[]])
-            setDataForDecisionMaker({'y': [], 'scores': [], 'd': []})
+            setFilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
+            setUnfilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
             setFileError(true)
         }
         setDatasetSelectionCounter(datasetSelectionCounter + 1)
@@ -87,63 +81,42 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScor
     }
 
     function splitFileBySensitiveAttributeAndJustifier(file, justifier) {
-        let y_group1 = []
-        let scores_group1 = []
-        let d_group1 = []
-        let y_group2 = []
-        let scores_group2 = []
-        let d_group2 = []
-        // first rows that are not for selected justifier and then loop through each row in the dataframe
-        file.filter(row => applyJustifierToRow(row, justifier)).forEach(function (row, index) {
-        if (row['sensitive-attribute'] === 0) {
-                y_group1.push(row['Y'])
+        let filteredData = {'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]}
+        let unfilteredData = {'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]}
+        file.forEach(function (row, index) {
+            let attribute = row['sensitive-attribute']
+            unfilteredData['y'][attribute].push(row['Y'])
+            if (row.hasOwnProperty('scores')) {
+                unfilteredData['scores'][attribute].push(row['scores'])
+            }
+            if (row.hasOwnProperty('D')) {
+                unfilteredData['d'][attribute].push(row['D'])
+            }
+            if (applyJustifierToRow(row, justifier)) {
+                filteredData['y'][attribute].push(row['Y'])
                 if (row.hasOwnProperty('scores')) {
-                    scores_group1.push(row['scores'])
+                    filteredData['scores'][attribute].push(row['scores'])
                 }
                 if (row.hasOwnProperty('D')) {
-                    d_group1.push(row['D'])
-                }
-            } else {
-                y_group2.push(row['Y'])
-                if (row.hasOwnProperty('scores')) {
-                    scores_group2.push(row['scores'])
-                }
-                if (row.hasOwnProperty('D')) {
-                    d_group2.push(row['D'])
+                    filteredData['d'][attribute].push(row['D'])
                 }
             }
         })
         let isValid = false
-        if (y_group1.length === scores_group1.length && y_group1.length === d_group1.length 
-            && y_group2.length === scores_group2.length && y_group2.length === d_group2.length) {
+        if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['y'][0].length === filteredData['d'][0].length 
+            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['y'][1].length === filteredData['d'][1].length) {
                 isValid = true
-        } else if (y_group1.length === scores_group1.length && d_group1.length === 0
-            && y_group2.length === scores_group2.length && d_group2.length === 0) {
+        } else if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['d'][0].length === 0
+            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['d'][1].length === 0) {
                 isValid = true
-        } else if (y_group1.length === d_group1.length && scores_group1.length === 0
-            && y_group2.length === d_group2.length && scores_group2.length === 0) {
+        } else if (filteredData['y'][0].length === filteredData['d'][0].length && filteredData['scores'][0].length === 0
+            && filteredData['y'][1].length === filteredData['d'][1].length && filteredData['scores'][1].length === 0) {
                 isValid = true
         }
         if (!isValid) {
             throw 'Incorrect format!'
         }
-        return [[y_group1, y_group2], [scores_group1, scores_group2], [d_group1, d_group2]]
-    }
-
-    function prepareDataForDecisionMaker(file) {
-        let y = []
-        let scores = []
-        let d = []
-        file.forEach(function (row, index) {
-            y.push(row['Y'])
-            if (row.hasOwnProperty('scores')) {
-                scores.push(row['scores'])
-            }
-            if (row.hasOwnProperty('D')) {
-                d.push(row['D'])
-            }
-        })
-        return {'y': y, 'scores': scores, 'd': d}
+        return {'filteredData': filteredData, 'unfilteredData': unfilteredData}
     }
 
     useEffect(() => {

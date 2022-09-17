@@ -2,18 +2,18 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
 
-const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, colors}) => {
+const ScoreDistribution = ({unfilteredData, selectedPoints, thresholdTuples, labels, colors}) => {
     var indices_of_Y0_for_group1 = [];
     var indices_of_Y1_for_group1 = [];
-    for(let i = 0; i < y[0].length; i++)
-        if (y[0][i] === 0)
+    for(let i = 0; i < unfilteredData['y'][0].length; i++)
+        if (unfilteredData['y'][0][i] === 0)
           indices_of_Y0_for_group1.push(i);
         else
           indices_of_Y1_for_group1.push(i);
     const group1_Y1 = [];
-    indices_of_Y1_for_group1.forEach(i => group1_Y1.push(scores[0][i]));
+    indices_of_Y1_for_group1.forEach(i => group1_Y1.push(unfilteredData['scores'][0][i]));
     const group1_Y0 = [];
-    indices_of_Y0_for_group1.forEach(i => group1_Y0.push(scores[0][i]));
+    indices_of_Y0_for_group1.forEach(i => group1_Y0.push(unfilteredData['scores'][0][i]));
     const trace_group1_Y1 = {
       y: group1_Y1,
       type: "histogram",
@@ -35,15 +35,15 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
     var indices_of_Y0_for_group2 = [];
     var indices_of_Y1_for_group2 = [];
-    for(let i = 0; i < y[1].length; i++)
-        if (y[1][i] === 0)
+    for(let i = 0; i < unfilteredData['y'][1].length; i++)
+        if (unfilteredData['y'][1][i] === 0)
           indices_of_Y0_for_group2.push(i);
         else
           indices_of_Y1_for_group2.push(i);
     const group2_Y1 = [];
-    indices_of_Y1_for_group2.forEach(i => group2_Y1.push(scores[1][i]));
+    indices_of_Y1_for_group2.forEach(i => group2_Y1.push(unfilteredData['scores'][1][i]));
     const group2_Y0 = [];
-    indices_of_Y0_for_group2.forEach(i => group2_Y0.push(scores[1][i]));
+    indices_of_Y0_for_group2.forEach(i => group2_Y0.push(unfilteredData['scores'][1][i]));
     const trace_group2_Y1 = {
         y: group2_Y1,
         type: "histogram",
@@ -169,7 +169,7 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
     return (
       <div className='ScoreDistribution'>
         <h2>Score distribution</h2>
-        {scores[0].length === 0 && scores[1].length === 0 ?
+        {unfilteredData['scores'][0].length === 0 && unfilteredData['scores'][1].length === 0 ?
           <>This plot is only available if the audited dataset contains predicted scores. The current dataset does not have a column named 'scores.'</>
           :
           <>
