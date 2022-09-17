@@ -162,22 +162,25 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
     }
 
     function updateThresholdCalculations() {
-        console.log(unfilteredData['y'])
-        setThresholdTuples(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
-        let combineFunction = patternMapper(pattern)
-        let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
-        // TODO: Add evaluation of D here
-        let maxUnfairness = undefined
-        if (pattern === "egalitarianism") {
-            maxUnfairness = Math.max(...fairnessScores)
-            fairnessScores = fairnessScores.map(function(s, i) {
-                return maxUnfairness - s;
-            });
+        if (filteredData['scores'][0].length !== 0 || filteredData['scores'][1].length !== 0) {
+            console.log(unfilteredData['y'])
+            setThresholdTuples(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], threshold, tuple))
+            setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
+            let combineFunction = patternMapper(pattern)
+            let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
+            // TODO: Add evaluation of D here
+            let maxUnfairness = undefined
+            if (pattern === "egalitarianism") {
+                maxUnfairness = Math.max(...fairnessScores)
+                fairnessScores = fairnessScores.map(function(s, i) {
+                    return maxUnfairness - s;
+                });
+            }
+            setFairnessScores(fairnessScores)
+            setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
+            return maxUnfairness
         }
-        setFairnessScores(fairnessScores)
-        setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
-        return maxUnfairness
+        return 0
     }
 
     function updateEvaluationOfD(maxUnfairness) {
