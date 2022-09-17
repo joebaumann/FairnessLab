@@ -40,6 +40,7 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
         setIdOfSelectedPoints({})
         setIncrementalSelectionId(1)
         setColors(Array(numThresholds * numThresholds).fill('#ffffff'))
+        setColorOfD('#fff')
         console.log('deselected all points')
     }
 
