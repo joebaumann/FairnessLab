@@ -53,8 +53,9 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
         try {
             let processedData = splitFileBySensitiveAttributeAndJustifier(file, justifier)
             let filteredData = processedData['filteredData']
-            setFilteredData(filteredData)
             let unfilteredData = processedData['unfilteredData']
+            checkDataValidity(filteredData, unfilteredData)
+            setFilteredData(filteredData)
             setUnfilteredData(unfilteredData)
             setFileError(false)
         } catch (error) {
@@ -102,21 +103,31 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                 }
             }
         })
-        let isValid = false
-        if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['y'][0].length === filteredData['d'][0].length 
-            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['y'][1].length === filteredData['d'][1].length) {
-                isValid = true
+        return {'filteredData': filteredData, 'unfilteredData': unfilteredData}
+    }
+
+    function checkDataValidity(filteredData, unfilteredData) {
+        let isValid = false;
+        if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['y'][0].length === filteredData['d'][0].length
+            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['y'][1].length === filteredData['d'][1].length
+            && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['y'][0].length === unfilteredData['d'][0].length
+            && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['y'][1].length === unfilteredData['d'][1].length) {
+            isValid = true;
         } else if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['d'][0].length === 0
-            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['d'][1].length === 0) {
-                isValid = true
+            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['d'][1].length === 0
+            && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['d'][0].length === 0
+            && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['d'][1].length === 0) {
+            isValid = true;
         } else if (filteredData['y'][0].length === filteredData['d'][0].length && filteredData['scores'][0].length === 0
-            && filteredData['y'][1].length === filteredData['d'][1].length && filteredData['scores'][1].length === 0) {
-                isValid = true
+            && filteredData['y'][1].length === filteredData['d'][1].length && filteredData['scores'][1].length === 0
+            && unfilteredData['y'][0].length === unfilteredData['d'][0].length && unfilteredData['scores'][0].length === 0
+            && unfilteredData['y'][1].length === unfilteredData['d'][1].length && unfilteredData['scores'][1].length === 0) {
+            isValid = true;
         }
         if (!isValid) {
-            throw 'Incorrect format!'
+            console.log('Invalid data')
+            throw 'Incorrect format!';
         }
-        return {'filteredData': filteredData, 'unfilteredData': unfilteredData}
     }
 
     useEffect(() => {
