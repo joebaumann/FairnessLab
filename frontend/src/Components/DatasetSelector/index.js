@@ -4,7 +4,7 @@ import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScores, setFilteredY, setFilteredD, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScores, setFilteredY, setFilteredD, setDataForDecisionMaker, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -51,18 +51,21 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScor
             file = datasets[datasetSelection]['file']
         }
         try {
-            let results = splitFileBySensitiveAttributeAndJustifier(file, justifier)
-            let y = results[0]
-            let scores = results[1]
-            let d = results[2]
-            setFilteredY(y)
-            setFilteredScores(scores)
-            setFilteredD(d)
+            let filteredResults = splitFileBySensitiveAttributeAndJustifier(file, justifier)
+            let filteredY = filteredResults[0]
+            let filteredScores = filteredResults[1]
+            let filteredD = filteredResults[2]
+            setFilteredY(filteredY)
+            setFilteredScores(filteredScores)
+            setFilteredD(filteredD)
+            let unfilteredResults = prepareDataForDecisionMaker(file)
+            setDataForDecisionMaker(unfilteredResults)
             setFileError(false)
         } catch (error) {
             setFilteredY([[],[]])
             setFilteredScores([[],[]])
             setFilteredD([[],[]])
+            setDataForDecisionMaker({'y': [], 'scores': [], 'd': []})
             setFileError(true)
         }
         setDatasetSelectionCounter(datasetSelectionCounter + 1)
@@ -125,6 +128,22 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredScor
             throw 'Incorrect format!'
         }
         return [[y_group1, y_group2], [scores_group1, scores_group2], [d_group1, d_group2]]
+    }
+
+    function prepareDataForDecisionMaker(file) {
+        let y = []
+        let scores = []
+        let d = []
+        file.forEach(function (row, index) {
+            y.push(row['Y'])
+            if (row.hasOwnProperty('scores')) {
+                scores.push(row['scores'])
+            }
+            if (row.hasOwnProperty('D')) {
+                d.push(row['D'])
+            }
+        })
+        return {'y': y, 'scores': scores, 'd': d}
     }
 
     useEffect(() => {

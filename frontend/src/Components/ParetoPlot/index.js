@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({filteredScores, filteredY, filteredD, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({filteredScores, filteredY, filteredD, dataForDecisionMaker, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -162,6 +162,7 @@ function ParetoPlot({filteredScores, filteredY, filteredD, group1, setGroup1, gr
 
     function updateThresholdCalculations() {
         setThresholdTuples(combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], threshold, tuple))
+        // BUG: use unfiltered dataset here
         setDecisionMakerUtility(combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
         let combineFunction = patternMapper(pattern)
         let fairnessScores = combineThresholds(numThresholds, filteredScores[0], filteredScores[1], filteredY[0], filteredY[1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
@@ -180,9 +181,7 @@ function ParetoPlot({filteredScores, filteredY, filteredD, group1, setGroup1, gr
 
     function updateEvaluationOfD(maxUnfairness) {
         if (filteredD[0].length !== 0 || filteredD[1].length !== 0) {
-            let decisionMakerUtility_A = calculateUtilityFromDecisions(filteredD[0], filteredY[0], [dmuTP, dmuFP, dmuFN, dmuTN])
-            let decisionMakerUtility_B = calculateUtilityFromDecisions(filteredD[1], filteredY[1], [dmuTP, dmuFP, dmuFN, dmuTN])
-            let decisionMakerUtility = sum(decisionMakerUtility_A, decisionMakerUtility_B)
+            let decisionMakerUtility = calculateUtilityFromDecisions(dataForDecisionMaker['d'], dataForDecisionMaker['y'], [dmuTP, dmuFP, dmuFN, dmuTN])
             let fairnessValue_A = calculateUtilityFromDecisions(filteredD[0], filteredY[0], [suTP1, suFP1, suFN1, suTN1]) / filteredD[0].length
             let fairnessValue_B = calculateUtilityFromDecisions(filteredD[1], filteredY[1], [suTP2, suFP2, suFN2, suTN2]) / filteredD[1].length
             let combineFunction = patternMapper(pattern)
