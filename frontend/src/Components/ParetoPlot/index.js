@@ -162,22 +162,29 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
     }
 
     function updateThresholdCalculations() {
-        console.log(unfilteredData['y'])
-        setThresholdTuples(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
-        let combineFunction = patternMapper(pattern)
-        let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
-        // TODO: Add evaluation of D here
-        let maxUnfairness = undefined
-        if (pattern === "egalitarianism") {
-            maxUnfairness = Math.max(...fairnessScores)
-            fairnessScores = fairnessScores.map(function(s, i) {
-                return maxUnfairness - s;
-            });
+        if (filteredData['scores'][0].length === 0 && filteredData['scores'][1].length === 0) {
+            setThresholdTuples([])
+            setDecisionMakerUtility([])
+            setFairnessScores([])
+            setSubjectsUtility([])
+            return 0
+        } else {
+            setThresholdTuples(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], threshold, tuple))
+            setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
+            let combineFunction = patternMapper(pattern)
+            let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
+            // TODO: Add evaluation of D here
+            let maxUnfairness = undefined
+            if (pattern === "egalitarianism") {
+                maxUnfairness = Math.max(...fairnessScores)
+                fairnessScores = fairnessScores.map(function(s, i) {
+                    return maxUnfairness - s;
+                });
+            }
+            setFairnessScores(fairnessScores)
+            setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
+            return maxUnfairness
         }
-        setFairnessScores(fairnessScores)
-        setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
-        return maxUnfairness
     }
 
     function updateEvaluationOfD(maxUnfairness) {
@@ -239,7 +246,6 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
-        console.log(datasetSelection)
         if (datasetSelection !== '') {
             setGroup1(global.config.datasets[datasetSelection]['group1'])
             setGroup2(global.config.datasets[datasetSelection]['group2'])
@@ -389,9 +395,11 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
                 <br/><br/>
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
-                <b>Fairness score</b>: Higher is better<br/>
-                <br/>
-                <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
+                <b>Fairness score</b>: Higher is better
+                <br/><br/>
+                {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
+                    <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
+                }
                 <br/><br/>
                 <div>
                     <button onClick={deselectAllPoints}>
@@ -413,6 +421,7 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
                         x: fairnessScores,
                         y: decisionMakerUtility,
                         mode: 'markers',
+                        visible: filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0,
                         marker: {
                             color: colors,
                             size: 7,
@@ -460,14 +469,12 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
 
                     onClick={(data) => {
                         var newColors = [...colors];
-                        console.log(data)
                         // Orange point (from D) gets index -1, every other points gets their regular index
                         let selectedPoint = -1
                         if (data.points[0].data.x.length > 1) {
                             selectedPoint = data.points[0].pointIndex
                         }
                         var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
-                        console.log('indexOfSelectedPoint', indexOfSelectedPoint)
                         if (indexOfSelectedPoint > -1) {
                             // deselect point and remove from list
                             selectedPoints.splice(indexOfSelectedPoint, 1)
