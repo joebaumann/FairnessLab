@@ -23,23 +23,74 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
     const [uploadedData, setUploadedData] = useState([]);
     const [fileError, setFileError] = useState(false);
 
-    function handleFile(e) {
-        try {
-            const text = (e.target.result)
-            const jsonFile = JSON.parse(text)
-            setUploadedData(jsonFile)
-        } catch (error) {
-            setFileError(true)
-        }
-      }
+    function handleFileJson(e) {
+        const text = (e.target.result)
+        const jsonFile = JSON.parse(text)
+        setUploadedData(jsonFile)
+    }
 
-    // // https://medium.com/@miniceo/front-end-shorts-how-to-read-content-from-the-file-input-in-react-17f49b293909
+    function handleFileCSV(e) {
+        const text = (e.target.result)
+        const jsonFile = csvToJSON(text)
+        setUploadedData(jsonFile)
+    }
+
+    // http://techslides.com/convert-csv-to-json-in-javascript
+    function csvToJSON(csv){
+
+        let newLineCharacter = '\n'
+        if (csv.indexOf('\r\n') !== -1) {
+            newLineCharacter = '\r\n'
+        } else if (csv.indexOf('\r') !== -1) {
+            newLineCharacter = '\r'
+        }
+        let lines = csv.split(newLineCharacter);
+    
+        let result = [];
+    
+        let headers = lines[0].split(",");
+    
+        for(var i=1;i<lines.length-1;i++){
+    
+            let obj = {};
+            let currentline=lines[i].split(",");
+    
+            for (let j=0;j<headers.length;j++){
+                let value = currentline[j];
+                if (headers[j] === 'Y' || headers[j] === 'D' || headers[j] === 'sensitive-attribute') {
+                    value = parseInt(value)
+                } else if (headers[j] === 'scores') {
+                    value = parseFloat(value)
+                }
+                obj[headers[j]] = value
+            }
+    
+            result.push(obj);
+    
+        }
+    
+        return result;
+    }
+
+    // https://medium.com/@miniceo/front-end-shorts-how-to-read-content-from-the-file-input-in-react-17f49b293909
     const selectFile = async (e) => {
-        if (e?.target?.files.length > 0) {
-            e.preventDefault()
-            const reader = new FileReader()
-            reader.onload = handleFile
-            reader.readAsText(e.target.files[0])
+        try {
+            if (e?.target?.files.length > 0) {
+                e.preventDefault()
+                const reader = new FileReader()
+                if (e.target.files[0].type === "application/json") {
+                    reader.onload = handleFileJson
+                } else if (e.target.files[0].type === "text/csv") {
+                    reader.onload = handleFileCSV
+                } else {
+                    throw 'Wrong file type'
+                }
+                reader.readAsText(e.target.files[0])
+            }
+        } catch (error) {
+            setFilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
+            setUnfilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
+            setFileError(true)
         }
     }
 
@@ -125,7 +176,6 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             isValid = true;
         }
         if (!isValid) {
-            console.log('Invalid data')
             throw 'Incorrect format!';
         }
     }
@@ -198,7 +248,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
         </span>
         <input type="file" name="file" onChange={selectFile} />
         <br/>
-        {datasetSelection == 'Own' && uploadedData.length === 0 &&
+        {datasetSelection == 'Own' && uploadedData.length === 0 && !fileError &&
             <div className="datasetExplanation">Please upload a dataset to audit or choose one of the predefined datasets.</div>
         }
         {datasetSelection == 'Own' && fileError &&
