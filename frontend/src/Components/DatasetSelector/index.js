@@ -202,7 +202,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
     return(
         <div className="DatasetSelector">
         <h1>Dataset</h1>
-        <div>Choose a dataset that you want to audit. If you want to upload your own dataset as a CSV file, please make sure that it has (1) a column named 'Y' (only 0 and 1 allowed), (2) a column named 'sensitive-attribute' (only 0 and 1 allowed) and (3) a column named 'scores' (values have to be between 0 and 1) and/or a column named 'D' (only 0 and 1 allowed). You can also upload a JSON file with an array of objects that contain the previously mentioned attributes.</div>
+        <div>Choose a dataset that you want to audit.</div>
         <br/>
         <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
             <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
@@ -245,8 +245,16 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="Own" defaultChecked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
+            <input type="file" name="file" onChange={selectFile} />
+            <div className="datasetExplanation">
+                If you want to upload your own dataset as a CSV file, please make sure that it has <ul>
+                <li>a column named 'Y' (only 0 and 1 allowed)</li>
+                <li>a column named 'sensitive-attribute' (only 0 and 1 allowed)</li>
+                <li>a column named 'scores' (values have to be between 0 and 1) and/or a column named 'D' (only 0 and 1 allowed)</li>
+                </ul>
+                You can also upload a JSON file with an array of objects that contain the previously mentioned attributes
+            </div>
         </span>
-        <input type="file" name="file" onChange={selectFile} />
         <br/>
         {datasetSelection == 'Own' && uploadedData.length === 0 && !fileError &&
             <div className="datasetExplanation">Please upload a dataset to audit or choose one of the predefined datasets.</div>
