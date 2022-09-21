@@ -11,6 +11,7 @@ const Navbar = () => {
       </Link>
       <NavLink key="audit" className="Navbar-link" exact to="/audit" activeClassName="active">Audit</NavLink>
       <NavLink key="compas" className="Navbar-link" exact to="/compas" activeClassName="active">COMPAS Case Study</NavLink>
+      <NavLink key="faq" className="Navbar-link" exact to="/faq" activeClassName="active">FAQ</NavLink>
       <NavLink key="contact" className="Navbar-link" exact to="/contact" activeClassName="active">Contact</NavLink>
     </nav>
   );
