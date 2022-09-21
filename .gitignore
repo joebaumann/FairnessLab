@@ -3,3 +3,7 @@ __pycache__
 
 ### VisualStudioCode ###
 .vscode/
+
+### JupyterNotebooks ###
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
