@@ -1,5 +1,0 @@
-age,c_charge_degree,race,age_cat,score_text,sex,priors_count,days_b_screening_arrest,decile_score,two_year_recid,c_jail_in,c_jail_out,D,scores,Y,sex-binary,sensitive-attribute
-34,F,African-American,25 - 45,Low,Male,0,-1.0,3,1,2013-01-26 03:45:27,2013-02-05 05:36:53,1,0.7,0,1,0
-24,F,African-American,Less than 25,Low,Male,4,-1.0,4,1,2013-04-13 04:58:34,2013-04-14 07:02:04,1,0.6,0,1,0
-41,F,Caucasian,25 - 45,Medium,Male,14,-1.0,6,1,2014-02-18 05:08:24,2014-02-24 12:18:30,0,0.4,0,1,1
-39,M,Caucasian,25 - 45,Low,Female,0,-1.0,1,0,2014-03-15 05:35:34,2014-03-18 04:28:46,1,0.9,1,0,1
