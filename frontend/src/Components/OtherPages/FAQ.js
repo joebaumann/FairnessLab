@@ -7,7 +7,7 @@ function FAQ() {
         <div>
         <Header title="FAQ"/>
 
-        <h3>What format should the uploaded dataset be in?</h3>
+        <h3 className="faq">What format should the uploaded dataset be in?</h3>
         <p>
         You can upload your dataset as either a CSV or a JSON file.
         You will need the following attributes:
@@ -55,24 +55,24 @@ function FAQ() {
             [&#123;'sensitive-attribute': 1, 'Y': 1, 'scores': 0.7, 'D': 1&#125;, &#123;'sensitive-attribute': 0, 'Y': 1, 'scores': 0.8, 'D': 1&#125;, &#123;'sensitive-attribute': 1, 'Y': 0, 'scores': 0.6, 'D': 1&#125;]
         </p>
 
-        <h3 id="binary-classifier">My data is not from a binary classifier. Can I still use this auditing tool?</h3>
+        <h3 className="faq" id="binary-classifier">My data is not from a binary classifier. Can I still use this auditing tool?</h3>
         <p>
             Yes, if you convert it to a binary dataset. Only do this if this makes sense in the context of your application.
         </p>
 
-        <h3>I don't have the scores that the model outputs ('scores'), only the final decisions ('D'). How does this affect the audit?</h3>
+        <h3 className="faq">I don't have the scores that the model outputs ('scores'), only the final decisions ('D'). How does this affect the audit?</h3>
         <p>
             No points from postprocessing in Pareto plot, only some basic points (like perfect predictor) to compare decisions against.
         </p>
 
-        <h3>What does the Pareto plot show?</h3>
+        <h3 className="faq">What does the Pareto plot show?</h3>
         <p>
             If 'scores' are available:
             If 'D' is available:
             Always:
         </p>
 
-        <h3>What makes the FairnessLab different from tools like Aequitas, AIF360 or FairLearn?</h3>
+        <h3 className="faq">What makes the FairnessLab different from tools like Aequitas, AIF360 or FairLearn?</h3>
         <p>
             Extension of standard group fairness metrics. Highlights assumptions of standard metrics.
         </p>
