@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
@@ -237,6 +237,35 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
         setXAxisLabel(xaxislabel)
     }
 
+    function updateDecisionAndLabelDescriptions(datasetSelection) {
+        switch(datasetSelection) {
+            case 'COMPAS':
+                setd0description("released (D=0)");
+                setd1description("detained (D=1)");
+                sety0description("an innocent individual (Y=0)");
+                sety1description("a recidivist (Y=1)");
+                break;
+            case 'German':
+                setd0description("rejected (D=0)");
+                setd1description("a loan (D=1)");
+                sety0description("an individual who defaulted on the loan (Y=0)");
+                sety1description("an individual who repaid the loan (Y=1)");
+                break;
+            case 'ACSEmploymentCA':
+                setd0description("predicted to be unemployed (D=0)");
+                setd1description("predicted to be employed (D=1)");
+                sety0description("an unemployed individual (Y=0)");
+                sety1description("an employed individual (Y=1)");
+                break;
+            case 'Own':
+                setd0description('negative decision (D=0)');
+                setd1description('positive decision (D=1)');
+                sety0description('an individual of type Y=0');
+                sety1description('an individual of type Y=1');
+                break;
+        }
+    }
+
     useEffect(() => {
         console.log('selection changed to ' + datasetSelection + ' with justifier: ' + justifier)
         deselectAllPoints()
@@ -249,6 +278,7 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
         if (datasetSelection !== '') {
             setGroup1(global.config.datasets[datasetSelection]['group1'])
             setGroup2(global.config.datasets[datasetSelection]['group2'])
+            updateDecisionAndLabelDescriptions(datasetSelection)
         }
     }, [datasetSelection]);
     
@@ -281,6 +311,22 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
                 <br/>
                 <b>D</b>: The decision in question; relies on Y to make this decision.
                 <br/><br/>
+                Describe the decision:
+                <br/>
+                <label htmlFor="d1description">D=1</label>
+                <input type="text" id="d1description" value={d1description} onChange={(e) => setd1description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                <label htmlFor="d0description">D=0</label>
+                <input type="text" id="d0description" value={d0description} onChange={(e) => setd0description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                Describe the labels:
+                <br/>
+                <label htmlFor="y1description">Y=1</label>
+                <input type="text" id="y1description" value={y1description} onChange={(e) => sety1description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                <label htmlFor="y0description">Y=0</label>
+                <input type="text" id="y0description" value={y0description} onChange={(e) => sety0description(e.target.value)} style={{width: "500px"}}/>
+                <br/><br/>
                 
                 <b>Decision maker</b>: The people or organization designing the algorithm, deciding on its design and thereby ultimately taking the decisions in question.
                 <br/>
@@ -298,10 +344,10 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
 
                 <h3>Quantification of the decision maker's utility</h3>
 
-                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
-                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y1description + " that is getting " + d1description + "?"}/>
+                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y0description + " that is getting " + d1description + "?"}/>
+                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y1description + " that is getting " + d0description + "?"}/>
+                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y0description + " that is getting " + d0description + "?"}/>
 
 
                 <h2>Fairness score</h2>
@@ -342,17 +388,17 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, se
 
                 <h5>For the group: {group1}</h5>
 
-                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a negative decision?"/>
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d0description + "?"}/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d0description + "?"}/>
 
                 <h5>For the group: {group2}</h5>
 
-                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label="How much utility does an individual with Y=0 derive from getting a negative decision?"/>                
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d0description + "?"}/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d0description + "?"}/>
                 
                 <h3>Pattern of Justice</h3>
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
