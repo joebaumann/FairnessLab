@@ -273,14 +273,12 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
-        if (datasetSelection !== '') {
-            setGroup1(global.config.datasets[datasetSelection]['group1'])
-            setGroup2(global.config.datasets[datasetSelection]['group2'])
-            setd0description(global.config.datasets[datasetSelection]['d0']);
-            setd1description(global.config.datasets[datasetSelection]['d1']);
-            sety0description(global.config.datasets[datasetSelection]['y0']);
-            sety1description(global.config.datasets[datasetSelection]['y1']);
-        }
+        setGroup1(global.config.datasets[datasetSelection]['group1'])
+        setGroup2(global.config.datasets[datasetSelection]['group2'])
+        setd0description(global.config.datasets[datasetSelection]['d0']);
+        setd1description(global.config.datasets[datasetSelection]['d1']);
+        sety0description(global.config.datasets[datasetSelection]['y0']);
+        sety1description(global.config.datasets[datasetSelection]['y1']);
     }, [datasetSelection]);
     
     useEffect(() => {
