@@ -20,6 +20,7 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
+    const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
     const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
@@ -237,6 +238,32 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
         setXAxisLabel(xaxislabel)
     }
 
+    function updateCorrespondsToExistingMetric() {
+        if (pattern === 'egalitarianism') {
+            if (justifier === 'no_justifier' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1 && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('statistical parity')
+                return
+            }
+            if (justifier === 'y_0' && suFP1 === 1 && suFP2 === 1 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('false positive rate parity')
+                return
+            }
+            if (justifier === 'y_1' && suTP1 === 1 && suTP2 === 1 && suFN1 === 0 && suFN2 === 0) {
+                setCorrespondingFairnessMetric('equality of opportunity')
+                return
+            }
+            if (justifier === 'd_0' && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('negative predictive value parity')
+                return
+            }
+            if (justifier === 'd_1' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1) {
+                setCorrespondingFairnessMetric('positive predictive value parity')
+                return
+            }
+        }
+        setCorrespondingFairnessMetric(undefined)
+    }
+
     useEffect(() => {
         console.log('selection changed to ' + datasetSelection + ' with justifier: ' + justifier)
         deselectAllPoints()
@@ -268,6 +295,10 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     useEffect(() => {
         updateXAxisLabel()
     }, [pattern, group1, group2]);
+
+    useEffect(() => {
+        updateCorrespondsToExistingMetric()
+    }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, pattern, justifier])
 
     useEffect(() => {
         deselectAllPoints()
@@ -416,6 +447,9 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better
+                {correspondingFairnessMetric !== undefined &&
+                    <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
+                }
                 <br/><br/>
                 {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
                     <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
