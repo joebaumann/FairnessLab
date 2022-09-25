@@ -22,7 +22,7 @@ function App() {
 
         <Navbar/>
 
-        <div className="Content">
+        <div className="Page">
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/audit" component={Audit}/>

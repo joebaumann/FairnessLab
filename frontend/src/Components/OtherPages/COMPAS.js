@@ -6,9 +6,11 @@ function COMPAS() {
   return (
     <div>
       <Header title="COMPAS case study"/>
-      <p>
-        Space for our blog post? Our link to it?
-      </p>
+      <div className="Content">
+        <p>
+          Space for our blog post? Our link to it?
+        </p>
+      </div>
     </div>
   );
 }
