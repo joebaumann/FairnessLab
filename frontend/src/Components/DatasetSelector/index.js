@@ -194,11 +194,12 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             processData()
     }, [uploadedData, datasetSelection]);
 
-    useEffect(() => {
-        if (uploadedData.length !== 0) {
-            setDatasetSelection('Own')
-        }
-    }, [uploadedData]);
+    // TODO: Not  working atm, fix this
+    // useEffect(() => {
+    //     if (uploadedData.length !== 0) {
+    //         setDatasetSelection('Own')
+    //     }
+    // }, [uploadedData]);
 
     return(
         <div className="DatasetSelector">
@@ -208,7 +209,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
         <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
             <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
             <div className="datasetExplanation">
-                The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We <a href="https://github.com/propublica/compas-analysis" target="_blank">preprocessed</a> the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.
+                The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We preprocessed the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.
                 <ul>
                     <li>Y=0: Was arrested within two years</li>
                     <li>Y=1: Was not arrested within two years</li>
@@ -217,6 +218,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: Black</li>
                     <li>Group 2: white</li>
                 </ul>
+                <a href="https://drive.google.com/file/d/1kd93hv1t7MyIu8f09QWQQobN0jbQHOGk/view?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="German" defaultChecked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
@@ -230,6 +232,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: female</li>
                     <li>Group 2: male</li>
                 </ul>
+                <a href="https://drive.google.com/file/d/1sKlZRV6pYxgED9JEulzJJLZ5HHldZ5fj/view?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="ACSEmploymentCA" defaultChecked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
@@ -243,6 +246,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: Black</li>
                     <li>Group 2: white</li>
                 </ul>
+                <a href="https://colab.research.google.com/drive/1R_UgSktEOFPccktXDis8VakEFJwuEvmd?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="Own" defaultChecked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
