@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './SelectedPointsTable.css';
 
 
@@ -15,7 +15,10 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
       return (
           <tr key={id}>
             <td>{id}</td>
-            <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
+            {thresholdGroup0 ?
+              <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
+              : <td>Decision rule from dataset</td>
+            }
             <td>{decisionMakerUtility} {decisionMakerCurrency}</td>
             <td>{fairnessScore.toFixed(4)}</td>
           </tr>
@@ -46,7 +49,7 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
 
   return (
     <div>
-        <h1 id='title'>Selected Decision Rules</h1>
+        <h2 id='title'>Selected Decision Rules</h2>
         {renderTable()}
     </div>
   )

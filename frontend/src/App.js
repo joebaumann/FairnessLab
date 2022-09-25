@@ -8,12 +8,9 @@ import {
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";
-import Workflow from "./Components/Workflow";
-import Data from "./Components/Data";
-import FairnessLabAudit from "./Components/FairnessLabAudit";
-import FairnessLabMakeFair from "./Components/FairnessLabImprove";
-import FairnessLabPareto from "./Components/FairnessLabPareto";
-import About from "./Components/OtherPages/About";
+import Audit from "./Components/Audit";
+import COMPAS from "./Components/OtherPages/COMPAS";
+import FAQ from "./Components/OtherPages/FAQ";
 import Contact from "./Components/OtherPages/Contact";
 import { Error404 } from "./Components/OtherPages/ErrorPages";
 
@@ -25,15 +22,12 @@ function App() {
 
         <Navbar/>
 
-        <div className="Content">
+        <div className="Page">
           <Switch>
             <Route exact path="/" component={Home}/>
-            {/* <Route path="/data" component={Data}/>
-            <Route path="/workflow" component={Workflow}/> */}
-            {/* <Route path="/audit" component={FairnessLabAudit}/>
-            <Route path="/improve" component={FairnessLabMakeFair}/> */}
-            <Route path="/pareto" component={FairnessLabPareto}/>
-            <Route path="/about" component={About}/>
+            <Route path="/audit" component={Audit}/>
+            <Route path="/compas" component={COMPAS}/>
+            <Route path="/faq" component={FAQ}/>
             <Route path="/contact" component={Contact}/>
             <Route path="*" component={Error404}/>
           </Switch>

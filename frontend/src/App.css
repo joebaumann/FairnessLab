@@ -1,10 +1,17 @@
-.Content {
+.Page {
   text-align: center;
   margin-top: 10vh;
 }
 
 @media (min-height: 800px), screen and (orientation: portrait) { 
-  .Content {
+  .Page {
     margin-top: 8vh;
   }
+}
+
+.Content {
+  text-align: left;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 15vh;
 }

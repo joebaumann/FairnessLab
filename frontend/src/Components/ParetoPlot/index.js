@@ -1,21 +1,27 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency}) {
+function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     const [dmuTP, setDmuTP] = useState(1);
     const [dmuFP, setDmuFP] = useState(0);
     const [dmuFN, setDmuFN] = useState(0);
     const [dmuTN, setDmuTN] = useState(1);
-    const [suTP, setSuTP] = useState(1);
-    const [suFP, setSuFP] = useState(1);
-    const [suFN, setSuFN] = useState(0);
-    const [suTN, setSuTN] = useState(0);
+    const [suTP1, setSuTP1] = useState(1);
+    const [suFP1, setSuFP1] = useState(1);
+    const [suFN1, setSuFN1] = useState(0);
+    const [suTN1, setSuTN1] = useState(0);
+    const [suTP2, setSuTP2] = useState(1);
+    const [suFP2, setSuFP2] = useState(1);
+    const [suFN2, setSuFN2] = useState(0);
+    const [suTN2, setSuTN2] = useState(0);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
+    const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
+    const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
     const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0.5);
@@ -35,6 +41,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         setIdOfSelectedPoints({})
         setIncrementalSelectionId(1)
         setColors(Array(numThresholds * numThresholds).fill('#ffffff'))
+        setColorOfD('#fff')
         console.log('deselected all points')
     }
 
@@ -72,15 +79,19 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
             else
                 decisions.push(0)
         }
-        let tp = countConfusion(decisions, 1, y, 1)
-        let fp = countConfusion(decisions, 1, y, 0)
-        let fn = countConfusion(decisions, 0, y, 1)
-        let tn = countConfusion(decisions, 0, y, 0)
+        return calculateUtilityFromDecisions(decisions, y, parameter_calculation);
+    }
 
-        let [ w_tp, w_fp, w_fn, w_tn ] = parameter_calculation
-        let value = w_tp * tp + w_fp * fp + w_fn * fn + w_tn * tn
-
-        return value
+    function calculateUtilityFromDecisions(decisions, y, parameter_calculation) {
+        let tp = countConfusion(decisions, 1, y, 1);
+        let fp = countConfusion(decisions, 1, y, 0);
+        let fn = countConfusion(decisions, 0, y, 1);
+        let tn = countConfusion(decisions, 0, y, 0);
+    
+        let [w_tp, w_fp, w_fn, w_tn] = parameter_calculation;
+        let value = w_tp * tp + w_fp * fp + w_fn * fn + w_tn * tn;
+    
+        return value;
     }
 
     function averageUtility(scores, threshold, y, parameter_calculation) {
@@ -133,9 +144,9 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         return values
     }
 
-    function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation) {
-        let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation)
-        let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation)
+    function combineThresholds(numThresholds, scores_A, scores_B, y_A, y_B, calculate_group_value, combine_group_values, parameter_calculation_1, parameter_calculation_2) {
+        let values_A = calculateValues(numThresholds, scores_A, y_A, calculate_group_value, parameter_calculation_1)
+        let values_B = calculateValues(numThresholds, scores_B, y_B, calculate_group_value, parameter_calculation_2)
         let values = []
         for (let r_A = 0; r_A < numThresholds; r_A++) {
             for (let r_B = 0; r_B < numThresholds; r_B++) {
@@ -152,22 +163,47 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     }
 
     function updateThresholdCalculations() {
-        setThresholdTuples(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], threshold, tuple))
-        setDecisionMakerUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN]))
-        if (pattern === 'egalitarianism') {
-            const unfairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, absoluteDifference, [suTP, suFP, suFN, suTN])
-            const maxUnfairness = Math.max(...unfairnessScores)
-            let fairnessScores = unfairnessScores.map(function(s, i) {
-                return maxUnfairness - s;
-            });
-            setFairnessScores(fairnessScores)
-        }
-        else {
+        if (filteredData['scores'][0].length === 0 && filteredData['scores'][1].length === 0) {
+            setThresholdTuples([])
+            setDecisionMakerUtility([])
+            setFairnessScores([])
+            setSubjectsUtility([])
+            return 0
+        } else {
+            setThresholdTuples(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], threshold, tuple))
+            setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
             let combineFunction = patternMapper(pattern)
-            let fairnessScores = combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, combineFunction, [suTP, suFP, suFN, suTN])
+            let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
+            // TODO: Add evaluation of D here
+            let maxUnfairness = undefined
+            if (pattern === "egalitarianism") {
+                maxUnfairness = Math.max(...fairnessScores)
+                fairnessScores = fairnessScores.map(function(s, i) {
+                    return maxUnfairness - s;
+                });
+            }
             setFairnessScores(fairnessScores)
+            setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
+            return maxUnfairness
         }
-        setSubjectsUtility(combineThresholds(numThresholds, scores[0], scores[1], y[0], y[1], averageUtility, tuple, [suTP, suFP, suFN, suTN]))
+    }
+
+    function updateEvaluationOfD(maxUnfairness) {
+        if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
+            let decisionMakerUtility_A = calculateUtilityFromDecisions(unfilteredData['d'][0], unfilteredData['y'][0], [dmuTP, dmuFP, dmuFN, dmuTN])
+            let decisionMakerUtility_B = calculateUtilityFromDecisions(unfilteredData['d'][1], unfilteredData['y'][1], [dmuTP, dmuFP, dmuFN, dmuTN])
+            let decisionMakerUtility = sum(decisionMakerUtility_A, decisionMakerUtility_B)
+            let fairnessValue_A = calculateUtilityFromDecisions(filteredData['d'][0], filteredData['y'][0], [suTP1, suFP1, suFN1, suTN1]) / filteredData['d'][0].length
+            let fairnessValue_B = calculateUtilityFromDecisions(filteredData['d'][1], filteredData['y'][1], [suTP2, suFP2, suFN2, suTN2]) / filteredData['d'][1].length
+            let combineFunction = patternMapper(pattern)
+            let fairnessScore = combineFunction(fairnessValue_A, fairnessValue_B)
+            if (pattern === "egalitarianism") {
+                fairnessScore = maxUnfairness - fairnessScore
+            }
+            setEvaluationOfD([fairnessScore, decisionMakerUtility, [fairnessValue_A, fairnessValue_B]])
+        } else {
+            setEvaluationOfD([])
+        }
     }
    
     function updateParetoFront() {
@@ -202,23 +238,53 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
         setXAxisLabel(xaxislabel)
     }
 
-    useEffect(() => {
-        console.log('selection changed to ' + datasetSelection)
-        console.log(scores)
-        deselectAllPoints()
-        setNumThresholds(11)
-        updateThresholdCalculations()
-    }, [datasetSelection, fileID]);
+    function updateCorrespondsToExistingMetric() {
+        if (pattern === 'egalitarianism') {
+            if (justifier === 'no_justifier' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1 && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('statistical parity')
+                return
+            }
+            if (justifier === 'y_0' && suFP1 === 1 && suFP2 === 1 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('false positive rate parity')
+                return
+            }
+            if (justifier === 'y_1' && suTP1 === 1 && suTP2 === 1 && suFN1 === 0 && suFN2 === 0) {
+                setCorrespondingFairnessMetric('equality of opportunity')
+                return
+            }
+            if (justifier === 'd_0' && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('negative predictive value parity')
+                return
+            }
+            if (justifier === 'd_1' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1) {
+                setCorrespondingFairnessMetric('positive predictive value parity')
+                return
+            }
+        }
+        setCorrespondingFairnessMetric(undefined)
+    }
 
     useEffect(() => {
-        console.log(datasetSelection)
+        console.log('selection changed to ' + datasetSelection + ' with justifier: ' + justifier)
+        deselectAllPoints()
+        setNumThresholds(11)
+        const maxUnfairness = updateThresholdCalculations()
+        updateEvaluationOfD(maxUnfairness)
+    }, [datasetSelection, datasetSelectionCounter]);
+
+    useEffect(() => {
         setGroup1(global.config.datasets[datasetSelection]['group1'])
         setGroup2(global.config.datasets[datasetSelection]['group2'])
+        setd0description(global.config.datasets[datasetSelection]['d0']);
+        setd1description(global.config.datasets[datasetSelection]['d1']);
+        sety0description(global.config.datasets[datasetSelection]['y0']);
+        sety1description(global.config.datasets[datasetSelection]['y1']);
     }, [datasetSelection]);
     
     useEffect(() => {
-        updateThresholdCalculations()
-    }, [suTP, suFP, suFN, suTN, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
+        const maxUnfairness = updateThresholdCalculations()
+        updateEvaluationOfD(maxUnfairness)
+    }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
 
     useEffect(() => {
         updateParetoFront()
@@ -227,6 +293,10 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
     useEffect(() => {
         updateXAxisLabel()
     }, [pattern, group1, group2]);
+
+    useEffect(() => {
+        updateCorrespondsToExistingMetric()
+    }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, pattern, justifier])
 
     useEffect(() => {
         deselectAllPoints()
@@ -241,8 +311,24 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
             <div className='ParetoConfiguration'>
                 <h1>Terminology</h1>
                 <b>Y</b>: The "ground truth"; not known at prediction time.
+                <br/><br/>
+                <b>Label the two ground truth cases:</b>
                 <br/>
+                <label htmlFor="y1description">Y=1</label>
+                <input type="text" id="y1description" value={y1description} onChange={(e) => sety1description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                <label htmlFor="y0description">Y=0</label>
+                <input type="text" id="y0description" value={y0description} onChange={(e) => sety0description(e.target.value)} style={{width: "500px"}}/>
+                <br/><br/>
                 <b>D</b>: The decision in question; relies on Y to make this decision.
+                <br/><br/>
+                <b>Label the two possible decisions:</b>
+                <br/>
+                <label htmlFor="d1description">D=1</label>
+                <input type="text" id="d1description" value={d1description} onChange={(e) => setd1description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                <label htmlFor="d0description">D=0</label>
+                <input type="text" id="d0description" value={d0description} onChange={(e) => setd0description(e.target.value)} style={{width: "500px"}}/>
                 <br/><br/>
                 
                 <b>Decision maker</b>: The people or organization designing the algorithm, deciding on its design and thereby ultimately taking the decisions in question.
@@ -253,7 +339,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <h1>Configuration</h1>
 
                 <h2>Decision maker's utility</h2>
-                <h5>How much utility does the decision maker derive from the decisions?</h5>
+                <b>How much utility does the decision maker derive from the decisions?</b>
 
                 <h3>Currency of the decision maker</h3>
                 <span>In what unit do you want to measure the utility of the decision maker?</span>
@@ -261,27 +347,14 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                 <h3>Quantification of the decision maker's utility</h3>
 
-                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label="DM_u11: How much utility does the decision-maker derive from giving a positive decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label="DM_u10: How much utility does the decision-maker derive from giving a positive decision to someone with Y=0?"/>
-                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label="DM_u01: How much utility does the decision-maker derive from giving a negative decision to someone with Y=1?"/>
-                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label="DM_u00: How much utility does the decision-maker derive from giving a negative decision to someone with Y=0?"/>
+                <UtilityQuantifier value={dmuTP} setSliderValue={setDmuTP} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y1description + " that is getting " + d1description + "?"}/>
+                <UtilityQuantifier value={dmuFP} setSliderValue={setDmuFP} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y0description + " that is getting " + d1description + "?"}/>
+                <UtilityQuantifier value={dmuFN} setSliderValue={setDmuFN} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y1description + " that is getting " + d0description + "?"}/>
+                <UtilityQuantifier value={dmuTN} setSliderValue={setDmuTN} unit={decisionMakerCurrency} label={"How much utility does the decision-maker derive from " + y0description + " that is getting " + d0description + "?"}/>
 
-                <h2>Decision subjects' utility</h2>
-                <h5>How much utility do the decision subjects derive from the decisions?</h5>
-
-                <h3>Currency of decision subjects</h3>
-                <span>In what unit do you want to measure the utility of the decision subject?</span>
-                <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
-
-                <h3>Quantification of the decision subjects' utility</h3>
-
-                <UtilityQuantifier value={suTP} setSliderValue={setSuTP} unit={subjectsCurrency} label="DS_u11: How much utility does an individual with Y=1 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFP} setSliderValue={setSuFP} unit={subjectsCurrency} label="DS_u10: How much utility does an individual with Y=0 derive from getting a positive decision?"/>
-                <UtilityQuantifier value={suFN} setSliderValue={setSuFN} unit={subjectsCurrency} label="DS_u01: How much utility does an individual with Y=1 derive from getting a negative decision?"/>
-                <UtilityQuantifier value={suTN} setSliderValue={setSuTN} unit={subjectsCurrency} label="DS_u00: How much utility does an individual with Y=0 derive from getting a negative decision?"/>
 
                 <h2>Fairness score</h2>
-                <h5>How should the utility of the decision subjects be distributed?</h5>
+                <b>How should the utility of the decision subjects be distributed?</b>
                 
                 <h3>Socio-demographic groups</h3>
                 <div>Which socio-demographic groups do you want to compare?</div>
@@ -291,6 +364,44 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <br/>
                 <label htmlFor="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
+
+                <h3>Justifier</h3>
+                <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
+
+                <div onChange={(e) => setJustifier(e.target.value)}>
+                    <input type="radio" value="no_justifier" name="justifier" defaultChecked="checked" /> None
+                    <input type="radio" value="y_0" name="justifier" /> Y=0
+                    <input type="radio" value="y_1" name="justifier" /> Y=1
+                    <input type="radio" value="d_0" name="justifier" /> D=0
+                    <input type="radio" value="d_1" name="justifier" /> D=1
+                </div>
+
+                <h3>Decision subjects' utility</h3>
+                <div>How much utility do the decision subjects derive from the decisions?</div>
+
+                <h4>Currency of decision subjects</h4>
+                <span>In what unit do you want to measure the utility of the decision subject?</span>
+                <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
+
+                <h4>Quantification of the decision subjects' utility</h4>
+
+                {justifier !== 'no_justifier' &&
+                    <div>Having a justifier means that the utility of some individuals is not considered when evaluating the fairness of the model. Sliders are disabled if their value is not considered for the evaluation.</div>
+                }
+
+                <h5>For the group: {group1}</h5>
+
+                <UtilityQuantifier value={suTP1} setSliderValue={setSuTP1} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFP1} setSliderValue={setSuFP1} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFN1} setSliderValue={setSuFN1} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d0description + "?"}/>
+                <UtilityQuantifier value={suTN1} setSliderValue={setSuTN1} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d0description + "?"}/>
+
+                <h5>For the group: {group2}</h5>
+
+                <UtilityQuantifier value={suTP2} setSliderValue={setSuTP2} disabled={justifier==="y_0" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFP2} setSliderValue={setSuFP2} disabled={justifier==="y_1" || justifier==="d_0"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d1description + "?"}/>
+                <UtilityQuantifier value={suFN2} setSliderValue={setSuFN2} disabled={justifier==="y_0" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y1description + " derive from getting " + d0description + "?"}/>
+                <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d0description + "?"}/>
                 
                 <h3>Pattern of Justice</h3>
                 <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
@@ -298,14 +409,18 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 <div>→ Measured as: <b>How close are the average utilities to being equal?</b></div>
                 <div><b>Maximin</b>: Fairness is if the average utility of the worst-off group is maximized by the decision rule. Inequalities are okay if they benefit the worst-off group.</div>
                 <div>→ Measured as: <b>What’s the lowest average utility?</b></div>
+                <div><b>Prioritarianism</b>: Fairness is if the aggregated utility of the groups is maximized by the decision rule, with the utility of the worst-off group being weighted higher than the other groups' utilities.</div>
+                <div>→ Measured as: <b>What’s the aggregated utility with the worst-off group having a higher weight?</b></div>
+                <div><b>Sufficientarianism</b>: Fairness is if all groups' have an average utility that is above the defined threshold. Inequalities are okay if every group is above the defined threshold.</div>
+                <div>→ Measured as: <b>How many groups are above the defined threshold?</b></div>
                 <br/>
 
                 <label htmlFor="pattern">Choose a pattern:</label>
                 <select name="pattern" id="pattern" onChange={(e) => setPattern(e.target.value)}>
                 <option value="egalitarianism">egalitarianism</option>
                 <option value="maximin">maximin</option>
-                {/* <option value="prioritarianism">prioritarianism</option>
-                <option value="sufficientarianism">sufficientarianism</option> */}
+                <option value="prioritarianism">prioritarianism</option>
+                <option value="sufficientarianism">sufficientarianism</option>
                 </select>
 
                 {pattern === 'sufficientarianism' &&
@@ -323,14 +438,20 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                 }
             </div>
             <div className="ParetoPlots">
-                <h1>Pareto plot</h1>
+                <h1>Audit</h1>
+                <h2>Pareto plot</h2>
                 With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
                 <br/><br/>
-                <b>Decision maker's utility</b>: Higher is better (total utility for the {scores[0].length + scores[1].length} individuals in the dataset)
+                <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
-                <b>Fairness score</b>: Higher is better<br/>
-                <br/>
-                <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
+                <b>Fairness score</b>: Higher is better
+                {correspondingFairnessMetric !== undefined &&
+                    <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
+                }
+                <br/><br/>
+                {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
+                    <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
+                }
                 <br/><br/>
                 <div>
                     <button onClick={deselectAllPoints}>
@@ -352,6 +473,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                         x: fairnessScores,
                         y: decisionMakerUtility,
                         mode: 'markers',
+                        visible: filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0,
                         marker: {
                             color: colors,
                             size: 7,
@@ -362,10 +484,30 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
                         },
                         type: 'scatter',
                         hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
-                        '<br><b>Fairness score</b>: %{x}<br>' +
+                        '<br><b>Fairness score</b>: %{x:.4f}<br>' +
                         '<b>Thresholds</b>: %{text}',
                         text: thresholdTuples,
                         name: 'Decision rule'
+                    },
+                    {
+                        x: [evaluationOfD[0]],
+                        y: [evaluationOfD[1]],
+                        mode: 'markers',
+                        visible: evaluationOfD.length !== 0,
+                        marker: {
+                            color: colorOfD,
+                            size: 15,
+                            symbol: 'diamond',
+                            line: {
+                                color: '#000000',
+                                width: 1
+                            }
+                        },
+                        type: 'scatter',
+                        hovertemplate: '<b>Decisions from dataset</b>' +
+                        '<br><b>Decision maker\'s utility</b>: %{y:.2f}' +
+                        '<br><b>Fairness score</b>: %{x:.4f}<br>',
+                        name: 'Decisions from dataset'
                     },
                     ]}
 
@@ -379,27 +521,44 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
 
                     onClick={(data) => {
                         var newColors = [...colors];
-                        var selectedPoint = data.points[0].pointIndex
+                        // Orange point (from D) gets index -1, every other points gets their regular index
+                        let selectedPoint = -1
+                        if (data.points[0].data.x.length > 1) {
+                            selectedPoint = data.points[0].pointIndex
+                        }
                         var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
                         if (indexOfSelectedPoint > -1) {
                             // deselect point and remove from list
                             selectedPoints.splice(indexOfSelectedPoint, 1)
                             delete idOfSelectedPoints[selectedPoint]
-                            newColors[selectedPoint] = '#ffffff'
+                            if (selectedPoint === -1) {
+                                setColorOfD('#fff')
+                            } else {
+                                newColors[selectedPoint] = '#ffffff'
+                            }
                         } else {
                             // select point and add to list
                             selectedPoints.push(selectedPoint)
 
-                            idOfSelectedPoints[selectedPoint] = {
-                                id: incrementalSelectionId,
-                                thresholdGroup0: thresholdTuples[selectedPoint][0],
-                                thresholdGroup1: thresholdTuples[selectedPoint][1],
-                                decisionMakerUtility: decisionMakerUtility[selectedPoint],
-                                fairnessScore: fairnessScores[selectedPoint]
+                            if (selectedPoint === -1) {
+                                idOfSelectedPoints[selectedPoint] = {
+                                    id: incrementalSelectionId,
+                                    decisionMakerUtility: evaluationOfD[1],
+                                    fairnessScore: evaluationOfD[0]
+                                }
+                                setColorOfD('orange')
+                            } else {
+                                idOfSelectedPoints[selectedPoint] = {
+                                    id: incrementalSelectionId,
+                                    thresholdGroup0: thresholdTuples[selectedPoint][0],
+                                    thresholdGroup1: thresholdTuples[selectedPoint][1],
+                                    decisionMakerUtility: decisionMakerUtility[selectedPoint],
+                                    fairnessScore: fairnessScores[selectedPoint]
+                                }
+                                newColors[selectedPoint] = getRandomColor()
                             }
                             
                             setIncrementalSelectionId(incrementalSelectionId + 1)
-                            newColors[selectedPoint] = getRandomColor()
                         }
                         setColors(newColors)
                         setSelectedPoints([...selectedPoints]);
@@ -411,7 +570,7 @@ function ParetoPlot({fileID, scores, y, group1, setGroup1, group2, setGroup2, da
       );
 }
 
-function UtilityQuantifier({value, setSliderValue, label, unit}) {
+function UtilityQuantifier({value, setSliderValue, label, unit, disabled}) {
     var numberRegex = /[-+]?[0-9]+\.?[0-9]+/
     var unitRegex = /[^\d+]+$/;
     var multiplierRegex = /^\*\s*\d+/;
@@ -420,7 +579,7 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
         <div>
             <label>{label}</label>
             <br/>
-            <input className="Slider" type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
+            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
             <datalist id="ticks">
                 <option>-10</option>
                 <option>-9</option>
@@ -444,7 +603,7 @@ function UtilityQuantifier({value, setSliderValue, label, unit}) {
                 <option>9</option>
                 <option>10</option>
             </datalist>
-            <span>{currentSliderValue} {unit}</span>
+            <span className="sliderSpan">{currentSliderValue} {unit}</span>
             {unit.match(multiplierRegex) !== null && 
             <span> = {Math.round(currentSliderValue * unit.match(numberRegex) * 100) / 100}{unit.match(unitRegex)}</span>}
         </div>
@@ -455,10 +614,10 @@ function ThresholdInput({numThresholds, setNumThresholds}) {
     const [currentNumThresholds, setCurrentNumThresholds] = useState(numThresholds)
     return (
         <>
-        <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 1, max: 101)</label>
-        <input type="text" min="1" max="101" value={currentNumThresholds} onChange={(e) => setCurrentNumThresholds(e.target.value)} onBlur={(e) => {
-            if (e.target.value < 1) {
-                setCurrentNumThresholds(1)
+        <label>Number of thresholds: How many thresholds do you want to test for each group? (min: 2, max: 101)</label>
+        <input type="text" min="2" max="101" value={currentNumThresholds} onChange={(e) => setCurrentNumThresholds(e.target.value)} onBlur={(e) => {
+            if (e.target.value < 2) {
+                setCurrentNumThresholds(2)
             }
             if (e.target.value > 101) {
                 setCurrentNumThresholds(101)

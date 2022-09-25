@@ -2,18 +2,18 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
 
-const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, colors}) => {
+const ScoreDistribution = ({unfilteredData, selectedPoints, thresholdTuples, labels, colors}) => {
     var indices_of_Y0_for_group1 = [];
     var indices_of_Y1_for_group1 = [];
-    for(let i = 0; i < y[0].length; i++)
-        if (y[0][i] === 0)
+    for(let i = 0; i < unfilteredData['y'][0].length; i++)
+        if (unfilteredData['y'][0][i] === 0)
           indices_of_Y0_for_group1.push(i);
         else
           indices_of_Y1_for_group1.push(i);
     const group1_Y1 = [];
-    indices_of_Y1_for_group1.forEach(i => group1_Y1.push(scores[0][i]));
+    indices_of_Y1_for_group1.forEach(i => group1_Y1.push(unfilteredData['scores'][0][i]));
     const group1_Y0 = [];
-    indices_of_Y0_for_group1.forEach(i => group1_Y0.push(scores[0][i]));
+    indices_of_Y0_for_group1.forEach(i => group1_Y0.push(unfilteredData['scores'][0][i]));
     const trace_group1_Y1 = {
       y: group1_Y1,
       type: "histogram",
@@ -35,15 +35,15 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
     var indices_of_Y0_for_group2 = [];
     var indices_of_Y1_for_group2 = [];
-    for(let i = 0; i < y[1].length; i++)
-        if (y[1][i] === 0)
+    for(let i = 0; i < unfilteredData['y'][1].length; i++)
+        if (unfilteredData['y'][1][i] === 0)
           indices_of_Y0_for_group2.push(i);
         else
           indices_of_Y1_for_group2.push(i);
     const group2_Y1 = [];
-    indices_of_Y1_for_group2.forEach(i => group2_Y1.push(scores[1][i]));
+    indices_of_Y1_for_group2.forEach(i => group2_Y1.push(unfilteredData['scores'][1][i]));
     const group2_Y0 = [];
-    indices_of_Y0_for_group2.forEach(i => group2_Y0.push(scores[1][i]));
+    indices_of_Y0_for_group2.forEach(i => group2_Y0.push(unfilteredData['scores'][1][i]));
     const trace_group2_Y1 = {
         y: group2_Y1,
         type: "histogram",
@@ -64,39 +64,50 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
     let threshold_lines1 = []
     let threshold_lines2 = []
+
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    }
     
+    var linelength = 2
     for (let s=0; s < selectedPoints.length; s++) {
       var selectedPoint = selectedPoints[s]
-      var color = colors[selectedPoint]
-      var threshold1 = {
-        type: 'line',
-        xref: 'paper',
-        y0: thresholdTuples[selectedPoint][0],
-        x0: 0.05,
-        y1: thresholdTuples[selectedPoint][0],
-        x1: 1,
-        line: {
-          color: color,
-          width: 3,
-          dash: 'dot'
+      if (selectedPoint !== -1) {
+        var color = colors[selectedPoint]
+        var threshold1 = {
+          type: 'line',
+          xref: 'paper',
+          y0: thresholdTuples[selectedPoint][0],
+          x0: 0.05,
+          y1: thresholdTuples[selectedPoint][0],
+          x1: 1,
+          line: {
+            color: color,
+            width: 3,
+            dash: linelength + "px,20px"
+          }
         }
+        threshold_lines1.push(threshold1)
+        
+        var threshold2 = {
+          type: 'line',
+          xref: 'paper',
+          y0: thresholdTuples[selectedPoint][1],
+          x0: 0,
+          y1: thresholdTuples[selectedPoint][1],
+          x1: 0.95,
+          line: {
+            color: color,
+            width: 3,
+            dash: linelength + "px,20px"
+          }
+        }
+        threshold_lines2.push(threshold2)
+        linelength += 2
       }
-      threshold_lines1.push(threshold1)
 
-      var threshold2 = {
-        type: 'line',
-        xref: 'paper',
-        y0: thresholdTuples[selectedPoint][1],
-        x0: 0,
-        y1: thresholdTuples[selectedPoint][1],
-        x1: 0.95,
-        line: {
-          color: color,
-          width: 3,
-          dash: 'dot'
-        }
-      }
-      threshold_lines2.push(threshold2)
     }
 
     const layoutGroup1 = {
@@ -157,17 +168,24 @@ const ScoreDistribution = ({scores, y, selectedPoints, thresholdTuples, labels, 
 
     return (
       <div className='ScoreDistribution'>
-        <h1>Score distribution</h1>
-        Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.
-        <br/>
-        <Plot className='LeftPlot'
-            data={dataGroup1}
-            layout={layoutGroup1}
-        />
-        <Plot className='RightPlot'
-            data={dataGroup2}
-            layout={layoutGroup2}
-        />
+        <h2>Score distribution</h2>
+        {unfilteredData['scores'][0].length === 0 && unfilteredData['scores'][1].length === 0 ?
+          <>This plot is only available if the audited dataset contains predicted scores. The current dataset does not have a column named 'scores.'</>
+          :
+          <>
+            Individuals with probability scores above or equal to their group-specific threshold receive D=1. The others receive D=0.
+            <br/>
+            <Plot className='LeftPlot'
+                data={dataGroup1}
+                layout={layoutGroup1}
+            />
+            <Plot className='RightPlot'
+                data={dataGroup2}
+                layout={layoutGroup2}
+            />
+          </>
+        
+        }
       </div>
       );
 }

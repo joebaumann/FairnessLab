@@ -9,12 +9,9 @@ const Navbar = () => {
       <Link to="/">
         <img alt="Logo" className="Navbar-logo" src={logo}/>
       </Link>
-      {/* <NavLink key="workflow" className="Navbar-link" exact to="/workflow" activeClassName="active">Workflow</NavLink>
-      <NavLink key="data" className="Navbar-link" exact to="/data" activeClassName="active">Data</NavLink> */}
-      {/* <NavLink key="audit" className="Navbar-link" exact to="/audit" activeClassName="active">Audit</NavLink>
-      <NavLink key="improve" className="Navbar-link" exact to="/improve" activeClassName="active">Improve</NavLink> */}
-      <NavLink key="pareto" className="Navbar-link" exact to="/pareto" activeClassName="active">Model evaluation</NavLink>
-      <NavLink key="about" className="Navbar-link" exact to="/about" activeClassName="active">About</NavLink>
+      <NavLink key="audit" className="Navbar-link" exact to="/audit" activeClassName="active">Audit</NavLink>
+      <NavLink key="compas" className="Navbar-link" exact to="/compas" activeClassName="active">COMPAS Case Study</NavLink>
+      <NavLink key="faq" className="Navbar-link" exact to="/faq" activeClassName="active">FAQ</NavLink>
       <NavLink key="contact" className="Navbar-link" exact to="/contact" activeClassName="active">Contact</NavLink>
     </nav>
   );
