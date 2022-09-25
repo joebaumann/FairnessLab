@@ -87,6 +87,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                 }
                 reader.readAsText(e.target.files[0])
             }
+            setFileError(false)
         } catch (error) {
             setFilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
             setUnfilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
@@ -159,20 +160,20 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
 
     function checkDataValidity(filteredData, unfilteredData) {
         let isValid = false;
-        if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['y'][0].length === filteredData['d'][0].length
-            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['y'][1].length === filteredData['d'][1].length
-            && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['y'][0].length === unfilteredData['d'][0].length
-            && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['y'][1].length === unfilteredData['d'][1].length) {
+        if (filteredData['y'][0].length !== 0 && filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['y'][0].length === filteredData['d'][0].length
+            && filteredData['y'][1].length !== 0 && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['y'][1].length === filteredData['d'][1].length
+            && unfilteredData['y'][0].length !== 0 && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['y'][0].length === unfilteredData['d'][0].length
+            && unfilteredData['y'][1].length !== 0 && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['y'][1].length === unfilteredData['d'][1].length) {
             isValid = true;
-        } else if (filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['d'][0].length === 0
-            && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['d'][1].length === 0
-            && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['d'][0].length === 0
-            && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['d'][1].length === 0) {
+        } else if (filteredData['y'][0].length !== 0 && filteredData['y'][0].length === filteredData['scores'][0].length && filteredData['d'][0].length === 0
+            && filteredData['y'][1].length !== 0 && filteredData['y'][1].length === filteredData['scores'][1].length && filteredData['d'][1].length === 0
+            && unfilteredData['y'][0].length !== 0 && unfilteredData['y'][0].length === unfilteredData['scores'][0].length && unfilteredData['d'][0].length === 0
+            && unfilteredData['y'][1].length !== 0 && unfilteredData['y'][1].length === unfilteredData['scores'][1].length && unfilteredData['d'][1].length === 0) {
             isValid = true;
-        } else if (filteredData['y'][0].length === filteredData['d'][0].length && filteredData['scores'][0].length === 0
-            && filteredData['y'][1].length === filteredData['d'][1].length && filteredData['scores'][1].length === 0
-            && unfilteredData['y'][0].length === unfilteredData['d'][0].length && unfilteredData['scores'][0].length === 0
-            && unfilteredData['y'][1].length === unfilteredData['d'][1].length && unfilteredData['scores'][1].length === 0) {
+        } else if (filteredData['y'][0].length !== 0 && filteredData['y'][0].length === filteredData['d'][0].length && filteredData['scores'][0].length === 0
+            && filteredData['y'][1].length !== 0 && filteredData['y'][1].length === filteredData['d'][1].length && filteredData['scores'][1].length === 0
+            && unfilteredData['y'][0].length !== 0 && unfilteredData['y'][0].length === unfilteredData['d'][0].length && unfilteredData['scores'][0].length === 0
+            && unfilteredData['y'][1].length !== 0 && unfilteredData['y'][1].length === unfilteredData['d'][1].length && unfilteredData['scores'][1].length === 0) {
             isValid = true;
         }
         if (!isValid) {
@@ -256,10 +257,10 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             You can also upload a JSON file with an array of objects that contain the previously mentioned attributes
         </div>
         <br/>
-        {datasetSelection == 'Own' && uploadedData.length === 0 && !fileError &&
-            <div className="datasetExplanation">Please upload a dataset to audit or choose one of the predefined datasets.</div>
+        {datasetSelection == 'Own' && uploadedData.length === 0 && fileError &&
+            <div className="datasetExplanation">Error: Please upload a dataset to audit or choose one of the predefined datasets.</div>
         }
-        {datasetSelection == 'Own' && fileError &&
+        {datasetSelection == 'Own' && uploadedData.length !== 0 && fileError &&
             <div className="datasetExplanation">Error: The feature labels of the selected file don't match the template. Please upload a dataset with the right feature labels.</div>
         }
         </div>
