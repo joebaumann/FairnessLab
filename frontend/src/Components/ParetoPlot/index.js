@@ -81,6 +81,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
+    const [correspondingWeightedFairnessMetric, setCorrespondingWeightedFairnessMetric] = useState(undefined);
     const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
@@ -300,28 +301,51 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
 
     function updateCorrespondsToExistingMetric() {
         if (pattern === 'egalitarianism') {
-            if (justifier === 'no_justifier' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1 && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'no_justifier' && suTP1 === suFP1 && Math.abs(suFP1 - suFN1) === 1 && suFN1 === suTN1 && suTP1 === suTP2 && suTN1 === suTN2 && suFP1 === suFP2 && suFN1 === suFN2) {
                 setCorrespondingFairnessMetric('statistical parity')
                 return
             }
-            if (justifier === 'y_0' && suFP1 === 1 && suFP2 === 1 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'y_0' && Math.abs(suFP1 - suTN1) === 1 && suFP1 === suFP2 && suTN1 === suTN2) {
                 setCorrespondingFairnessMetric('false positive rate parity')
                 return
             }
-            if (justifier === 'y_1' && suTP1 === 1 && suTP2 === 1 && suFN1 === 0 && suFN2 === 0) {
-                setCorrespondingFairnessMetric('equality of opportunity')
+            if (justifier === 'y_1' && Math.abs(suTP1 - suFN1) === 1 && suTP1 === suTP2 && suFN1 === suFN2) {
+                setCorrespondingFairnessMetric('true positive rate parity AKA equality of opportunity')
                 return
             }
-            if (justifier === 'd_0' && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'd_0' && Math.abs(suFN1 - suTN1) === 1 && suTN1 === suTN2 && suFN1 === suFN2) {
                 setCorrespondingFairnessMetric('negative predictive value parity')
                 return
             }
-            if (justifier === 'd_1' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1) {
-                setCorrespondingFairnessMetric('positive predictive value parity')
+            if (justifier === 'd_1' && Math.abs(suTP1 - suFP1) === 1 && suTP1 === suTP2 && suFP1 === suFP2) {
+                setCorrespondingFairnessMetric('positive predictive value parity AKA predictive parity')
+                return
+            }
+            // config is not equivalent to any existing metric
+            // check if it is a weighted version of an existing metric
+            if (justifier === 'no_justifier' && suTP1 === suFP1 && suFP1 !== suFN1 && suFN1 === suTN1 && suTP1 === suTP2 && suTN1 === suTN2 && suFP1 === suFP2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('statistical parity')
+                return
+            }
+            if (justifier === 'y_0' && suFP1 !== suTN1 && suFP1 === suFP2 && suTN1 === suTN2) {
+                setCorrespondingWeightedFairnessMetric('false positive rate parity')
+                return
+            }
+            if (justifier === 'y_1' && suTP1 !== suFN1 && suTP1 === suTP2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('true positive rate parity AKA equality of opportunity')
+                return
+            }
+            if (justifier === 'd_0' && suFN1 !== suTN1 && suTN1 === suTN2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('negative predictive value parity')
+                return
+            }
+            if (justifier === 'd_1' && suTP1 !== suFP1 && suTP1 === suTP2 && suFP1 === suFP2) {
+                setCorrespondingWeightedFairnessMetric('positive predictive value parity AKA predictive parity')
                 return
             }
         }
         setCorrespondingFairnessMetric(undefined)
+        setCorrespondingWeightedFairnessMetric(undefined)
     }
 
     useEffect(() => {
@@ -505,8 +529,14 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better
-                {correspondingFairnessMetric !== undefined &&
+                {correspondingFairnessMetric !== undefined ?
                     <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
+                    :
+                    <>
+                    {correspondingWeightedFairnessMetric !== undefined &&
+                        <div>The fairness metric you selected corresponds to a weighted version of <i>{correspondingWeightedFairnessMetric}</i></div>
+                    }
+                    </>
                 }
                 <br/><br/>
                 {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&

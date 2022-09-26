@@ -10,11 +10,6 @@ import SubjectsUtility from '../SubjectsUtility';
 function Audit(props) {
   // loads the state for a specific demo if the audit page was accessed from the compas case study
   
-  const [str, setStr] = useState('hi'.length === 2 ? 'hello world' : 'test');
-  console.log("aaaa " + props.match.params.demo);
-  console.log("aaaa " + props.match.params.demo === "undefined");
-
-
   const [datasetSelection, setDatasetSelection] = useState('COMPAS');
   const [justifier, setJustifier] = useState(() => {
     if (props.match.params.demo == "compasaudit1") {
