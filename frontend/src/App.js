@@ -25,7 +25,7 @@ function App() {
         <div className="Page">
           <Switch>
             <Route exact path="/" component={Home}/>
-            <Route path="/audit" component={Audit}/>
+            <Route path="/audit/:demo?" component={Audit}/> {/* 'demo' is an optional parameter to load one of the compas audits described in the compas case study */}
             <Route path="/compas" component={COMPAS}/>
             <Route path="/faq" component={FAQ}/>
             <Route path="/contact" component={Contact}/>

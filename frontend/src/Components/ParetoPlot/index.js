@@ -4,17 +4,77 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
-    const [dmuTP, setDmuTP] = useState(1);
-    const [dmuFP, setDmuFP] = useState(0);
-    const [dmuFN, setDmuFN] = useState(0);
-    const [dmuTN, setDmuTN] = useState(1);
+function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+    const [dmuTP, setDmuTP] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return 0
+        }
+        else if (isDemo == "compasaudit2") {
+          return 0
+        }
+        else {
+          return 1;
+        }
+      });
+    const [dmuFP, setDmuFP] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return -1
+        }
+        else if (isDemo == "compasaudit2") {
+          return -1
+        }
+        else {
+          return 0;
+        }
+      });
+    const [dmuFN, setDmuFN] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return -1
+        }
+        else if (isDemo == "compasaudit2") {
+          return -1
+        }
+        else {
+          return 0;
+        }
+      });
+    const [dmuTN, setDmuTN] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return 0
+        }
+        else if (isDemo == "compasaudit2") {
+          return 0
+        }
+        else {
+          return 1;
+        }
+      });
     const [suTP1, setSuTP1] = useState(1);
-    const [suFP1, setSuFP1] = useState(1);
+    const [suFP1, setSuFP1] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return -1
+        }
+        else if (isDemo == "compasaudit2") {
+          return -2
+        }
+        else {
+          return 1;
+        }
+      });
     const [suFN1, setSuFN1] = useState(0);
     const [suTN1, setSuTN1] = useState(0);
     const [suTP2, setSuTP2] = useState(1);
-    const [suFP2, setSuFP2] = useState(1);
+    const [suFP2, setSuFP2] = useState(() => {
+        if (isDemo == "compasaudit1") {
+          return -1
+        }
+        else if (isDemo == "compasaudit2") {
+          return -1
+        }
+        else {
+          return 1;
+        }
+      });
     const [suFN2, setSuFN2] = useState(0);
     const [suTN2, setSuTN2] = useState(0);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
@@ -369,11 +429,11 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
                 <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
 
                 <div onChange={(e) => setJustifier(e.target.value)}>
-                    <input type="radio" value="no_justifier" name="justifier" defaultChecked="checked" /> None
-                    <input type="radio" value="y_0" name="justifier" /> Y=0
-                    <input type="radio" value="y_1" name="justifier" /> Y=1
-                    <input type="radio" value="d_0" name="justifier" /> D=0
-                    <input type="radio" value="d_1" name="justifier" /> D=1
+                    <input type="radio" value="no_justifier" name="justifier" defaultChecked={justifier === 'no_justifier'} /> None
+                    <input type="radio" value="y_0" name="justifier" defaultChecked={justifier === 'y_0'} /> Y=0
+                    <input type="radio" value="y_1" name="justifier" defaultChecked={justifier === 'y_1'} /> Y=1
+                    <input type="radio" value="d_0" name="justifier" defaultChecked={justifier === 'd_0'} /> D=0
+                    <input type="radio" value="d_1" name="justifier" defaultChecked={justifier === 'd_1'} /> D=1
                 </div>
 
                 <h3>Decision subjects' utility</h3>
