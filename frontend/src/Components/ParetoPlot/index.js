@@ -4,7 +4,24 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+
 function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+    
+    const [open, setOpen] = React.useState(false);
+    
+    const handleClose = (event, reason) => {
+        if ("clickaway" == reason) return;
+        setOpen(false);
+    };
+    
+    const handleSnackbar = () => {
+        setOpen(true);
+    };
+  
     const [dmuTP, setDmuTP] = useState(() => {
         if (isDemo == "compasaudit1") {
           return 0
@@ -324,28 +341,45 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
             // config is not equivalent to any existing metric
             // check if it is a weighted version of an existing metric
             if (justifier === 'no_justifier' && suTP1 === suFP1 && suFP1 !== suFN1 && suFN1 === suTN1 && suTP1 === suTP2 && suTN1 === suTN2 && suFP1 === suFP2 && suFN1 === suFN2) {
-                setCorrespondingWeightedFairnessMetric('statistical parity')
+                setCorrespondingWeightedFairnessMetric('statistical parity multiplied by ' + Math.abs(suFP1 - suFN1));
                 return
             }
             if (justifier === 'y_0' && suFP1 !== suTN1 && suFP1 === suFP2 && suTN1 === suTN2) {
-                setCorrespondingWeightedFairnessMetric('false positive rate parity')
+                setCorrespondingWeightedFairnessMetric('false positive rate parity multiplied by ' + Math.abs(suFP1 - suTN1));
                 return
             }
             if (justifier === 'y_1' && suTP1 !== suFN1 && suTP1 === suTP2 && suFN1 === suFN2) {
-                setCorrespondingWeightedFairnessMetric('true positive rate parity AKA equality of opportunity')
+                setCorrespondingWeightedFairnessMetric('true positive rate parity AKA equality of opportunity multiplied by ' + Math.abs(suTP1 - suFN1));
                 return
             }
             if (justifier === 'd_0' && suFN1 !== suTN1 && suTN1 === suTN2 && suFN1 === suFN2) {
-                setCorrespondingWeightedFairnessMetric('negative predictive value parity')
+                setCorrespondingWeightedFairnessMetric('negative predictive value parity multiplied by ' + Math.abs(suFN1 - suTN1));
                 return
             }
             if (justifier === 'd_1' && suTP1 !== suFP1 && suTP1 === suTP2 && suFP1 === suFP2) {
-                setCorrespondingWeightedFairnessMetric('positive predictive value parity AKA predictive parity')
+                setCorrespondingWeightedFairnessMetric('positive predictive value parity AKA predictive parity multiplied by ' + Math.abs(suTP1 - suFP1));
                 return
             }
         }
         setCorrespondingFairnessMetric(undefined)
         setCorrespondingWeightedFairnessMetric(undefined)
+    }
+
+    function getSnackbarMessage() {
+        return (
+            <>
+            {correspondingFairnessMetric !== undefined ?
+                <div>The fairness metric you selected corresponds to <b><i>{correspondingFairnessMetric}</i></b>.</div>
+                :
+                <>
+                {correspondingWeightedFairnessMetric !== undefined &&
+                    <div>The fairness metric you selected corresponds to a weighted version of <b><i>{correspondingWeightedFairnessMetric}</i></b>.</div>
+                }
+                </>
+            }
+            </>
+        )
+
     }
 
     useEffect(() => {
@@ -389,6 +423,15 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     useEffect(() => {
         updateParetoFront()
     }, []);
+
+    useEffect(() => {
+        if (correspondingFairnessMetric !== undefined | correspondingWeightedFairnessMetric !== undefined) {
+            handleSnackbar()
+        }
+        else {
+            handleClose()
+        }
+    }, [correspondingFairnessMetric, correspondingWeightedFairnessMetric]);
 
     return (
         <div className='ParetoPlot'>
@@ -529,15 +572,33 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better
-                {correspondingFairnessMetric !== undefined ?
-                    <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
-                    :
-                    <>
-                    {correspondingWeightedFairnessMetric !== undefined &&
-                        <div>The fairness metric you selected corresponds to a weighted version of <i>{correspondingWeightedFairnessMetric}</i></div>
-                    }
-                    </>
-                }
+
+                <div>
+
+                    <Snackbar
+                        anchorOrigin={{
+                        horizontal: "left",
+                        vertical: "bottom",
+                        }}
+                        open={open}
+                        autoHideDuration={10000}
+                        message={getSnackbarMessage()}
+                        onClose={handleClose}
+                        action={
+                        <React.Fragment>
+                            <IconButton
+                            size="small"
+                            aria-label="close"
+                            color="inherit"
+                            onClick={handleClose}
+                            >
+                            <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                        }
+                    />
+                </div>
+                
                 <br/><br/>
                 {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
                     <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
@@ -664,12 +725,12 @@ function UtilityQuantifier({value, setSliderValue, label, unit, disabled}) {
     var numberRegex = /[-+]?[0-9]+\.?[0-9]+/
     var unitRegex = /[^\d+]+$/;
     var multiplierRegex = /^\*\s*\d+/;
-    const [currentSliderValue, setCurrentSliderValue] = useState(value)
+    const [currentSliderValue, setCurrentSliderValue] = useState(Number(value))
     return (
         <div>
             <label>{label}</label>
             <br/>
-            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
+            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(Number(e.target.value))} onMouseUp={(e) => setSliderValue(Number(e.target.value))} list="ticks" />
             <datalist id="ticks">
                 <option>-10</option>
                 <option>-9</option>
