@@ -27,7 +27,7 @@ function Home() {
         <h3>Want to see the FairnessLab in action?</h3>
         <p>
           You can find an audit of the well-known COMPAS dataset in the section <a href="/FairnessLab/#/compas">COMPAS Case Study</a>.
-          The dataset was published along with the ProPublica story <a href="https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing" target="_blank">"Machine Bias"</a> that started a debate about how to evaluate the fairness of machine learning models.
+          The dataset was published along with the ProPublica story <a href="https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing" target="_blank" rel="noreferrer">"Machine Bias"</a> that started a debate about how to evaluate the fairness of machine learning models.
           When you follow our audit of COMPAS in the FairnessLab, you will see that there are more ways to evaluate the fairness of the predictions than discussed by ProPublica (which audited COMPAS) and Northpointe (the company that developed COMPAS).
           Importantly, instutional racism might imply that the consequences of the predictions should be evaluated differently than standard group fairness metrics do.
           Going through this case study should thus both give you new insights into the COMPAS case and a better understanding of what the FairnessLab is capable of.
@@ -40,8 +40,8 @@ function Home() {
         <h3>Curious to learn more?</h3>
         <p>
           This tool has been built by a team of researchers at the Zurich University of Applied Sciences, the University of Zurich and the University of St. Gallen.
-          You can learn more about us and our work <a href="https://fair-ai.ch" target="_blank">on our website</a>.
-          The FairnessLab builds on our theoretical work on group fairness metrics: "Distributive Justice as the Foundational Premise of Fair ML: Unification, Extension, and Interpretation of Group Fairness Metrics"<a href="https://arxiv.org/abs/2206.02897" target="_blank">(available on arXiv)</a> and "A Justice-Based Framework for the Analysis of Algorithmic Fairness-Utility Trade-Offs" <a href="https://arxiv.org/abs/2206.02891" target="_blank">(available on arXiv)</a>.
+          You can learn more about us and our work <a href="https://fair-ai.ch" target="_blank" rel="noreferrer">on our website</a>.
+          The FairnessLab builds on our theoretical work on group fairness metrics: "Distributive Justice as the Foundational Premise of Fair ML: Unification, Extension, and Interpretation of Group Fairness Metrics"<a href="https://arxiv.org/abs/2206.02897" target="_blank" rel="noreferrer">(available on arXiv)</a> and "A Justice-Based Framework for the Analysis of Algorithmic Fairness-Utility Trade-Offs" <a href="https://arxiv.org/abs/2206.02891" target="_blank" rel="noreferrer">(available on arXiv)</a>.
         </p>
       </div>
     </div>

@@ -1,10 +1,8 @@
 import './App.css';
 import {
   HashRouter,
-  BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home/Home";

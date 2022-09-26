@@ -12,10 +12,10 @@ function Audit(props) {
   
   const [datasetSelection, setDatasetSelection] = useState('COMPAS');
   const [justifier, setJustifier] = useState(() => {
-    if (props.match.params.demo == "compasaudit1") {
+    if (props.match.params.demo === "compasaudit1") {
       return 'y_0'
     }
-    else if (props.match.params.demo == "compasaudit2") {
+    else if (props.match.params.demo === "compasaudit2") {
       return 'y_0'
     }
     else {
@@ -47,11 +47,11 @@ function Audit(props) {
 
   return(
     <div className="Audit">
-      { props.match.params.demo == 'compasaudit1' ?
+      { props.match.params.demo === 'compasaudit1' ?
         <Header title="Audit: COMPAS Case Study Audit 1 (replication of ProPublica)"/>
         :
         <>
-        { props.match.params.demo == 'compasaudit1' ?
+        { props.match.params.demo === 'compasaudit1' ?
           <Header title="Audit: COMPAS Case Study Audit 2 (new insights)"/>
           :
           <Header title="Audit"/>

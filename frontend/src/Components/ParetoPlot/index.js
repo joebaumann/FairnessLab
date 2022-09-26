@@ -14,7 +14,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     const [open, setOpen] = React.useState(false);
     
     const handleClose = (event, reason) => {
-        if ("clickaway" == reason) return;
+        if ("clickaway" === reason) return;
         setOpen(false);
     };
     
@@ -23,10 +23,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     };
   
     const [dmuTP, setDmuTP] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return 0
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return 0
         }
         else {
@@ -34,10 +34,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         }
       });
     const [dmuFP, setDmuFP] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return -1
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return -1
         }
         else {
@@ -45,10 +45,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         }
       });
     const [dmuFN, setDmuFN] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return -1
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return -1
         }
         else {
@@ -56,10 +56,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         }
       });
     const [dmuTN, setDmuTN] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return 0
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return 0
         }
         else {
@@ -68,10 +68,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
       });
     const [suTP1, setSuTP1] = useState(1);
     const [suFP1, setSuFP1] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return -1
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return -2
         }
         else {
@@ -82,10 +82,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     const [suTN1, setSuTN1] = useState(0);
     const [suTP2, setSuTP2] = useState(1);
     const [suFP2, setSuFP2] = useState(() => {
-        if (isDemo == "compasaudit1") {
+        if (isDemo === "compasaudit1") {
           return -1
         }
-        else if (isDemo == "compasaudit2") {
+        else if (isDemo === "compasaudit2") {
           return -1
         }
         else {
