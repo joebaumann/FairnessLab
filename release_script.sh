@@ -14,6 +14,7 @@ git checkout releases
 echo "which branch do you want to release?"
 read branch_to_release
 git merge --squash $branch_to_release
+echo -e "\nchangelog.md\nrelease_script.sh" >> .gitignore
 git add -A
 git reset release_script.sh
 echo add a one line commit message, which will also be the release header:
@@ -29,7 +30,7 @@ echo Please enter the new tag name:
 read new_tag_name
 echo the new tag name is $new_tag_name
 git tag $new_tag_name
-gh release create $new_tag_name -F changelog.md -R https://github.com/joebaumann/FairnessLab-public
+gh release create $new_tag_name -t "$new_tag_name: $commit_message" -F changelog.md -R https://github.com/joebaumann/FairnessLab-public
 
 else
 echo Describe the changes for the new release \(as this will be used as the description for the new release\) using: nano changelog.md
