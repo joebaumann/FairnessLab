@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
@@ -20,6 +20,7 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
+    const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
     const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
@@ -237,33 +238,30 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
         setXAxisLabel(xaxislabel)
     }
 
-    function updateDecisionAndLabelDescriptions(datasetSelection) {
-        switch(datasetSelection) {
-            case 'COMPAS':
-                setd0description("released (D=0)");
-                setd1description("detained (D=1)");
-                sety0description("an innocent individual (Y=0)");
-                sety1description("a recidivist (Y=1)");
-                break;
-            case 'German':
-                setd0description("rejected (D=0)");
-                setd1description("a loan (D=1)");
-                sety0description("an individual who defaulted on the loan (Y=0)");
-                sety1description("an individual who repaid the loan (Y=1)");
-                break;
-            case 'ACSEmploymentCA':
-                setd0description("predicted to be unemployed (D=0)");
-                setd1description("predicted to be employed (D=1)");
-                sety0description("an unemployed individual (Y=0)");
-                sety1description("an employed individual (Y=1)");
-                break;
-            case 'Own':
-                setd0description('negative decision (D=0)');
-                setd1description('positive decision (D=1)');
-                sety0description('an individual of type Y=0');
-                sety1description('an individual of type Y=1');
-                break;
+    function updateCorrespondsToExistingMetric() {
+        if (pattern === 'egalitarianism') {
+            if (justifier === 'no_justifier' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1 && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('statistical parity')
+                return
+            }
+            if (justifier === 'y_0' && suFP1 === 1 && suFP2 === 1 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('false positive rate parity')
+                return
+            }
+            if (justifier === 'y_1' && suTP1 === 1 && suTP2 === 1 && suFN1 === 0 && suFN2 === 0) {
+                setCorrespondingFairnessMetric('equality of opportunity')
+                return
+            }
+            if (justifier === 'd_0' && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+                setCorrespondingFairnessMetric('negative predictive value parity')
+                return
+            }
+            if (justifier === 'd_1' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1) {
+                setCorrespondingFairnessMetric('positive predictive value parity')
+                return
+            }
         }
+        setCorrespondingFairnessMetric(undefined)
     }
 
     useEffect(() => {
@@ -275,11 +273,12 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
-        if (datasetSelection !== '') {
-            setGroup1(global.config.datasets[datasetSelection]['group1'])
-            setGroup2(global.config.datasets[datasetSelection]['group2'])
-            updateDecisionAndLabelDescriptions(datasetSelection)
-        }
+        setGroup1(global.config.datasets[datasetSelection]['group1'])
+        setGroup2(global.config.datasets[datasetSelection]['group2'])
+        setd0description(global.config.datasets[datasetSelection]['d0']);
+        setd1description(global.config.datasets[datasetSelection]['d1']);
+        sety0description(global.config.datasets[datasetSelection]['y0']);
+        sety1description(global.config.datasets[datasetSelection]['y1']);
     }, [datasetSelection]);
     
     useEffect(() => {
@@ -296,6 +295,10 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     }, [pattern, group1, group2]);
 
     useEffect(() => {
+        updateCorrespondsToExistingMetric()
+    }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, pattern, justifier])
+
+    useEffect(() => {
         deselectAllPoints()
     }, [numThresholds]);
 
@@ -308,24 +311,24 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
             <div className='ParetoConfiguration'>
                 <h1>Terminology</h1>
                 <b>Y</b>: The "ground truth"; not known at prediction time.
-                <br/>
-                <b>D</b>: The decision in question; relies on Y to make this decision.
                 <br/><br/>
-                Describe the decision:
-                <br/>
-                <label htmlFor="d1description">D=1</label>
-                <input type="text" id="d1description" value={d1description} onChange={(e) => setd1description(e.target.value)} style={{width: "500px"}}/>
-                <br/>
-                <label htmlFor="d0description">D=0</label>
-                <input type="text" id="d0description" value={d0description} onChange={(e) => setd0description(e.target.value)} style={{width: "500px"}}/>
-                <br/>
-                Describe the labels:
+                <b>Label the two ground truth cases:</b>
                 <br/>
                 <label htmlFor="y1description">Y=1</label>
                 <input type="text" id="y1description" value={y1description} onChange={(e) => sety1description(e.target.value)} style={{width: "500px"}}/>
                 <br/>
                 <label htmlFor="y0description">Y=0</label>
                 <input type="text" id="y0description" value={y0description} onChange={(e) => sety0description(e.target.value)} style={{width: "500px"}}/>
+                <br/><br/>
+                <b>D</b>: The decision in question; relies on Y to make this decision.
+                <br/><br/>
+                <b>Label the two possible decisions:</b>
+                <br/>
+                <label htmlFor="d1description">D=1</label>
+                <input type="text" id="d1description" value={d1description} onChange={(e) => setd1description(e.target.value)} style={{width: "500px"}}/>
+                <br/>
+                <label htmlFor="d0description">D=0</label>
+                <input type="text" id="d0description" value={d0description} onChange={(e) => setd0description(e.target.value)} style={{width: "500px"}}/>
                 <br/><br/>
                 
                 <b>Decision maker</b>: The people or organization designing the algorithm, deciding on its design and thereby ultimately taking the decisions in question.
@@ -442,6 +445,9 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better
+                {correspondingFairnessMetric !== undefined &&
+                    <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
+                }
                 <br/><br/>
                 {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
                     <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
