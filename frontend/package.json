@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://joebaumann.github.io/FairnessLab",
+  "homepage": "https://joebaumann.github.io/FairnessLab-public",
   "dependencies": {
     "@babel/core": "^7.13.0",
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "^7.13.12",
