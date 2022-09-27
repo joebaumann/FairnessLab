@@ -4,23 +4,101 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
-    const [dmuTP, setDmuTP] = useState(1);
-    const [dmuFP, setDmuFP] = useState(0);
-    const [dmuFN, setDmuFN] = useState(0);
-    const [dmuTN, setDmuTN] = useState(1);
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+
+function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+    
+    const [open, setOpen] = React.useState(false);
+    
+    const handleClose = (event, reason) => {
+        if ("clickaway" === reason) return;
+        setOpen(false);
+    };
+    
+    const handleSnackbar = () => {
+        setOpen(true);
+    };
+  
+    const [dmuTP, setDmuTP] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return 0
+        }
+        else if (isDemo === "compasaudit2") {
+          return 0
+        }
+        else {
+          return 1;
+        }
+      });
+    const [dmuFP, setDmuFP] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return -1
+        }
+        else if (isDemo === "compasaudit2") {
+          return -1
+        }
+        else {
+          return 0;
+        }
+      });
+    const [dmuFN, setDmuFN] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return -1
+        }
+        else if (isDemo === "compasaudit2") {
+          return -1
+        }
+        else {
+          return 0;
+        }
+      });
+    const [dmuTN, setDmuTN] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return 0
+        }
+        else if (isDemo === "compasaudit2") {
+          return 0
+        }
+        else {
+          return 1;
+        }
+      });
     const [suTP1, setSuTP1] = useState(1);
-    const [suFP1, setSuFP1] = useState(1);
+    const [suFP1, setSuFP1] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return -1
+        }
+        else if (isDemo === "compasaudit2") {
+          return -2
+        }
+        else {
+          return 1;
+        }
+      });
     const [suFN1, setSuFN1] = useState(0);
     const [suTN1, setSuTN1] = useState(0);
     const [suTP2, setSuTP2] = useState(1);
-    const [suFP2, setSuFP2] = useState(1);
+    const [suFP2, setSuFP2] = useState(() => {
+        if (isDemo === "compasaudit1") {
+          return -1
+        }
+        else if (isDemo === "compasaudit2") {
+          return -1
+        }
+        else {
+          return 1;
+        }
+      });
     const [suFN2, setSuFN2] = useState(0);
     const [suTN2, setSuTN2] = useState(0);
     const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
+    const [correspondingWeightedFairnessMetric, setCorrespondingWeightedFairnessMetric] = useState(undefined);
     const [colorOfD, setColorOfD] = useState('#fff')
     const [pattern, setPattern] = useState('egalitarianism');
     const [xAxisLabel, setXAxisLabel] = useState(null);
@@ -240,28 +318,68 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
 
     function updateCorrespondsToExistingMetric() {
         if (pattern === 'egalitarianism') {
-            if (justifier === 'no_justifier' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1 && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'no_justifier' && suTP1 === suFP1 && Math.abs(suFP1 - suFN1) === 1 && suFN1 === suTN1 && suTP1 === suTP2 && suTN1 === suTN2 && suFP1 === suFP2 && suFN1 === suFN2) {
                 setCorrespondingFairnessMetric('statistical parity')
                 return
             }
-            if (justifier === 'y_0' && suFP1 === 1 && suFP2 === 1 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'y_0' && Math.abs(suFP1 - suTN1) === 1 && suFP1 === suFP2 && suTN1 === suTN2) {
                 setCorrespondingFairnessMetric('false positive rate parity')
                 return
             }
-            if (justifier === 'y_1' && suTP1 === 1 && suTP2 === 1 && suFN1 === 0 && suFN2 === 0) {
-                setCorrespondingFairnessMetric('equality of opportunity')
+            if (justifier === 'y_1' && Math.abs(suTP1 - suFN1) === 1 && suTP1 === suTP2 && suFN1 === suFN2) {
+                setCorrespondingFairnessMetric('true positive rate parity AKA equality of opportunity')
                 return
             }
-            if (justifier === 'd_0' && suFN1 === 0 && suFN2 === 0 && suTN1 === 0 && suTN2 === 0) {
+            if (justifier === 'd_0' && Math.abs(suFN1 - suTN1) === 1 && suTN1 === suTN2 && suFN1 === suFN2) {
                 setCorrespondingFairnessMetric('negative predictive value parity')
                 return
             }
-            if (justifier === 'd_1' && suTP1 === 1 && suTP2 === 1 && suFP1 === 1 && suFP2 === 1) {
-                setCorrespondingFairnessMetric('positive predictive value parity')
+            if (justifier === 'd_1' && Math.abs(suTP1 - suFP1) === 1 && suTP1 === suTP2 && suFP1 === suFP2) {
+                setCorrespondingFairnessMetric('positive predictive value parity AKA predictive parity')
+                return
+            }
+            // config is not equivalent to any existing metric
+            // check if it is a weighted version of an existing metric
+            if (justifier === 'no_justifier' && suTP1 === suFP1 && suFP1 !== suFN1 && suFN1 === suTN1 && suTP1 === suTP2 && suTN1 === suTN2 && suFP1 === suFP2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('statistical parity multiplied by ' + Math.abs(suFP1 - suFN1));
+                return
+            }
+            if (justifier === 'y_0' && suFP1 !== suTN1 && suFP1 === suFP2 && suTN1 === suTN2) {
+                setCorrespondingWeightedFairnessMetric('false positive rate parity multiplied by ' + Math.abs(suFP1 - suTN1));
+                return
+            }
+            if (justifier === 'y_1' && suTP1 !== suFN1 && suTP1 === suTP2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('true positive rate parity AKA equality of opportunity multiplied by ' + Math.abs(suTP1 - suFN1));
+                return
+            }
+            if (justifier === 'd_0' && suFN1 !== suTN1 && suTN1 === suTN2 && suFN1 === suFN2) {
+                setCorrespondingWeightedFairnessMetric('negative predictive value parity multiplied by ' + Math.abs(suFN1 - suTN1));
+                return
+            }
+            if (justifier === 'd_1' && suTP1 !== suFP1 && suTP1 === suTP2 && suFP1 === suFP2) {
+                setCorrespondingWeightedFairnessMetric('positive predictive value parity AKA predictive parity multiplied by ' + Math.abs(suTP1 - suFP1));
                 return
             }
         }
         setCorrespondingFairnessMetric(undefined)
+        setCorrespondingWeightedFairnessMetric(undefined)
+    }
+
+    function getSnackbarMessage() {
+        return (
+            <>
+            {correspondingFairnessMetric !== undefined ?
+                <div>The fairness metric you selected corresponds to <b><i>{correspondingFairnessMetric}</i></b>.</div>
+                :
+                <>
+                {correspondingWeightedFairnessMetric !== undefined &&
+                    <div>The fairness metric you selected corresponds to a weighted version of <b><i>{correspondingWeightedFairnessMetric}</i></b>.</div>
+                }
+                </>
+            }
+            </>
+        )
+
     }
 
     useEffect(() => {
@@ -305,6 +423,15 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
     useEffect(() => {
         updateParetoFront()
     }, []);
+
+    useEffect(() => {
+        if (correspondingFairnessMetric !== undefined | correspondingWeightedFairnessMetric !== undefined) {
+            handleSnackbar()
+        }
+        else {
+            handleClose()
+        }
+    }, [correspondingFairnessMetric, correspondingWeightedFairnessMetric]);
 
     return (
         <div className='ParetoPlot'>
@@ -369,11 +496,11 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
                 <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
 
                 <div onChange={(e) => setJustifier(e.target.value)}>
-                    <input type="radio" value="no_justifier" name="justifier" defaultChecked="checked" /> None
-                    <input type="radio" value="y_0" name="justifier" /> Y=0
-                    <input type="radio" value="y_1" name="justifier" /> Y=1
-                    <input type="radio" value="d_0" name="justifier" /> D=0
-                    <input type="radio" value="d_1" name="justifier" /> D=1
+                    <input type="radio" value="no_justifier" name="justifier" defaultChecked={justifier === 'no_justifier'} /> None
+                    <input type="radio" value="y_0" name="justifier" defaultChecked={justifier === 'y_0'} /> Y=0
+                    <input type="radio" value="y_1" name="justifier" defaultChecked={justifier === 'y_1'} /> Y=1
+                    <input type="radio" value="d_0" name="justifier" defaultChecked={justifier === 'd_0'} /> D=0
+                    <input type="radio" value="d_1" name="justifier" defaultChecked={justifier === 'd_1'} /> D=1
                 </div>
 
                 <h3>Decision subjects' utility</h3>
@@ -445,9 +572,33 @@ function ParetoPlot({filteredData, unfilteredData, group1, setGroup1, group2, d0
                 <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
                 <br/>
                 <b>Fairness score</b>: Higher is better
-                {correspondingFairnessMetric !== undefined &&
-                    <div>The fairness metric you selected corresponds to <i>{correspondingFairnessMetric}</i></div>
-                }
+
+                <div>
+
+                    <Snackbar
+                        anchorOrigin={{
+                        horizontal: "left",
+                        vertical: "bottom",
+                        }}
+                        open={open}
+                        autoHideDuration={10000}
+                        message={getSnackbarMessage()}
+                        onClose={handleClose}
+                        action={
+                        <React.Fragment>
+                            <IconButton
+                            size="small"
+                            aria-label="close"
+                            color="inherit"
+                            onClick={handleClose}
+                            >
+                            <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                        }
+                    />
+                </div>
+                
                 <br/><br/>
                 {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
                     <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
@@ -574,12 +725,12 @@ function UtilityQuantifier({value, setSliderValue, label, unit, disabled}) {
     var numberRegex = /[-+]?[0-9]+\.?[0-9]+/
     var unitRegex = /[^\d+]+$/;
     var multiplierRegex = /^\*\s*\d+/;
-    const [currentSliderValue, setCurrentSliderValue] = useState(value)
+    const [currentSliderValue, setCurrentSliderValue] = useState(Number(value))
     return (
         <div>
             <label>{label}</label>
             <br/>
-            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(e.target.value)} onMouseUp={(e) => setSliderValue(e.target.value)} list="ticks" />
+            <input className="Slider" disabled={disabled} type="range" min="-10" max="10" step="0.1" value={currentSliderValue} onChange={(e) => setCurrentSliderValue(Number(e.target.value))} onMouseUp={(e) => setSliderValue(Number(e.target.value))} list="ticks" />
             <datalist id="ticks">
                 <option>-10</option>
                 <option>-9</option>

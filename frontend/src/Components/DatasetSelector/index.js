@@ -97,7 +97,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
 
     function processData() {
         let file
-        if (datasetSelection == 'Own') {
+        if (datasetSelection === 'Own') {
             file = uploadedData
         } else {
             file = datasets[datasetSelection]['file']
@@ -218,7 +218,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: Black</li>
                     <li>Group 2: white</li>
                 </ul>
-                <a href="https://drive.google.com/file/d/1kd93hv1t7MyIu8f09QWQQobN0jbQHOGk/view?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
+                <a href="https://drive.google.com/file/d/1kd93hv1t7MyIu8f09QWQQobN0jbQHOGk/view?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="German" defaultChecked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
@@ -232,7 +232,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: female</li>
                     <li>Group 2: male</li>
                 </ul>
-                <a href="https://drive.google.com/file/d/1sKlZRV6pYxgED9JEulzJJLZ5HHldZ5fj/view?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
+                <a href="https://drive.google.com/file/d/1sKlZRV6pYxgED9JEulzJJLZ5HHldZ5fj/view?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="ACSEmploymentCA" defaultChecked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
@@ -246,7 +246,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: Black</li>
                     <li>Group 2: white</li>
                 </ul>
-                <a href="https://colab.research.google.com/drive/1R_UgSktEOFPccktXDis8VakEFJwuEvmd?usp=sharing" target="_blank">You can find the notebook here to see how we prepared the data.</a>
+                <a href="https://colab.research.google.com/drive/1R_UgSktEOFPccktXDis8VakEFJwuEvmd?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="Own" defaultChecked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
@@ -261,10 +261,10 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             You can also upload a JSON file with an array of objects that contain the previously mentioned attributes
         </div>
         <br/>
-        {datasetSelection == 'Own' && uploadedData.length === 0 && fileError &&
+        {datasetSelection === 'Own' && uploadedData.length === 0 && fileError &&
             <div className="datasetExplanation">Error: Please upload a dataset to audit or choose one of the predefined datasets.</div>
         }
-        {datasetSelection == 'Own' && uploadedData.length !== 0 && fileError &&
+        {datasetSelection === 'Own' && uploadedData.length !== 0 && fileError &&
             <div className="datasetExplanation">Error: The feature labels of the selected file don't match the template. Please upload a dataset with the right feature labels.</div>
         }
         </div>
