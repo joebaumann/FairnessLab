@@ -1,0 +1,13 @@
+.ScoreDistribution {
+    margin-top: 10vh;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.LeftPlot {
+    margin-right: 0px;
+}
+
+.RightPlot {
+    margin-left: 0px;
+}

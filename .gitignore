@@ -1,2 +1,12 @@
 venv
 __pycache__
+
+### VisualStudioCode ###
+.vscode/
+
+### JupyterNotebooks ###
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+### GitHub Release Descriptions ###
+changelog.md

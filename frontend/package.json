@@ -2,17 +2,37 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://joebaumann.github.io/FairnessLab",
   "dependencies": {
+    "@babel/core": "^7.13.0",
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "^7.13.12",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.6",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
     "canvasjs-react-charts": "^1.0.5",
+    "mdb-react-ui-kit": "^1.0.0-beta5",
+    "mdbreact": "^5.0.2",
+    "pareto-frontier": "^1.1.1",
+    "plotly.js": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-plotly.js": "^2.5.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "tsutils": "^3.21.0",
+    "typescript": "^4.2.4",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -35,5 +55,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }

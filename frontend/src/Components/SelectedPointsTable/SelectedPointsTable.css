@@ -1,0 +1,24 @@
+#selectedPoints {
+    text-align: right;
+    border-collapse: collapse;
+    border: 3px solid #ddd;
+    max-width: 100%;
+}
+
+#selectedPoints td, #selectedPoints th {
+    border: 1px solid #ddd;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+  
+#selectedPoints tr:nth-child(even){background-color: #f2f2f2;}
+  
+#selectedPoints tr:hover {background-color: #ddd;}
+  
+#selectedPoints th {
+    padding: 10px;
+    text-align: center;
+    background-color: #4e87ad;
+    color: white;
+}
