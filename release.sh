@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # created released branch with command: git checkout -b releases bd384c69bb86aa6965da8dc2fb6a4e72e835774d
+# created remote for public repo with: git remote add public-releases https://github.com/joebaumann/FairnessLab.git
 
-echo "Have you already updated the changelog file and set the package.json homepage to 'https://joebaumann.github.io/FairnessLab-public'? (yes/no)"
+echo "Have you already updated the changelog file and set the package.json homepage to 'https://joebaumann.github.io/FairnessLab'? (yes/no)"
 
 read input
 if [ "$input" == "yes" ]
