@@ -48,10 +48,10 @@ function Audit(props) {
   return(
     <div className="Audit">
       { props.match.params.demo === 'compasaudit1' ?
-        <Header title="Audit: COMPAS Case Study Audit 1 (replication of ProPublica)"/>
+        <Header title="Audit: COMPAS Case Study Audit 1 (replication of <a href='https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing'  target='_blank'>ProPublica</a>)"/>
         :
         <>
-        { props.match.params.demo === 'compasaudit1' ?
+        { props.match.params.demo === 'compasaudit2' ?
           <Header title="Audit: COMPAS Case Study Audit 2 (new insights)"/>
           :
           <Header title="Audit"/>

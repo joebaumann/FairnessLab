@@ -4,7 +4,7 @@ import './Header.css';
 const Header = ({title}) => {
     return (
         <header className="Header">
-          <h1>{title}</h1>
+          <h1 dangerouslySetInnerHTML={{__html: title}} />
         </header>
       );
 }
