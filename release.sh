@@ -15,7 +15,7 @@ then
     echo "which branch do you want to release?"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
-    echo "check if there are any merge conflicts and type continue to add all files, push, and commit:"
+    echo "check if there are any merge conflicts and type 'continue' to add all files, push, and commit:"
     read input_push
     if [ "$input_push" == "continue" ]
         then
@@ -27,7 +27,7 @@ then
         git push
         git push public-releases releases:main
 
-        echo all new commits have been squashed, commited locally, and committed to the public release main branch
+        echo all new commits have commited locally on the releases and to the public-release main branch
 
         echo "The latest git tag is: $(git describe --tags)"
         echo Please enter the new tag name:
