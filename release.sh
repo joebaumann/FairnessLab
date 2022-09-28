@@ -38,7 +38,7 @@ then
         read input_release
         if [ "$input_release" == "yes" ]
         then
-            gh release create $new_tag_name -t "$new_tag_name: $commit_message" -F changelog.md -R https://github.com/joebaumann/FairnessLab-public
+            gh release create $new_tag_name -t "$new_tag_name: $commit_message" -F changelog.md -R https://github.com/joebaumann/FairnessLab
         else
             echo aborting release...
         fi
