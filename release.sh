@@ -35,7 +35,7 @@ then
         echo the new tag name is $new_tag_name
         git tag $new_tag_name
 
-        echo "Have a look at the current latest commit. Do you really want to do the release?"
+        echo "Have a look at the current latest commit. Do you really want to do the release? (yes/no)"
         read input_release
         if [ "$input_release" == "yes" ]
         then
