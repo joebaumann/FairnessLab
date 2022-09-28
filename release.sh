@@ -14,7 +14,6 @@ then
     echo "which branch do you want to release?"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
-    echo -e "\nchangelog.md\nrelease_script.sh" >> .gitignore
     echo "check if there are any merge conflicts and type continue to add all files, push, and commit:"
     read input_push
     if [ "$input_push" == "continue" ]
