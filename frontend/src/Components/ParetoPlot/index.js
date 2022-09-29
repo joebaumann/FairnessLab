@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 
-function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, decisionMakerUtility, setDecisionMakerUtility, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     
     const [open, setOpen] = React.useState(false);
     
@@ -94,7 +94,6 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
       });
     const [suFN2, setSuFN2] = useState(0);
     const [suTN2, setSuTN2] = useState(0);
-    const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
@@ -267,6 +266,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     }
 
     function updateEvaluationOfD(maxUnfairness) {
+        let evaluationOfD = []
         if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
             let decisionMakerUtility_A = calculateUtilityFromDecisions(unfilteredData['d'][0], unfilteredData['y'][0], [dmuTP, dmuFP, dmuFN, dmuTN])
             let decisionMakerUtility_B = calculateUtilityFromDecisions(unfilteredData['d'][1], unfilteredData['y'][1], [dmuTP, dmuFP, dmuFN, dmuTN])
@@ -278,10 +278,9 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
             if (pattern === "egalitarianism") {
                 fairnessScore = maxUnfairness - fairnessScore
             }
-            setEvaluationOfD([fairnessScore, decisionMakerUtility, [fairnessValue_A, fairnessValue_B]])
-        } else {
-            setEvaluationOfD([])
+            evaluationOfD = [fairnessScore, decisionMakerUtility, [fairnessValue_A, fairnessValue_B]]
         }
+        setEvaluationOfD(evaluationOfD)
     }
    
     function updateParetoFront() {
@@ -379,7 +378,16 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
             }
             </>
         )
+    }
 
+    function selectEvaluationOfD() {
+        selectedPoints.push(-1)
+        idOfSelectedPoints[-1] = incrementalSelectionId
+        setColorOfD('orange')
+        setSelectedPoints([...selectedPoints]);
+        setIdOfSelectedPoints(idOfSelectedPoints);
+        setIncrementalSelectionId(incrementalSelectionId + 1)
+        console.log(selectedPoints)
     }
 
     useEffect(() => {
@@ -388,6 +396,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         setNumThresholds(11)
         const maxUnfairness = updateThresholdCalculations()
         updateEvaluationOfD(maxUnfairness)
+        selectEvaluationOfD()
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
@@ -437,9 +446,9 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
                 <h1>Terminology</h1>
-                <b>Y</b>: The "ground truth"; not known at prediction time.
+                <b>Y</b>: The actual outcome, also known as the "ground truth"; not known at prediction time.
                 <br/><br/>
-                <b>Label the two ground truth cases:</b>
+                <b>Label the two possible outcomes:</b>
                 <br/>
                 <label htmlFor="y1description">Y=1</label>
                 <input type="text" id="y1description" value={y1description} onChange={(e) => sety1description(e.target.value)} style={{width: "500px"}}/>
@@ -447,7 +456,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <label htmlFor="y0description">Y=0</label>
                 <input type="text" id="y0description" value={y0description} onChange={(e) => sety0description(e.target.value)} style={{width: "500px"}}/>
                 <br/><br/>
-                <b>D</b>: The decision in question; relies on Y to make this decision.
+                <b>D</b>: The decision in question; is trying to predict Y.
                 <br/><br/>
                 <b>Label the two possible decisions:</b>
                 <br/>
@@ -469,7 +478,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <b>How much utility does the decision maker derive from the decisions?</b>
 
                 <h3>Currency of the decision maker</h3>
-                <span>In what unit do you want to measure the utility of the decision maker?</span>
+                <span>In what unit do you want to measure the utility of the decision maker (e.g., dollar, well-being)?</span>
                 <input type="text" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision maker's utility</h3>
@@ -492,8 +501,9 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <label htmlFor="group2">Group 2</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
 
-                <h3>Justifier</h3>
-                <div>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? If it is a subgroup of them, define this subgroup here:</div>
+                <h3>Claims differentiator (or justifier)</h3>
+                <p>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? For example, one could argue that the subgroup of people with Y=1 is deserves a higher (or lower) utility than people with Y=0.</p>
+                <div>Define the subgroup in which people are deserving of the same amount of utility:</div>
 
                 <div onChange={(e) => setJustifier(e.target.value)}>
                     <input type="radio" value="no_justifier" name="justifier" defaultChecked={justifier === 'no_justifier'} /> None
@@ -507,7 +517,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                 <div>How much utility do the decision subjects derive from the decisions?</div>
 
                 <h4>Currency of decision subjects</h4>
-                <span>In what unit do you want to measure the utility of the decision subject?</span>
+                <span>In what unit do you want to measure the utility of the decision subject (e.g., dollar, well-being)?</span>
                 <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
                 <h4>Quantification of the decision subjects' utility</h4>
@@ -671,6 +681,8 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                     } }
 
                     onClick={(data) => {
+                        console.log('selectedPoints', selectedPoints)
+                        console.log('idOfSelectedPoints', idOfSelectedPoints)
                         var newColors = [...colors];
                         // Orange point (from D) gets index -1, every other points gets their regular index
                         let selectedPoint = -1
@@ -699,13 +711,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                                 }
                                 setColorOfD('orange')
                             } else {
-                                idOfSelectedPoints[selectedPoint] = {
-                                    id: incrementalSelectionId,
-                                    thresholdGroup0: thresholdTuples[selectedPoint][0],
-                                    thresholdGroup1: thresholdTuples[selectedPoint][1],
-                                    decisionMakerUtility: decisionMakerUtility[selectedPoint],
-                                    fairnessScore: fairnessScores[selectedPoint]
-                                }
+                                idOfSelectedPoints[selectedPoint] = incrementalSelectionId
                                 newColors[selectedPoint] = getRandomColor()
                             }
                             
