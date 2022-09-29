@@ -20,7 +20,7 @@ then
     if [ "$input_push" == "continue" ]
         then
         git add -A
-        git reset release_script.sh
+        git reset release.sh
         echo add a one line commit message, which will also be the release header:
         read commit_message
         git commit -m "$commit_message"
@@ -48,6 +48,6 @@ then
     fi
 
 else
-echo Describe the changes for the new release \(as this will be used as the description for the new release\) using: nano changelog.md
+echo "Describe the changes for the new release \(as this will be used as the description for the new release\) using: nano changelog.md"
 
 fi
