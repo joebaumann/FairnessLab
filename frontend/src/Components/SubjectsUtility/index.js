@@ -7,23 +7,23 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
         let traceUtilities = {
-            x: [`${group1} (${idOfSelectedPoints[i].id})`, `${group2} (${idOfSelectedPoints[i].id})`],
+            x: [`${group1} (${idOfSelectedPoints[i]})`, `${group2} (${idOfSelectedPoints[i]})`],
             y: i===-1? evaluationOfD[2] : subjectsUtility[i],
             marker:{
               color: i===-1? ['orange', 'orange'] : [colors[i], colors[i]]
             },
             type: 'bar',
-            name: 'Selection ' + idOfSelectedPoints[i].id
+            name: 'Selection ' + idOfSelectedPoints[i]
         };
         tracesUtilities.push(traceUtilities)
         let traceFairnessScores = {
-            x: [`Fairness score (${idOfSelectedPoints[i].id})`],
+            x: [`Fairness score (${idOfSelectedPoints[i]})`],
             y: i===-1? [evaluationOfD[0]] : [fairnessScores[i]],
             marker:{
               color: i===-1? ['orange'] : [colors[i]]
             },
             type: 'bar',
-            name: 'Selection ' + idOfSelectedPoints[i].id
+            name: 'Selection ' + idOfSelectedPoints[i]
         };
         tracesFairnessScores.push(traceFairnessScores)
     })
@@ -35,14 +35,14 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
             {selectedPoints.length === 0 && 
             <b>Select at least one point in the pareto plot to see something.<br/><br/></b>
             }
-            <span>Here you can see a direct comparison of the decision subjects' average utilities for the selected points.</span>
+            <span>Here you can see a direct comparison of the fairness scores for the selected points. The higher the score, the better the decision rule aligns with the configured fairness metric.</span>
             <br/>
             <Plot
-                data={tracesUtilities}
+                data={tracesFairnessScores}
 
                 layout = {
                     {
-                        title: 'Decision subjects\' utilities',
+                        title: 'Calculated fairness score',
                         xaxis: {
                             automargin: true,
                         }
@@ -51,14 +51,14 @@ const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selec
                 }
             />
             <br/>
-            <span>Here you can see a direct comparison of the fairness scores for the selected points. The higher the score, the less fair the decision rule is considered to be.</span>
+            <span>Here you can see a direct comparison of the decision subjects' average utilities for the selected points.</span>
             <br/>
             <Plot
-                data={tracesFairnessScores}
+                data={tracesUtilities}
 
                 layout = {
                     {
-                        title: 'Calculated fairness score',
+                        title: 'Decision subjects\' utilities',
                         xaxis: {
                             automargin: true,
                         }

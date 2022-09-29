@@ -2,30 +2,31 @@ import React from 'react';
 import './SelectedPointsTable.css';
 
 
-function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerCurrency, subjectsUtility, labels}) {
+function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerCurrency, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD, labels}) {
 
-  const tableDate = Object.values(idOfSelectedPoints).sort(function(a, b){
-    return a.id-b.id
-  })
-    
   function renderTableData() {
     
-    return tableDate.map((tableRow, index) => {
-      const { id, thresholdGroup0, thresholdGroup1, decisionMakerUtility, fairnessScore } = tableRow //destructuring
+    return selectedPoints.map(i => {
+      const id = idOfSelectedPoints[i]
+      const thresholdGroup0 = i===-1? undefined : thresholdTuples[i][0]
+      const thresholdGroup1 = i===-1? undefined : thresholdTuples[i][1]
+      const decisionMaker = i===-1? evaluationOfD[1] : decisionMakerUtility[i]
+      const fairnessScore = i===-1? evaluationOfD[0] : fairnessScores[i]
+      console.log('fairnessScore', fairnessScore)
       return (
-          <tr key={id}>
-            <td>{id}</td>
-            {thresholdGroup0 ?
-              <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
-              : <td>Decision rule from dataset</td>
-            }
-            <td>{decisionMakerUtility} {decisionMakerCurrency}</td>
-            <td>{fairnessScore.toFixed(4)}</td>
-          </tr>
+        <tr key={id}>
+          <td>{id}</td>
+          {thresholdGroup0 !== undefined ?
+            <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
+            : <td>Decision rule from dataset</td>
+          }
+          <td>{decisionMaker} {decisionMakerCurrency}</td>
+          <td>{fairnessScore?.toFixed(4)}</td>
+        </tr>
       )
     })
   }
-
+    
   function renderTable() {
     if (selectedPoints.length === 0) {
       return (<h4 id="nothingSelected">Nothing selected yet.</h4>)
@@ -50,7 +51,17 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
   return (
     <div>
         <h2 id='title'>Selected Decision Rules</h2>
-        {renderTable()}
+        <table id='selectedPoints'>
+        <tbody>
+          <tr>
+            <th>Selection</th>
+            <th>Thresholds</th>
+            <th>Decision maker's utility</th>
+            <th>Fairness score</th>
+          </tr>
+          {renderTableData()}
+        </tbody>
+        </table>
     </div>
   )
 }
