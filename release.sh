@@ -20,7 +20,6 @@ then
     if [ "$input_push" == "continue" ]
         then
         git add -A
-        git reset release.sh
         echo add a one line commit message, which will also be the release header:
         read commit_message
         git commit -m "$commit_message"
