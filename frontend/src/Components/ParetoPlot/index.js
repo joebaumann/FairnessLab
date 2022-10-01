@@ -406,6 +406,8 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         setd1description(global.config.datasets[datasetSelection]['d1']);
         sety0description(global.config.datasets[datasetSelection]['y0']);
         sety1description(global.config.datasets[datasetSelection]['y1']);
+        setDecisionMakerCurrency(global.config.datasets[datasetSelection]['unit_DM'])
+        setSubjectsCurrency(global.config.datasets[datasetSelection]['unit_DS'])
     }, [datasetSelection]);
     
     useEffect(() => {

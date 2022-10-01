@@ -31,9 +31,9 @@ function Audit(props) {
   const [d1description, setd1description] = useState('positive decision (D=1)');
   const [y0description, sety0description] = useState('of type Y=0');
   const [y1description, sety1description] = useState('of type Y=1');
-  const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('CHF');
+  const [decisionMakerCurrency, setDecisionMakerCurrency] = useState('');
   const [decisionMakerUtility, setDecisionMakerUtility] = useState([]);
-  const [subjectsCurrency, setSubjectsCurrency] = useState('CHF');
+  const [subjectsCurrency, setSubjectsCurrency] = useState('');
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [idOfSelectedPoints, setIdOfSelectedPoints] = useState({});
   const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);

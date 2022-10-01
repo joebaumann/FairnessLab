@@ -10,13 +10,14 @@ function COMPAS() {
       <Header title="COMPAS case study"/>
       <div className="Content">
         <p>
-          Space for our blog post? Our link to it?
+          Use these buttons to follow our COMPAS use case study.
         </p>
         <Button component={Link} to="/audit/compasaudit1">
-          COMPAS Audit 1
+          Audit COMPAS "the old way"
         </Button>
+        <br/>
         <Button component={Link} to="/audit/compasaudit2">
-          COMPAS Audit 2
+          Audit COMPAS "the new way"
         </Button>
       </div>
     </div>

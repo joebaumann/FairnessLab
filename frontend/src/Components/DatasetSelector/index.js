@@ -218,7 +218,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: Black</li>
                     <li>Group 2: white</li>
                 </ul>
-                <a href="https://drive.google.com/file/d/1kd93hv1t7MyIu8f09QWQQobN0jbQHOGk/view?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
+                <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/compas/Compas%20Analysis%20-%20Unifying%20framework.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="German" defaultChecked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
@@ -232,7 +232,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                     <li>Group 1: female</li>
                     <li>Group 2: male</li>
                 </ul>
-                <a href="https://drive.google.com/file/d/1sKlZRV6pYxgED9JEulzJJLZ5HHldZ5fj/view?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
+                <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/credit_lending/UCI%20German%20Credit.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
             <input name="datasetSelection" type="radio" value="ACSEmploymentCA" defaultChecked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
