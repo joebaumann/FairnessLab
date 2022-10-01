@@ -12,7 +12,6 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
       const thresholdGroup1 = i===-1? undefined : thresholdTuples[i][1]
       const decisionMaker = i===-1? evaluationOfD[1] : decisionMakerUtility[i]
       const fairnessScore = i===-1? evaluationOfD[0] : fairnessScores[i]
-      console.log('fairnessScore', fairnessScore)
       return (
         <tr key={id}>
           <td>{id}</td>
@@ -27,27 +26,6 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerC
     })
   }
     
-  function renderTable() {
-    if (selectedPoints.length === 0) {
-      return (<h4 id="nothingSelected">Nothing selected yet.</h4>)
-    }
-    else {
-      return (
-        <table id='selectedPoints'>
-        <tbody>
-          <tr>
-            <th>Selection</th>
-            <th>Thresholds</th>
-            <th>Decision maker's utility</th>
-            <th>Fairness score</th>
-          </tr>
-          {renderTableData()}
-        </tbody>
-        </table>
-        )
-      }
-  }
-
   return (
     <div>
         <h2 id='title'>Selected Decision Rules</h2>

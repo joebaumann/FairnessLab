@@ -182,7 +182,6 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
     }
 
     useEffect(() => {
-        console.log('execute once')
         processData()
     }, []);
     

@@ -119,7 +119,6 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         setIncrementalSelectionId(1)
         setColors(Array(numThresholds * numThresholds).fill('#ffffff'))
         setColorOfD('#fff')
-        console.log('deselected all points')
     }
 
     function patternMapper(pattern) {
@@ -387,11 +386,9 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         setSelectedPoints([...selectedPoints]);
         setIdOfSelectedPoints(idOfSelectedPoints);
         setIncrementalSelectionId(incrementalSelectionId + 1)
-        console.log(selectedPoints)
     }
 
     useEffect(() => {
-        console.log('selection changed to ' + datasetSelection + ' with justifier: ' + justifier)
         deselectAllPoints()
         setNumThresholds(11)
         const maxUnfairness = updateThresholdCalculations()
@@ -683,8 +680,6 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
                     } }
 
                     onClick={(data) => {
-                        console.log('selectedPoints', selectedPoints)
-                        console.log('idOfSelectedPoints', idOfSelectedPoints)
                         var newColors = [...colors];
                         // Orange point (from D) gets index -1, every other points gets their regular index
                         let selectedPoint = -1
