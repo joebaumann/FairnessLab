@@ -20,7 +20,7 @@ function Home() {
         <h3>Who is this for?</h3>
         <p>
           The tool is meant to be accessible to people with limited technical knowledge. We highly encourage everyone to use this tool to audit publically accessible models.
-          What you will for your own audit is mainly domain knowledge:
+          What you need for your own audit is mainly domain knowledge:
           You have to have a good understanding of the context in which the machine learning model is deployed to be able to define an appropriate way of measuring fairness in this context.
           The FairnessLab will guide you through this process of defining an appropriate fairness metric.
         </p>

@@ -155,6 +155,7 @@ function Configuration({demo}) {
             setDmuTN(0)
             setSuFP2(-2)
             setJustifier('y_0')
+            setPattern('egalitarianism')
             if (demo === "compasaudit1") {
                 setSuFP1(-1)
             } else if (demo === "compasaudit2") {
