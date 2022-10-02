@@ -9,27 +9,38 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { getDatasetSelection, changeDatasetSelection } from '../../store/dataset';
-import { getDecisionMakerCurrency, changeDecisionMakerCurrency } from '../../store/decisionMaker';
-import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, getSuTP2 } from '../../store/fairnessScore';
+import { getDatasetSelection } from '../../store/dataset';
+import { getDecisionMakerCurrency, changeDecisionMakerCurrency, changeDmuTP, changeDmuFP, changeDmuFN, changeDmuTN } from '../../store/decisionMaker';
+import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2 } from '../../store/fairnessScore';
+import { getD0Description, getD1Description, getY0Description, getY1Description } from '../../store/terminology';
 
-function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({isDemo, filteredData, unfilteredData, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
     const subjectsCurrency = useSelector(getSubjectsCurrency)
-    const suTP1 = useSelector(getSuTP1)
-    const suTP2 = useSelector(getSuTP2)
+    const y0description = useSelector(getY0Description)
+    const y1description = useSelector(getY1Description)
+    const d0description = useSelector(getD0Description)
+    const d1description = useSelector(getD1Description)
 
     const dispatch = useDispatch ()
-    function setDecisionMakerCurrency(currency) {
-        dispatch(changeDecisionMakerCurrency(currency))
-    }
-    function setSubjectsCurrency(currency) {
-        dispatch(changeSubjectsCurrency(currency))
-    }
-    const setSuTP1 = () => {}
-    const setSuTP2 = () => {}
+    function setDecisionMakerCurrency(currency) {dispatch(changeDecisionMakerCurrency(currency))}
+    function setDmuTP(value) {dispatch(changeDmuTP(value))}
+    function setDmuFP(value) {dispatch(changeDmuFP(value))}
+    function setDmuFN(value) {dispatch(changeDmuFN(value))}
+    function setDmuTN(value) {dispatch(changeDmuTN(value))}
+    function setSubjectsCurrency(currency) {dispatch(changeSubjectsCurrency(currency))}
+    function setSuTP1(value) {dispatch(changeSuTP1(value))}
+    function setSuFP1(value) {dispatch(changeSuFP1(value))}
+    function setSuFN1(value) {dispatch(changeSuFN1(value))}
+    function setSuTN1(value) {dispatch(changeSuTN1(value))}
+    function setSuTP2(value) {dispatch(changeSuTP2(value))}
+    function setSuFP2(value) {dispatch(changeSuFP2(value))}
+    function setSuFN2(value) {dispatch(changeSuFN2(value))}
+    function setSuTN2(value) {dispatch(changeSuTN2(value))}
+    function setGroup1(value) {dispatch(changeGroup1(value))}
+    function setGroup2(value) {dispatch(changeGroup2(value))}
 
     const [open, setOpen] = React.useState(false);
     
@@ -42,7 +53,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
         setOpen(true);
     };
   
-    const [dmuTP, setDmuTP] = useState(() => {
+    const dmuTP = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return 0
         }
@@ -50,10 +61,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return 0
         }
         else {
-          return 1;
+          return state.decisionMaker.dmuTP;
         }
-      });
-    const [dmuFP, setDmuFP] = useState(() => {
+    });
+    const dmuFP = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return -1
         }
@@ -61,10 +72,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return -1
         }
         else {
-          return 0;
+          return state.decisionMaker.dmuFP;
         }
-      });
-    const [dmuFN, setDmuFN] = useState(() => {
+    });
+    const dmuFN = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return -1
         }
@@ -72,10 +83,10 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return -1
         }
         else {
-          return 0;
+          return state.decisionMaker.dmuFN;
         }
-      });
-    const [dmuTN, setDmuTN] = useState(() => {
+    });
+    const dmuTN = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return 0
         }
@@ -83,11 +94,11 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return 0
         }
         else {
-          return 1;
+          return state.decisionMaker.dmuTN;
         }
-      });
-    // const [suTP1, setSuTP1] = useState(1);
-    const [suFP1, setSuFP1] = useState(() => {
+    });
+    const suTP1 = useSelector(getSuTP1)
+    const suFP1 = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return -1
         }
@@ -95,13 +106,13 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return -2
         }
         else {
-          return 1;
+          return state.fairnessScore.suFP1;
         }
-      });
-    const [suFN1, setSuFN1] = useState(0);
-    const [suTN1, setSuTN1] = useState(0);
-    // const [suTP2, setSuTP2] = useState(1);
-    const [suFP2, setSuFP2] = useState(() => {
+    });
+    const suFN1 = useSelector(getSuFN1);
+    const suTN1 = useSelector(getSuTN1);
+    const suTP2 = useSelector(getSuTP2);
+    const suFP2 = useSelector((state) => {
         if (isDemo === "compasaudit1") {
           return -1
         }
@@ -109,11 +120,13 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return -1
         }
         else {
-          return 1;
+          return state.fairnessScore.suFP2;
         }
-      });
-    const [suFN2, setSuFN2] = useState(0);
-    const [suTN2, setSuTN2] = useState(0);
+    });
+    const suFN2 = useSelector(getSuFN2);
+    const suTN2 = useSelector(getSuTN2);
+    const group1 = useSelector(getGroup1);
+    const group2 = useSelector(getGroup2);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
@@ -419,10 +432,6 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     useEffect(() => {
         setGroup1(global.config.datasets[datasetSelection]['group1'])
         setGroup2(global.config.datasets[datasetSelection]['group2'])
-        setd0description(global.config.datasets[datasetSelection]['d0']);
-        setd1description(global.config.datasets[datasetSelection]['d1']);
-        sety0description(global.config.datasets[datasetSelection]['y0']);
-        sety1description(global.config.datasets[datasetSelection]['y1']);
         setDecisionMakerCurrency(global.config.datasets[datasetSelection]['unit_DM'])
         setSubjectsCurrency(global.config.datasets[datasetSelection]['unit_DS'])
     }, [datasetSelection]);
@@ -464,33 +473,6 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
     return (
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
-                <h1>Terminology</h1>
-                <b>Y</b>: The actual outcome, also known as the "ground truth"; not known at prediction time.
-                <br/><br/>
-                <b>Label the two possible outcomes:</b>
-                <br/>
-                <label htmlFor="y1description">Y=1</label>
-                <input type="text" id="y1description" value={y1description} onChange={(e) => sety1description(e.target.value)} style={{width: "500px"}}/>
-                <br/>
-                <label htmlFor="y0description">Y=0</label>
-                <input type="text" id="y0description" value={y0description} onChange={(e) => sety0description(e.target.value)} style={{width: "500px"}}/>
-                <br/><br/>
-                <b>D</b>: The decision in question; is trying to predict Y.
-                <br/><br/>
-                <b>Label the two possible decisions:</b>
-                <br/>
-                <label htmlFor="d1description">D=1</label>
-                <input type="text" id="d1description" value={d1description} onChange={(e) => setd1description(e.target.value)} style={{width: "500px"}}/>
-                <br/>
-                <label htmlFor="d0description">D=0</label>
-                <input type="text" id="d0description" value={d0description} onChange={(e) => setd0description(e.target.value)} style={{width: "500px"}}/>
-                <br/><br/>
-                
-                <b>Decision maker</b>: The people or organization designing the algorithm, deciding on its design and thereby ultimately taking the decisions in question.
-                <br/>
-                <b>Decision subjects</b>: The people subjected to the decisions of the algorithm. They may or may not be aware that this algorithm is being deployed and used to make decisions about them.
-                
-
                 <h1>Configuration</h1>
 
                 <h2>Decision maker's utility</h2>

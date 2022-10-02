@@ -1,11 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import './SelectedPointsTable.css';
+import { getGroup1, getGroup2 } from '../../store/fairnessScore';
+import { getDecisionMakerCurrency } from '../../store/decisionMaker';
 
 
-function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD, labels}) {
-
-  const decisionMakerCurrency = useSelector((state) => state.decisionMakerCurrency)
+function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD}) {
+  const group1 = useSelector(getGroup1);
+  const group2 = useSelector(getGroup2);
+  const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
   
   function renderTableData() {
     
@@ -19,7 +22,7 @@ function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerU
         <tr key={id}>
           <td>{id}</td>
           {thresholdGroup0 !== undefined ?
-            <td>{labels[0]}: {thresholdGroup0.toFixed(2)}; {labels[1]}: {thresholdGroup1.toFixed(2)}</td>
+            <td>{group1}: {thresholdGroup0.toFixed(2)}; {group2}: {thresholdGroup1.toFixed(2)}</td>
             : <td>Decision rule from dataset</td>
           }
           <td>{decisionMaker} {decisionMakerCurrency}</td>

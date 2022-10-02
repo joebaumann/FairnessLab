@@ -1,8 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
+import { getGroup1, getGroup2 } from '../../store/fairnessScore';
 
-const SubjectsUtility = ({subjectsUtility, fairnessScores, group1, group2, selectedPoints, colors, idOfSelectedPoints, evaluationOfD}) => {
+
+const SubjectsUtility = ({subjectsUtility, fairnessScores, selectedPoints, colors, idOfSelectedPoints, evaluationOfD}) => {
+    const group1 = useSelector(getGroup1);
+    const group2 = useSelector(getGroup2);
+
     let tracesUtilities = []
     let tracesFairnessScores = []
     selectedPoints.forEach(i => {
