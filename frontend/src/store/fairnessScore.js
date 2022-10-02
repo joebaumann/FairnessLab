@@ -14,6 +14,8 @@ const fairnessScoreSlice = createSlice({
         suTN2: 0,
         group1: 'group 1',
         group2: 'group 2',
+        justifier: 'no_justifier',
+        pattern: 'egalitarianism'
     },
     reducers: {
         changeSubjectsCurrency(state, action) {
@@ -49,12 +51,18 @@ const fairnessScoreSlice = createSlice({
         changeGroup2(state, action) {
             state.group2 = action.payload
         },
+        changeJustifier(state, action) {
+            state.justifier = action.payload
+        },
+        changePattern(state, action) {
+            state.pattern = action.payload
+        },
     }
 })
 
 const { actions, reducer } = fairnessScoreSlice
 
-export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2 } = actions
+export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2, changeJustifier, changePattern } = actions
 
 export default reducer
 
@@ -70,3 +78,5 @@ export const getSuFN2 = state => state.fairnessScore.suFN2
 export const getSuTN2 = state => state.fairnessScore.suTN2
 export const getGroup1 = state => state.fairnessScore.group1
 export const getGroup2 = state => state.fairnessScore.group2
+export const getJustifier = state => state.fairnessScore.justifier
+export const getPattern = state => state.fairnessScore.pattern

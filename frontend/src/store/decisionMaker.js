@@ -5,9 +5,9 @@ const decisionMakerSlice = createSlice({
     initialState: {
         currency: 'USD',
         dmuTP: 1,
-        dmuFP: 1,
+        dmuFP: 0,
         dmuFN: 0,
-        dmuTN: 0,
+        dmuTN: 1,
     },
     reducers: {
         changeDecisionMakerCurrency(state, action) {
@@ -36,3 +36,7 @@ export default reducer
 
 // selectors
 export const getDecisionMakerCurrency = state => state.decisionMaker.currency
+export const getDmuTP = state => state.decisionMaker.dmuTP
+export const getDmuFP = state => state.decisionMaker.dmuFP
+export const getDmuFN = state => state.decisionMaker.dmuFN
+export const getDmuTN = state => state.decisionMaker.dmuTN

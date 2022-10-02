@@ -6,8 +6,9 @@ import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
 import { getDatasetSelection, changeDatasetSelection } from '../../store/dataset';
+import { getJustifier } from '../../store/fairnessScore';
 
-function DatasetSelector({setFilteredData, setUnfilteredData, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({setFilteredData, setUnfilteredData, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -24,10 +25,9 @@ function DatasetSelector({setFilteredData, setUnfilteredData, justifier, dataset
     }
 
     const datasetSelection = useSelector(getDatasetSelection)
+    const justifier = useSelector(getJustifier);
     const dispatch = useDispatch ()
-    function setDatasetSelection(selection) {
-        dispatch(changeDatasetSelection(selection))
-    }
+    function setDatasetSelection(selection) {dispatch(changeDatasetSelection(selection))}
 
     const [uploadedData, setUploadedData] = useState([]);
     const [fileError, setFileError] = useState(false);

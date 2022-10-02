@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Header from '../Header';
 import DatasetSelector from '../DatasetSelector';
 import Terminology from '../Terminology';
+import Configuration from '../Configuration';
 import ParetoPlot from '../ParetoPlot';
 import SelectedPointsTable from '../SelectedPointsTable';
 import ScoreDistribution from '../ScoreDistribution';
@@ -11,17 +12,6 @@ import SubjectsUtility from '../SubjectsUtility';
 function Audit(props) {
   // loads the state for a specific demo if the audit page was accessed from the compas case study
   
-  const [justifier, setJustifier] = useState(() => {
-    if (props.match.params.demo === "compasaudit1") {
-      return 'y_0'
-    }
-    else if (props.match.params.demo === "compasaudit2") {
-      return 'y_0'
-    }
-    else {
-      return 'no_justifier';
-    }
-  });
   // the datasetSelectionCounter is incremented every time the datasetSelection or the justifier changes
   // this makes sure that the decision subject utilities are recalculated after the justifier has been applied to the dataset
   const [datasetSelectionCounter, setDatasetSelectionCounter] = useState(0);
@@ -52,12 +42,13 @@ function Audit(props) {
         </>
       }
       <div className="Content">
-        <DatasetSelector setFilteredData={setFilteredData} setUnfilteredData={setUnfilteredData} justifier={justifier} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
+        <DatasetSelector setFilteredData={setFilteredData} setUnfilteredData={setUnfilteredData} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
         <Terminology/>
-        <ParetoPlot isDemo={props.match.params.demo} filteredData={filteredData} unfilteredData={unfilteredData} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} decisionMakerUtility={decisionMakerUtility} setDecisionMakerUtility={setDecisionMakerUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} justifier={justifier} setJustifier={setJustifier} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
+        <Configuration isDemo={props.match.params.demo}/>
+        <SubjectsUtility subjectsUtility={subjectsUtility} fairnessScores={fairnessScores} selectedPoints={selectedPoints} colors={colors} idOfSelectedPoints={idOfSelectedPoints} evaluationOfD={evaluationOfD} />
+        <ParetoPlot isDemo={props.match.params.demo} filteredData={filteredData} unfilteredData={unfilteredData} numThresholds={numThresholds} setNumThresholds={setNumThresholds} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} setSubjectsUtility={setSubjectsUtility} decisionMakerUtility={decisionMakerUtility} setDecisionMakerUtility={setDecisionMakerUtility} fairnessScores={fairnessScores} setFairnessScores={setFairnessScores} thresholdTuples={thresholdTuples} setThresholdTuples={setThresholdTuples} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
         <SelectedPointsTable selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} decisionMakerUtility={decisionMakerUtility} fairnessScores={fairnessScores} thresholdTuples={thresholdTuples} evaluationOfD={evaluationOfD} />
         <ScoreDistribution unfilteredData={unfilteredData} selectedPoints={selectedPoints} colors={colors} thresholdTuples={thresholdTuples} />
-        <SubjectsUtility subjectsUtility={subjectsUtility} fairnessScores={fairnessScores} selectedPoints={selectedPoints} colors={colors} idOfSelectedPoints={idOfSelectedPoints} evaluationOfD={evaluationOfD} />
       </div>
     </div>
   )
