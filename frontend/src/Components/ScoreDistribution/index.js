@@ -3,10 +3,13 @@ import { useSelector } from 'react-redux';
 import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
 import { getGroup1, getGroup2 } from '../../store/fairnessScore';
+import { getThresholdTuples } from '../../store/paretoPlot';
 
-const ScoreDistribution = ({unfilteredData, selectedPoints, thresholdTuples, colors}) => {
+const ScoreDistribution = ({unfilteredData, selectedPoints, colors}) => {
   const group1 = useSelector(getGroup1);
   const group2 = useSelector(getGroup2);
+  const thresholdTuples = useSelector(getThresholdTuples)
+
   var indices_of_Y0_for_group1 = [];
   var indices_of_Y1_for_group1 = [];
   for(let i = 0; i < unfilteredData['y'][0].length; i++)

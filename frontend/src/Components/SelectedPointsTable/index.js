@@ -3,12 +3,16 @@ import { useSelector } from 'react-redux';
 import './SelectedPointsTable.css';
 import { getGroup1, getGroup2 } from '../../store/fairnessScore';
 import { getDecisionMakerCurrency } from '../../store/decisionMaker';
+import { getDecisionMakerUtility, getFairnessScores, getThresholdTuples } from '../../store/paretoPlot';
 
 
-function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD}) {
+function SelectedPointsTable({selectedPoints, idOfSelectedPoints, evaluationOfD}) {
   const group1 = useSelector(getGroup1);
   const group2 = useSelector(getGroup2);
-  const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
+  const decisionMakerCurrency = useSelector(getDecisionMakerCurrency);
+  const fairnessScores = useSelector(getFairnessScores);
+  const decisionMakerUtility = useSelector(getDecisionMakerUtility);
+  const thresholdTuples = useSelector(getThresholdTuples);
   
   function renderTableData() {
     

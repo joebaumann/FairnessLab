@@ -3,11 +3,14 @@ import { useSelector } from 'react-redux';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
 import { getGroup1, getGroup2 } from '../../store/fairnessScore';
+import { getFairnessScores, getSubjectsUtility } from '../../store/paretoPlot';
 
 
-const SubjectsUtility = ({subjectsUtility, fairnessScores, selectedPoints, colors, idOfSelectedPoints, evaluationOfD}) => {
+const SubjectsUtility = ({selectedPoints, colors, idOfSelectedPoints, evaluationOfD}) => {
     const group1 = useSelector(getGroup1);
     const group2 = useSelector(getGroup2);
+    const subjectsUtility = useSelector(getSubjectsUtility);
+    const fairnessScores = useSelector(getFairnessScores);
 
     let tracesUtilities = []
     let tracesFairnessScores = []

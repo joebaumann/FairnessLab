@@ -8,12 +8,16 @@ import '../../config';
 import { getDatasetSelection } from '../../store/dataset';
 import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from '../../store/decisionMaker';
 import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight } from '../../store/fairnessScore';
-import { changeNumThresholds, getNumThresholds } from '../../store/paretoPlot';
+import { changeDecisionMakerUtility, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, getDecisionMakerUtility, getFairnessScores, getNumThresholds, getSubjectsUtility, getThresholdTuples } from '../../store/paretoPlot';
 
-function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, datasetSelectionCounter, colors, setColors, evaluationOfD, setEvaluationOfD}) {
     
     const dispatch = useDispatch ()
     function setNumThresholds(value) {dispatch(changeNumThresholds(value))}
+    function setThresholdTuples(value) {dispatch(changeThresholdTuples(value))}
+    function setSubjectsUtility(value) {dispatch(changeSubjectsUtility(value))}
+    function setFairnessScores(value) {dispatch(changeFairnessScores(value))}
+    function setDecisionMakerUtility(value) {dispatch(changeDecisionMakerUtility(value))}
 
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
@@ -36,6 +40,11 @@ function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPo
     const numThresholds = useSelector(getNumThresholds);
     const sufficientarianismThreshold = useSelector(getSufficientarianismThreshold);
     const prioritarianismWeight = useSelector(getPrioritarianismWeight);
+
+    const fairnessScores = useSelector(getFairnessScores);
+    const decisionMakerUtility = useSelector(getDecisionMakerUtility);
+    const thresholdTuples = useSelector(getThresholdTuples);
+
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [colorOfD, setColorOfD] = useState('#fff')
@@ -309,7 +318,6 @@ function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPo
                     Deselect all points
                 </button>
             </div>
-
 
             <Plot
                 data={[
