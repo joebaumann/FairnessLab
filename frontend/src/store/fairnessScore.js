@@ -15,7 +15,9 @@ const fairnessScoreSlice = createSlice({
         group1: 'group 1',
         group2: 'group 2',
         justifier: 'no_justifier',
-        pattern: 'egalitarianism'
+        pattern: 'egalitarianism',
+        sufficientarianismThreshold: 0.5,
+        prioritarianismWeight: 2,
     },
     reducers: {
         changeSubjectsCurrency(state, action) {
@@ -57,12 +59,18 @@ const fairnessScoreSlice = createSlice({
         changePattern(state, action) {
             state.pattern = action.payload
         },
+        changeSufficientarianismThreshold(state, action) {
+            state.sufficientarianismThreshold = action.payload
+        },
+        changePrioritarianismWeight(state, action) {
+            state.prioritarianismWeight = action.payload
+        },
     }
 })
 
 const { actions, reducer } = fairnessScoreSlice
 
-export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2, changeJustifier, changePattern } = actions
+export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2, changeJustifier, changePattern, changeSufficientarianismThreshold, changePrioritarianismWeight } = actions
 
 export default reducer
 
@@ -80,3 +88,5 @@ export const getGroup1 = state => state.fairnessScore.group1
 export const getGroup2 = state => state.fairnessScore.group2
 export const getJustifier = state => state.fairnessScore.justifier
 export const getPattern = state => state.fairnessScore.pattern
+export const getSufficientarianismThreshold = state => state.fairnessScore.sufficientarianismThreshold
+export const getPrioritarianismWeight = state => state.fairnessScore.prioritarianismWeight

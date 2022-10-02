@@ -7,10 +7,14 @@ import '../../config';
 
 import { getDatasetSelection } from '../../store/dataset';
 import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from '../../store/decisionMaker';
-import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern } from '../../store/fairnessScore';
+import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight } from '../../store/fairnessScore';
+import { changeNumThresholds, getNumThresholds } from '../../store/paretoPlot';
 
-function ParetoPlot({filteredData, unfilteredData, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     
+    const dispatch = useDispatch ()
+    function setNumThresholds(value) {dispatch(changeNumThresholds(value))}
+
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
     const subjectsCurrency = useSelector(getSubjectsCurrency)
@@ -29,12 +33,13 @@ function ParetoPlot({filteredData, unfilteredData, numThresholds, setNumThreshol
     const group1 = useSelector(getGroup1);
     const group2 = useSelector(getGroup2);
     const pattern = useSelector(getPattern);
+    const numThresholds = useSelector(getNumThresholds);
+    const sufficientarianismThreshold = useSelector(getSufficientarianismThreshold);
+    const prioritarianismWeight = useSelector(getPrioritarianismWeight);
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
     const [colorOfD, setColorOfD] = useState('#fff')
     const [xAxisLabel, setXAxisLabel] = useState(null);
-    const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0.5);
-    const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     function getRandomColor() {
         // get a random color while avoiding yellow and colors that are too light
@@ -286,128 +291,125 @@ function ParetoPlot({filteredData, unfilteredData, numThresholds, setNumThreshol
 
     return (
         <div className='ParetoPlot'>
-            <div className="ParetoPlots">
-                <h1>Audit</h1>
-                <h2>Pareto plot</h2>
-                With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
-                <br/><br/>
-                <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
-                <br/>
-                <b>Fairness score</b>: Higher is better
+            <h2>Pareto plot</h2>
+            With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
+            <br/><br/>
+            <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
+            <br/>
+            <b>Fairness score</b>: Higher is better
 
-                
-                <br/><br/>
-                {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
-                    <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
-                }
-                <br/><br/>
-                <div>
-                    <button onClick={deselectAllPoints}>
-                        Deselect all points
-                    </button>
-                </div>
-
-
-                <Plot
-                    data={[
-                    {
-                        x: paretoOptimalPointsX,
-                        y: paretoOptimalPointsY,
-                        mode: 'lines',
-                        name: 'Pareto front',
-                        marker: {color: '#a61b62'}
-                    },
-                    {
-                        x: fairnessScores,
-                        y: decisionMakerUtility,
-                        mode: 'markers',
-                        visible: filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0,
-                        marker: {
-                            color: colors,
-                            size: 7,
-                            line: {
-                                color: '#000000',
-                                width: 1
-                            }
-                        },
-                        type: 'scatter',
-                        hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
-                        '<br><b>Fairness score</b>: %{x:.4f}<br>' +
-                        '<b>Thresholds</b>: %{text}',
-                        text: thresholdTuples,
-                        name: 'Decision rule'
-                    },
-                    {
-                        x: [evaluationOfD[0]],
-                        y: [evaluationOfD[1]],
-                        mode: 'markers',
-                        visible: evaluationOfD.length !== 0,
-                        marker: {
-                            color: colorOfD,
-                            size: 15,
-                            symbol: 'diamond',
-                            line: {
-                                color: '#000000',
-                                width: 1
-                            }
-                        },
-                        type: 'scatter',
-                        hovertemplate: '<b>Decisions from dataset</b>' +
-                        '<br><b>Decision maker\'s utility</b>: %{y:.2f}' +
-                        '<br><b>Fairness score</b>: %{x:.4f}<br>',
-                        name: 'Decisions from dataset'
-                    },
-                    ]}
-
-                    layout={ {
-                        width: 1000,
-                        height: 800,
-                        xaxis: { title: xAxisLabel},
-                        yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
-                        hovermode:'closest',
-                    } }
-
-                    onClick={(data) => {
-                        var newColors = [...colors];
-                        // Orange point (from D) gets index -1, every other points gets their regular index
-                        let selectedPoint = -1
-                        if (data.points[0].data.x.length > 1) {
-                            selectedPoint = data.points[0].pointIndex
-                        }
-                        var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
-                        if (indexOfSelectedPoint > -1) {
-                            // deselect point and remove from list
-                            selectedPoints.splice(indexOfSelectedPoint, 1)
-                            delete idOfSelectedPoints[selectedPoint]
-                            if (selectedPoint === -1) {
-                                setColorOfD('#fff')
-                            } else {
-                                newColors[selectedPoint] = '#ffffff'
-                            }
-                        } else {
-                            // select point and add to list
-                            selectedPoints.push(selectedPoint)
-
-                            if (selectedPoint === -1) {
-                                idOfSelectedPoints[selectedPoint] = {
-                                    id: incrementalSelectionId,
-                                    decisionMakerUtility: evaluationOfD[1],
-                                    fairnessScore: evaluationOfD[0]
-                                }
-                                setColorOfD('orange')
-                            } else {
-                                idOfSelectedPoints[selectedPoint] = incrementalSelectionId
-                                newColors[selectedPoint] = getRandomColor()
-                            }
-                            
-                            setIncrementalSelectionId(incrementalSelectionId + 1)
-                        }
-                        setColors(newColors)
-                        setSelectedPoints([...selectedPoints]);
-                        setIdOfSelectedPoints(idOfSelectedPoints);
-                      }}
-                />
+            
+            <br/><br/>
+            {filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0 &&
+                <ThresholdInput numThresholds={numThresholds} setNumThresholds={setNumThresholds}/>
+            }
+            <br/><br/>
+            <div>
+                <button onClick={deselectAllPoints}>
+                    Deselect all points
+                </button>
             </div>
+
+
+            <Plot
+                data={[
+                {
+                    x: paretoOptimalPointsX,
+                    y: paretoOptimalPointsY,
+                    mode: 'lines',
+                    name: 'Pareto front',
+                    marker: {color: '#a61b62'}
+                },
+                {
+                    x: fairnessScores,
+                    y: decisionMakerUtility,
+                    mode: 'markers',
+                    visible: filteredData['scores'][0].length !== 0 && filteredData['scores'][1].length !== 0,
+                    marker: {
+                        color: colors,
+                        size: 7,
+                        line: {
+                            color: '#000000',
+                            width: 1
+                        }
+                    },
+                    type: 'scatter',
+                    hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
+                    '<br><b>Fairness score</b>: %{x:.4f}<br>' +
+                    '<b>Thresholds</b>: %{text}',
+                    text: thresholdTuples,
+                    name: 'Decision rule'
+                },
+                {
+                    x: [evaluationOfD[0]],
+                    y: [evaluationOfD[1]],
+                    mode: 'markers',
+                    visible: evaluationOfD.length !== 0,
+                    marker: {
+                        color: colorOfD,
+                        size: 15,
+                        symbol: 'diamond',
+                        line: {
+                            color: '#000000',
+                            width: 1
+                        }
+                    },
+                    type: 'scatter',
+                    hovertemplate: '<b>Decisions from dataset</b>' +
+                    '<br><b>Decision maker\'s utility</b>: %{y:.2f}' +
+                    '<br><b>Fairness score</b>: %{x:.4f}<br>',
+                    name: 'Decisions from dataset'
+                },
+                ]}
+
+                layout={ {
+                    width: 1000,
+                    height: 800,
+                    xaxis: { title: xAxisLabel},
+                    yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
+                    hovermode:'closest',
+                } }
+
+                onClick={(data) => {
+                    var newColors = [...colors];
+                    // Orange point (from D) gets index -1, every other points gets their regular index
+                    let selectedPoint = -1
+                    if (data.points[0].data.x.length > 1) {
+                        selectedPoint = data.points[0].pointIndex
+                    }
+                    var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
+                    if (indexOfSelectedPoint > -1) {
+                        // deselect point and remove from list
+                        selectedPoints.splice(indexOfSelectedPoint, 1)
+                        delete idOfSelectedPoints[selectedPoint]
+                        if (selectedPoint === -1) {
+                            setColorOfD('#fff')
+                        } else {
+                            newColors[selectedPoint] = '#ffffff'
+                        }
+                    } else {
+                        // select point and add to list
+                        selectedPoints.push(selectedPoint)
+
+                        if (selectedPoint === -1) {
+                            idOfSelectedPoints[selectedPoint] = {
+                                id: incrementalSelectionId,
+                                decisionMakerUtility: evaluationOfD[1],
+                                fairnessScore: evaluationOfD[0]
+                            }
+                            setColorOfD('orange')
+                        } else {
+                            idOfSelectedPoints[selectedPoint] = incrementalSelectionId
+                            newColors[selectedPoint] = getRandomColor()
+                        }
+                        
+                        setIncrementalSelectionId(incrementalSelectionId + 1)
+                    }
+                    setColors(newColors)
+                    setSelectedPoints([...selectedPoints]);
+                    setIdOfSelectedPoints(idOfSelectedPoints);
+                    }}
+            />
         </div>
       );
 }

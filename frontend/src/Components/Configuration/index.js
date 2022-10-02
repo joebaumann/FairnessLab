@@ -9,18 +9,10 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { getDatasetSelection } from '../../store/dataset';
 import { getDecisionMakerCurrency, changeDecisionMakerCurrency, changeDmuTP, changeDmuFP, changeDmuFN, changeDmuTN, getDmuTP, getDmuFP, getDmuFN, getDmuTN } from '../../store/decisionMaker';
-import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier } from '../../store/fairnessScore';
+import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier, getSufficientarianismThreshold, getPrioritarianismWeight, changeSufficientarianismThreshold, changePrioritarianismWeight } from '../../store/fairnessScore';
 import { getD0Description, getD1Description, getY0Description, getY1Description } from '../../store/terminology';
 
 function Configuration({isDemo}) {
-    
-    const datasetSelection = useSelector(getDatasetSelection)
-    const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
-    const subjectsCurrency = useSelector(getSubjectsCurrency)
-    const y0description = useSelector(getY0Description)
-    const y1description = useSelector(getY1Description)
-    const d0description = useSelector(getD0Description)
-    const d1description = useSelector(getD1Description)
 
     const dispatch = useDispatch ()
     function setDecisionMakerCurrency(currency) {dispatch(changeDecisionMakerCurrency(currency))}
@@ -41,7 +33,16 @@ function Configuration({isDemo}) {
     function setGroup2(value) {dispatch(changeGroup2(value))}
     function setJustifier(value) {dispatch(changeJustifier(value))}
     function setPattern(value) {dispatch(changePattern(value))}
+    function setSufficientarianismThreshold(value) {dispatch(changeSufficientarianismThreshold(value))}
+    function setPrioritarianismWeight(value) {dispatch(changePrioritarianismWeight(value))}
     
+    const datasetSelection = useSelector(getDatasetSelection)
+    const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
+    const subjectsCurrency = useSelector(getSubjectsCurrency)
+    const y0description = useSelector(getY0Description)
+    const y1description = useSelector(getY1Description)
+    const d0description = useSelector(getD0Description)
+    const d1description = useSelector(getD1Description)
     const dmuTP = useSelector(getDmuTP);
     const dmuFP = useSelector(getDmuFP);
     const dmuFN = useSelector(getDmuFN);
@@ -58,10 +59,10 @@ function Configuration({isDemo}) {
     const group2 = useSelector(getGroup2);
     const justifier = useSelector(getJustifier);
     const pattern = useSelector(getPattern);
+    const sufficientarianismThreshold = useSelector(getSufficientarianismThreshold);
+    const prioritarianismWeight = useSelector(getPrioritarianismWeight);
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
     const [correspondingWeightedFairnessMetric, setCorrespondingWeightedFairnessMetric] = useState(undefined);
-    const [sufficientarianismThreshold, setSufficientarianismThreshold] = useState(0.5);
-    const [prioritarianismWeight, setPrioritarianismWeight] = useState(2);
 
     const [open, setOpen] = React.useState(false);
     
