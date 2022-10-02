@@ -20,8 +20,6 @@ function Audit(props) {
   const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);
   const [evaluationOfD, setEvaluationOfD] = useState([0, 0]);
   const [colors, setColors] = useState(Array(11 * 11).fill('#4e87ad'));
-  const [filteredData, setFilteredData] = useState({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]});
-  const [unfilteredData, setUnfilteredData] = useState({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
 
   return(
     <div className="Audit">
@@ -37,14 +35,14 @@ function Audit(props) {
         </>
       }
       <div className="Content">
-        <DatasetSelector setFilteredData={setFilteredData} setUnfilteredData={setUnfilteredData} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
+        <DatasetSelector datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
         <Terminology/>
         <Configuration isDemo={props.match.params.demo}/>
         <h1>Audit</h1>
         <SubjectsUtility selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} colors={colors} evaluationOfD={evaluationOfD} />
-        <ParetoPlot isDemo={props.match.params.demo} filteredData={filteredData} unfilteredData={unfilteredData} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
+        <ParetoPlot isDemo={props.match.params.demo} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
         <SelectedPointsTable selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} evaluationOfD={evaluationOfD} />
-        <ScoreDistribution unfilteredData={unfilteredData} selectedPoints={selectedPoints} colors={colors} />
+        <ScoreDistribution selectedPoints={selectedPoints} colors={colors} />
       </div>
     </div>
   )

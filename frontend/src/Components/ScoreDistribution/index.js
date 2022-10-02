@@ -4,11 +4,13 @@ import Plot from 'react-plotly.js';
 import './ScoreDistribution.css';
 import { getGroup1, getGroup2 } from '../../store/fairnessScore';
 import { getThresholdTuples } from '../../store/paretoPlot';
+import { getUnfilteredData } from '../../store/dataset';
 
-const ScoreDistribution = ({unfilteredData, selectedPoints, colors}) => {
+const ScoreDistribution = ({selectedPoints, colors}) => {
   const group1 = useSelector(getGroup1);
   const group2 = useSelector(getGroup2);
   const thresholdTuples = useSelector(getThresholdTuples)
+  const unfilteredData = useSelector(getUnfilteredData);
 
   var indices_of_Y0_for_group1 = [];
   var indices_of_Y1_for_group1 = [];

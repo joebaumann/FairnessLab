@@ -5,12 +5,12 @@ import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
 import '../../config';
 
-import { getDatasetSelection } from '../../store/dataset';
+import { getDatasetSelection, getFilteredData, getUnfilteredData } from '../../store/dataset';
 import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from '../../store/decisionMaker';
 import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight } from '../../store/fairnessScore';
 import { changeDecisionMakerUtility, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, getDecisionMakerUtility, getFairnessScores, getNumThresholds, getSubjectsUtility, getThresholdTuples } from '../../store/paretoPlot';
 
-function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, datasetSelectionCounter, colors, setColors, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, datasetSelectionCounter, colors, setColors, evaluationOfD, setEvaluationOfD}) {
     
     const dispatch = useDispatch ()
     function setNumThresholds(value) {dispatch(changeNumThresholds(value))}
@@ -40,6 +40,8 @@ function ParetoPlot({filteredData, unfilteredData, selectedPoints, setSelectedPo
     const numThresholds = useSelector(getNumThresholds);
     const sufficientarianismThreshold = useSelector(getSufficientarianismThreshold);
     const prioritarianismWeight = useSelector(getPrioritarianismWeight);
+    const filteredData = useSelector(getFilteredData);
+    const unfilteredData = useSelector(getUnfilteredData);
 
     const fairnessScores = useSelector(getFairnessScores);
     const decisionMakerUtility = useSelector(getDecisionMakerUtility);
