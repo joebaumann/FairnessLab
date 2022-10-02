@@ -263,12 +263,14 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
     }
 
     function selectEvaluationOfD() {
-        selectedPoints.push(-1)
-        idOfSelectedPoints[-1] = incrementalSelectionId
-        setColorOfD('orange')
-        setSelectedPoints([...selectedPoints]);
-        setIdOfSelectedPoints(idOfSelectedPoints);
-        setIncrementalSelectionId(incrementalSelectionId + 1)
+        if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
+            setColorOfD('orange')
+            setSelectedPoints([-1]);
+            let idOfSelectedPoints = {}
+            idOfSelectedPoints[-1] = incrementalSelectionId
+            setIdOfSelectedPoints(idOfSelectedPoints);
+            setIncrementalSelectionId(2)
+        }
     }
 
     useEffect(() => {

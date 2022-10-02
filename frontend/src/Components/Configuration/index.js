@@ -12,7 +12,7 @@ import { getDecisionMakerCurrency, changeDecisionMakerCurrency, changeDmuTP, cha
 import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier, getSufficientarianismThreshold, getPrioritarianismWeight, changeSufficientarianismThreshold, changePrioritarianismWeight } from '../../store/fairnessScore';
 import { getD0Description, getD1Description, getY0Description, getY1Description } from '../../store/terminology';
 
-function Configuration({isDemo}) {
+function Configuration({demo}) {
 
     const dispatch = useDispatch ()
     function setDecisionMakerCurrency(currency) {dispatch(changeDecisionMakerCurrency(currency))}
@@ -61,9 +61,9 @@ function Configuration({isDemo}) {
     const pattern = useSelector(getPattern);
     const sufficientarianismThreshold = useSelector(getSufficientarianismThreshold);
     const prioritarianismWeight = useSelector(getPrioritarianismWeight);
+
     const [correspondingFairnessMetric, setCorrespondingFairnessMetric] = useState(undefined);
     const [correspondingWeightedFairnessMetric, setCorrespondingWeightedFairnessMetric] = useState(undefined);
-
     const [open, setOpen] = React.useState(false);
     
     const handleClose = (event, reason) => {
@@ -148,20 +148,20 @@ function Configuration({isDemo}) {
     }, [datasetSelection]);
 
     useEffect(() => {
-        if (isDemo === "compasaudit1" || isDemo === "compasaudit2") {
+        if (demo === "compasaudit1" || demo === "compasaudit2") {
             setDmuTP(0)
             setDmuFP(-1)
             setDmuFN(-1)
             setDmuTN(0)
             setSuFP2(-2)
             setJustifier('y_0')
-            if (isDemo === "compasaudit1") {
+            if (demo === "compasaudit1") {
                 setSuFP1(-1)
-            } else if (isDemo === "compasaudit2") {
+            } else if (demo === "compasaudit2") {
                 setSuFP1(-2)
             }
         }
-    }, [isDemo]);
+    }, [demo]);
     
     useEffect(() => {
         updateCorrespondsToExistingMetric()
