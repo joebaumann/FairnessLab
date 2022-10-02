@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import pf from 'pareto-frontier';
 import Plot from 'react-plotly.js';
 import './ParetoPlot.css';
@@ -8,9 +9,28 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
+import { getDatasetSelection, changeDatasetSelection } from '../../store/dataset';
+import { getDecisionMakerCurrency, changeDecisionMakerCurrency } from '../../store/decisionMaker';
+import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, getSuTP2 } from '../../store/fairnessScore';
 
-function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, datasetSelection, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerCurrency, setDecisionMakerCurrency, decisionMakerUtility, setDecisionMakerUtility, subjectsCurrency, setSubjectsCurrency, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, group2, d0description, setd0description, d1description, setd1description, y0description, sety0description, y1description, sety1description, setGroup2, numThresholds, setNumThresholds, selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, colors, setColors, setSubjectsUtility, fairnessScores, setFairnessScores, thresholdTuples, setThresholdTuples, decisionMakerUtility, setDecisionMakerUtility, justifier, setJustifier, datasetSelectionCounter, evaluationOfD, setEvaluationOfD}) {
     
+    const datasetSelection = useSelector(getDatasetSelection)
+    const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
+    const subjectsCurrency = useSelector(getSubjectsCurrency)
+    const suTP1 = useSelector(getSuTP1)
+    const suTP2 = useSelector(getSuTP2)
+
+    const dispatch = useDispatch ()
+    function setDecisionMakerCurrency(currency) {
+        dispatch(changeDecisionMakerCurrency(currency))
+    }
+    function setSubjectsCurrency(currency) {
+        dispatch(changeSubjectsCurrency(currency))
+    }
+    const setSuTP1 = () => {}
+    const setSuTP2 = () => {}
+
     const [open, setOpen] = React.useState(false);
     
     const handleClose = (event, reason) => {
@@ -66,7 +86,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
           return 1;
         }
       });
-    const [suTP1, setSuTP1] = useState(1);
+    // const [suTP1, setSuTP1] = useState(1);
     const [suFP1, setSuFP1] = useState(() => {
         if (isDemo === "compasaudit1") {
           return -1
@@ -80,7 +100,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
       });
     const [suFN1, setSuFN1] = useState(0);
     const [suTN1, setSuTN1] = useState(0);
-    const [suTP2, setSuTP2] = useState(1);
+    // const [suTP2, setSuTP2] = useState(1);
     const [suFP2, setSuFP2] = useState(() => {
         if (isDemo === "compasaudit1") {
           return -1
@@ -418,7 +438,7 @@ function ParetoPlot({isDemo, filteredData, unfilteredData, group1, setGroup1, gr
 
     useEffect(() => {
         updateXAxisLabel()
-    }, [pattern, group1, group2]);
+    }, [pattern, group1, group2, subjectsCurrency]);
 
     useEffect(() => {
         updateCorrespondsToExistingMetric()

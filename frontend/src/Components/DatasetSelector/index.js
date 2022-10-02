@@ -1,10 +1,13 @@
 import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData, setUnfilteredData, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+import { getDatasetSelection, changeDatasetSelection } from '../../store/dataset';
+
+function DatasetSelector({setFilteredData, setUnfilteredData, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -18,6 +21,12 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
         'Own': {
             'file': []
         }
+    }
+
+    const datasetSelection = useSelector(getDatasetSelection)
+    const dispatch = useDispatch ()
+    function setDatasetSelection(selection) {
+        dispatch(changeDatasetSelection(selection))
     }
 
     const [uploadedData, setUploadedData] = useState([]);

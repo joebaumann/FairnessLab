@@ -1,9 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import './SelectedPointsTable.css';
 
 
-function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerCurrency, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD, labels}) {
+function SelectedPointsTable({selectedPoints, idOfSelectedPoints, decisionMakerUtility, fairnessScores, thresholdTuples, evaluationOfD, labels}) {
 
+  const decisionMakerCurrency = useSelector((state) => state.decisionMakerCurrency)
+  
   function renderTableData() {
     
     return selectedPoints.map(i => {
