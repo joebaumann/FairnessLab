@@ -65,12 +65,6 @@ const ScoreDistribution = ({unfilteredData, selectedPoints, thresholdTuples, lab
     let threshold_lines1 = []
     let threshold_lines2 = []
 
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-    }
-    
     var linelength = 2
     for (let s=0; s < selectedPoints.length; s++) {
       var selectedPoint = selectedPoints[s]
