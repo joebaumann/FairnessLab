@@ -8,9 +8,9 @@ import '../../config';
 import { getDatasetSelection, getFilteredData, getUnfilteredData } from '../../store/dataset';
 import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from '../../store/decisionMaker';
 import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight } from '../../store/fairnessScore';
-import { changeDecisionMakerUtility, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, getDecisionMakerUtility, getFairnessScores, getNumThresholds, getSubjectsUtility, getThresholdTuples } from '../../store/paretoPlot';
+import { addSelectedPoint, changeDecisionMakerUtility, changeEvaluationOfD, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, deleteSelectedPoint, deselectAllPoints, getColorOfD, getDecisionMakerUtility, getEvaluationOfD, getFairnessScores, getNumThresholds, getSelectedPoints, getThresholdTuples, selectEvaluationOfD } from '../../store/paretoPlot';
 
-function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setIdOfSelectedPoints, incrementalSelectionId, setIncrementalSelectionId, datasetSelectionCounter, colors, setColors, evaluationOfD, setEvaluationOfD}) {
+function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
     
     const dispatch = useDispatch ()
     function setNumThresholds(value) {dispatch(changeNumThresholds(value))}
@@ -18,6 +18,7 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
     function setSubjectsUtility(value) {dispatch(changeSubjectsUtility(value))}
     function setFairnessScores(value) {dispatch(changeFairnessScores(value))}
     function setDecisionMakerUtility(value) {dispatch(changeDecisionMakerUtility(value))}
+    function setEvaluationOfD(value) {dispatch(changeEvaluationOfD(value))}
 
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
@@ -42,14 +43,16 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
     const prioritarianismWeight = useSelector(getPrioritarianismWeight);
     const filteredData = useSelector(getFilteredData);
     const unfilteredData = useSelector(getUnfilteredData);
-
+    
     const fairnessScores = useSelector(getFairnessScores);
     const decisionMakerUtility = useSelector(getDecisionMakerUtility);
     const thresholdTuples = useSelector(getThresholdTuples);
+    const evaluationOfD = useSelector(getEvaluationOfD);
+    const selectedPoints = useSelector(getSelectedPoints);
+    const colorOfD = useSelector(getColorOfD)
 
     const [paretoOptimalPointsX, setParetoOptimalPointsX] = useState([]);
     const [paretoOptimalPointsY, setParetoOptimalPointsY] = useState([]);
-    const [colorOfD, setColorOfD] = useState('#fff')
     const [xAxisLabel, setXAxisLabel] = useState(null);
 
     function getRandomColor() {
@@ -61,12 +64,9 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
         return `hsla(${hue},80%,50%,0.8)`
     }
 
-    function deselectAllPoints() {
-        setSelectedPoints([])
-        setIdOfSelectedPoints({})
-        setIncrementalSelectionId(1)
+    function deselectAllPointsAndD() {
+        dispatch(deselectAllPoints())
         setColors(Array(numThresholds * numThresholds).fill('#ffffff'))
-        setColorOfD('#fff')
     }
 
     function patternMapper(pattern) {
@@ -262,23 +262,14 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
         setXAxisLabel(xaxislabel)
     }
 
-    function selectEvaluationOfD() {
-        if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
-            setColorOfD('orange')
-            setSelectedPoints([-1]);
-            let idOfSelectedPoints = {}
-            idOfSelectedPoints[-1] = incrementalSelectionId
-            setIdOfSelectedPoints(idOfSelectedPoints);
-            setIncrementalSelectionId(2)
-        }
-    }
-
     useEffect(() => {
-        deselectAllPoints()
+        deselectAllPointsAndD()
         setNumThresholds(11)
         const maxUnfairness = updateThresholdCalculations()
         updateEvaluationOfD(maxUnfairness)
-        selectEvaluationOfD()
+        if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
+            dispatch(selectEvaluationOfD())
+        }
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
@@ -295,7 +286,7 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
     }, [pattern, group1, group2, subjectsCurrency]);
 
     useEffect(() => {
-        deselectAllPoints()
+        deselectAllPointsAndD()
     }, [numThresholds]);
 
     useEffect(() => {
@@ -318,7 +309,7 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
             }
             <br/><br/>
             <div>
-                <button onClick={deselectAllPoints}>
+                <button onClick={deselectAllPointsAndD}>
                     Deselect all points
                 </button>
             </div>
@@ -391,36 +382,19 @@ function ParetoPlot({selectedPoints, setSelectedPoints, idOfSelectedPoints, setI
                     }
                     var indexOfSelectedPoint = selectedPoints.indexOf(selectedPoint)
                     if (indexOfSelectedPoint > -1) {
-                        // deselect point and remove from list
-                        selectedPoints.splice(indexOfSelectedPoint, 1)
-                        delete idOfSelectedPoints[selectedPoint]
-                        if (selectedPoint === -1) {
-                            setColorOfD('#fff')
-                        } else {
-                            newColors[selectedPoint] = '#ffffff'
+                        dispatch(deleteSelectedPoint({'index': indexOfSelectedPoint, 'selectedPoint': selectedPoint}))
+                        if (selectedPoint !== -1) {
+                            newColors[selectedPoint] = '#fff'
                         }
                     } else {
                         // select point and add to list
-                        selectedPoints.push(selectedPoint)
-
-                        if (selectedPoint === -1) {
-                            idOfSelectedPoints[selectedPoint] = {
-                                id: incrementalSelectionId,
-                                decisionMakerUtility: evaluationOfD[1],
-                                fairnessScore: evaluationOfD[0]
-                            }
-                            setColorOfD('orange')
-                        } else {
-                            idOfSelectedPoints[selectedPoint] = incrementalSelectionId
+                        dispatch(addSelectedPoint(selectedPoint))
+                        if (selectedPoint !== -1) {
                             newColors[selectedPoint] = getRandomColor()
                         }
-                        
-                        setIncrementalSelectionId(incrementalSelectionId + 1)
                     }
                     setColors(newColors)
-                    setSelectedPoints([...selectedPoints]);
-                    setIdOfSelectedPoints(idOfSelectedPoints);
-                    }}
+                }}
             />
         </div>
       );

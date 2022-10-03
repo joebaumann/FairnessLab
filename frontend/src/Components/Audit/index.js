@@ -10,15 +10,10 @@ import ScoreDistribution from '../ScoreDistribution';
 import SubjectsUtility from '../SubjectsUtility';
 
 function Audit(props) {
-  // loads the state for a specific demo if the audit page was accessed from the compas case study
-  
   // the datasetSelectionCounter is incremented every time the datasetSelection or the justifier changes
   // this makes sure that the decision subject utilities are recalculated after the justifier has been applied to the dataset
   const [datasetSelectionCounter, setDatasetSelectionCounter] = useState(0);
-  const [selectedPoints, setSelectedPoints] = useState([]);
-  const [idOfSelectedPoints, setIdOfSelectedPoints] = useState({});
-  const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);
-  const [evaluationOfD, setEvaluationOfD] = useState([0, 0]);
+  // const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);
   const [colors, setColors] = useState(Array(11 * 11).fill('#4e87ad'));
 
   return(
@@ -29,10 +24,10 @@ function Audit(props) {
         <Terminology/>
         <Configuration demo={props.match.params.demo}/>
         <h1>Audit</h1>
-        <SubjectsUtility selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} colors={colors} evaluationOfD={evaluationOfD} />
-        <ParetoPlot demo={props.match.params.demo} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints} idOfSelectedPoints={idOfSelectedPoints} setIdOfSelectedPoints={setIdOfSelectedPoints} incrementalSelectionId={incrementalSelectionId} setIncrementalSelectionId={setIncrementalSelectionId} colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} evaluationOfD={evaluationOfD} setEvaluationOfD={setEvaluationOfD} />
-        <SelectedPointsTable selectedPoints={selectedPoints} idOfSelectedPoints={idOfSelectedPoints} evaluationOfD={evaluationOfD} />
-        <ScoreDistribution selectedPoints={selectedPoints} colors={colors} />
+        <SubjectsUtility colors={colors} />
+        <ParetoPlot demo={props.match.params.demo} colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} />
+        <SelectedPointsTable />
+        <ScoreDistribution colors={colors} />
       </div>
     </div>
   )

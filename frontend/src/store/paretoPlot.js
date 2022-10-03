@@ -8,7 +8,11 @@ const paretoPlotSlice = createSlice({
         subjectsUtility: [],
         fairnessScores: [],
         decisionMakerUtility: [],
-        colors: Array(121).fill('#4e87ad'),
+        evaluationOfD: [],
+        selectedPoints: [],
+        idOfSelectedPoints: {},
+        incrementalSelectionId: 1,
+        colorOfD: '#fff',
     },
     reducers: {
         changeNumThresholds(state, action) {
@@ -26,15 +30,46 @@ const paretoPlotSlice = createSlice({
         changeDecisionMakerUtility(state, action) {
             state.decisionMakerUtility = action.payload
         },
-        changeColors(state, action) {
-            state.colors = action.payload
+        changeEvaluationOfD(state, action) {
+            state.evaluationOfD = action.payload
+        },
+        changeSelectedPoints(state, action) {
+            state.selectedPoints = action.payload
+        },
+        deleteSelectedPoint(state, action) {
+            state.selectedPoints.splice(action.payload.index, 1)
+            delete state.idOfSelectedPoints[action.payload.selectedPoint]
+            if (action.payload.selectedPoint === -1) {
+                state.colorOfD = '#fff'
+            }
+        },
+        addSelectedPoint(state, action) {
+            state.selectedPoints.push(action.payload)
+
+            if (action.payload === -1) {
+                state.colorOfD = 'orange'
+            }
+            state.idOfSelectedPoints[action.payload] = state.incrementalSelectionId
+            state.incrementalSelectionId += 1
+        },
+        deselectAllPoints(state, action) {
+            state.selectedPoints = []
+            state.idOfSelectedPoints = {}
+            state.incrementalSelectionId = 1
+            state.colorOfD = '#fff'
+        },
+        selectEvaluationOfD(state, action) {
+            state.selectedPoints = [-1]
+            state.idOfSelectedPoints[-1] = 1
+            state.incrementalSelectionId = 2
+            state.colorOfD = 'orange'
         },
     }
 })
 
 const { actions, reducer } = paretoPlotSlice
 
-export const { changeNumThresholds, changeThresholdTuples, changeSubjectsUtility, changeFairnessScores, changeDecisionMakerUtility, changeColors } = actions
+export const { changeNumThresholds, changeThresholdTuples, changeSubjectsUtility, changeFairnessScores, changeDecisionMakerUtility, changeEvaluationOfD, changeSelectedPoints, deleteSelectedPoint, addSelectedPoint, deselectAllPoints, selectEvaluationOfD } = actions
 
 export default reducer
 
@@ -44,4 +79,7 @@ export const getThresholdTuples = state => state.paretoPlot.thresholdTuples
 export const getSubjectsUtility = state => state.paretoPlot.subjectsUtility
 export const getFairnessScores = state => state.paretoPlot.fairnessScores
 export const getDecisionMakerUtility = state => state.paretoPlot.decisionMakerUtility
-export const getColors = state => state.paretoPlot.colors
+export const getEvaluationOfD = state => state.paretoPlot.evaluationOfD
+export const getSelectedPoints = state => state.paretoPlot.selectedPoints
+export const getIdOfSelectedPoints = state => state.paretoPlot.idOfSelectedPoints
+export const getColorOfD = state => state.paretoPlot.colorOfD
