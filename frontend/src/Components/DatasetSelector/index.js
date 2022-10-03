@@ -1,10 +1,14 @@
 import './DatasetSelector.css';
 import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import compas_file from '../../data_static/compas/compas.json';
 import german_file from '../../data_static/credit_lending/german.json';
 import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 
-function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData, setUnfilteredData, justifier, datasetSelectionCounter, setDatasetSelectionCounter}) {
+import { getDatasetSelection, changeDatasetSelection, changeFilteredData, changeUnfilteredData } from '../../store/dataset';
+import { getJustifier } from '../../store/fairnessScore';
+
+function DatasetSelector({demo, datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -19,6 +23,13 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             'file': []
         }
     }
+
+    const datasetSelection = useSelector(getDatasetSelection)
+    const justifier = useSelector(getJustifier);
+    const dispatch = useDispatch ()
+    function setDatasetSelection(selection) {dispatch(changeDatasetSelection(selection))}
+    function setFilteredData(data) {dispatch(changeFilteredData(data))}
+    function setUnfilteredData(data) {dispatch(changeUnfilteredData(data))}
 
     const [uploadedData, setUploadedData] = useState([]);
     const [fileError, setFileError] = useState(false);
@@ -183,6 +194,11 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
 
     useEffect(() => {
         processData()
+        console.log('demo', demo)
+        if (demo === "compasaudit1" || demo === "compasaudit2") {
+            console.log('change selection')
+            setDatasetSelection('COMPAS')
+        }
     }, []);
     
     useEffect(() => {
@@ -193,20 +209,19 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
             processData()
     }, [uploadedData, datasetSelection]);
 
-    // TODO: Not  working atm, fix this
-    // useEffect(() => {
-    //     if (uploadedData.length !== 0) {
-    //         setDatasetSelection('Own')
-    //     }
-    // }, [uploadedData]);
+    useEffect(() => {
+        if (uploadedData.length !== 0) {
+            setDatasetSelection('Own')
+        }
+    }, [uploadedData]);
 
     return(
         <div className="DatasetSelector">
         <h1>Dataset</h1>
         <div>Choose a dataset that you want to audit.</div>
         <br/>
-        <span value={datasetSelection} onChange={(e) => setDatasetSelection(e.target.value)}>
-            <input name="datasetSelection" type="radio" value="COMPAS" defaultChecked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
+        <span value={datasetSelection}>
+            <input name="datasetSelection" type="radio" value="COMPAS" onChange={(e) => setDatasetSelection(e.target.value)} checked={datasetSelection === "COMPAS"} /> <b>COMPAS</b>
             <div className="datasetExplanation">
                 The COMPAS dataset was collected by ProPublica for their article "Machine Bias." We preprocessed the dataset to make it usable for this demo. The predicted scores are the original (decimal) scores from COMPAS.
                 <ul>
@@ -220,7 +235,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                 <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/compas/Compas%20Analysis%20-%20Unifying%20framework.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="German" defaultChecked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
+            <input name="datasetSelection" type="radio" value="German" onChange={(e) => setDatasetSelection(e.target.value)} checked={datasetSelection === "German"} /> <b>Credit lending (UCI German Credit)</b>
             <div className="datasetExplanation">
                 The German Credit dataset is available in the UCI repository. It is a small dataset of German credit loans from the 1970s. The scores have been predicted with a vanilla logistic regression.
                 <ul>
@@ -234,7 +249,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                 <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/credit_lending/UCI%20German%20Credit.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" defaultChecked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
+            <input name="datasetSelection" type="radio" value="ACSEmploymentCA" onChange={(e) => setDatasetSelection(e.target.value)} checked={datasetSelection === "ACSEmploymentCA"} /> <b>ACSEmployment (California)</b>
             <div className="datasetExplanation">
                 The ACSEmployment dataset is derived from US Census data and is available through the Folktables GitHub repository. It is a large dataset of US adults from California. The task is to predict whether an individual is employed. The scores have been predicted with a vanilla logistic regression.
                 <ul>
@@ -248,7 +263,7 @@ function DatasetSelector({datasetSelection, setDatasetSelection, setFilteredData
                 <a href="https://colab.research.google.com/drive/1R_UgSktEOFPccktXDis8VakEFJwuEvmd?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
             <br/>
-            <input name="datasetSelection" type="radio" value="Own" defaultChecked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
+            <input name="datasetSelection" type="radio" value="Own" onChange={(e) => setDatasetSelection(e.target.value)} checked={datasetSelection === "Own"} /> <b>Choose your own dataset:</b>
         </span>
         <input type="file" name="file" onChange={selectFile} />
         <div className="datasetExplanation">
