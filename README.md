@@ -1,9 +1,10 @@
-# FairnessLab
+# :balance_scale: FairnessLab
 
 ![Continuous Deployment](https://github.com/joebaumann/FairnessLab/workflows/Deploy/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 The FairnessLab is an open-source tool for bias audits. It can be used to audit binary decision-making systems.
-What sets the FairnessLab apart from existing tools: It allows you to create fairness metrics that are uniquely fit to your own application context. This is based on the idea that fairness is highly contextual, so the way we evaluate the fairness of the audited system has to be adapted to the context. This can only be done by clarifying what assumptions we make about the context in which the audited system will be deployed. The FairnessLab asks for these assumptions and derives a fairness metric that fits this context. This approach is based on our theoretical framework for unifying and extending existing definitions of group fairness [[Hertweck et al. (2022)](https://arxiv.org/abs/2206.02891), [Baumann et al. (2022)](https://arxiv.org/abs/2206.02897)]. The resulting context-specific fairness metrics alleviate many of the limitations of current group fairness metrics that have been criticized.
+What sets the FairnessLab apart from existing tools is that it allows you to create fairness metrics that are uniquely fit to your own application context. This is based on the idea that fairness is highly contextual, so the way we evaluate the fairness of the audited system has to be adapted to the context. This can only be done by clarifying what assumptions we make about the context in which the audited system will be deployed. The FairnessLab asks for these assumptions and derives a fairness metric that fits this context. This approach is based on our theoretical framework for unifying and extending existing definitions of group fairness [[Hertweck et al. (2022)](https://arxiv.org/abs/2206.02891), [Baumann et al. (2022)](https://arxiv.org/abs/2206.02897)]. The resulting context-specific fairness metrics alleviate many of the limitations of current group fairness metrics that have been criticized.
 
 ## Demo
 
@@ -13,7 +14,7 @@ You can see the FairnessLab in action if you read through this audit of the COMP
 
 ![FairnessLabDemo](demo/demo.gif)
 
-## Run WebApp locally:
+## Run WebApp locally
 
 ```
 git clone https://github.com/joebaumann/FairnessLab.git
@@ -27,7 +28,7 @@ npm start
 ```
 This should automatically open the WebApp at <http://localhost:3000/>.
 
-## Deploy WebApp:
+## Deploy WebApp
 
 Make sure that you are in the frontend directory with:
 ```
