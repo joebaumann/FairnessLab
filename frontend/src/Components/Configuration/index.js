@@ -213,12 +213,16 @@ function Configuration({demo}) {
                 <p>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? For example, one could argue that the subgroup of people with Y=1 is deserves a higher (or lower) utility than people with Y=0.</p>
                 <div>Define the subgroup in which people are deserving of the same amount of utility:</div>
 
-                <div onChange={(e) => setJustifier(e.target.value)}>
-                    <input type="radio" value="no_justifier" name="justifier" defaultChecked={justifier === 'no_justifier'} /> None
-                    <input type="radio" value="y_0" name="justifier" defaultChecked={justifier === 'y_0'} /> Y=0
-                    <input type="radio" value="y_1" name="justifier" defaultChecked={justifier === 'y_1'} /> Y=1
-                    <input type="radio" value="d_0" name="justifier" defaultChecked={justifier === 'd_0'} /> D=0
-                    <input type="radio" value="d_1" name="justifier" defaultChecked={justifier === 'd_1'} /> D=1
+                <div>
+                    <input type="radio" value="no_justifier" name="justifier" checked={justifier === 'no_justifier'} onChange={(e) => setJustifier(e.target.value)} /> Everyone deserves the same utility
+                    <br/>
+                    <input type="radio" value="y_0" name="justifier" checked={justifier === 'y_0'} onChange={(e) => setJustifier(e.target.value)} /> People with Y=0 deserve the same utility
+                    <br/>
+                    <input type="radio" value="y_1" name="justifier" checked={justifier === 'y_1'} onChange={(e) => setJustifier(e.target.value)} /> People with Y=1 deserve the same utility
+                    <br/>
+                    <input type="radio" value="d_0" name="justifier" checked={justifier === 'd_0'} onChange={(e) => setJustifier(e.target.value)} /> People with D=0 deserve the same utility
+                    <br/>
+                    <input type="radio" value="d_1" name="justifier" checked={justifier === 'd_1'} onChange={(e) => setJustifier(e.target.value)} /> People with D=1 deserve the same utility
                 </div>
 
                 <h3>Decision subjects' utility</h3>
