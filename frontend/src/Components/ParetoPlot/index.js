@@ -7,7 +7,7 @@ import '../../config';
 
 import { getDatasetSelection, getFilteredData, getUnfilteredData } from '../../store/dataset';
 import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from '../../store/decisionMaker';
-import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight } from '../../store/fairnessScore';
+import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight, getFairnessScoreDescription } from '../../store/fairnessScore';
 import { addSelectedPoint, changeDecisionMakerUtility, changeEvaluationOfD, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, deleteSelectedPoint, deselectAllPoints, getColorOfD, getDecisionMakerUtility, getEvaluationOfD, getFairnessScores, getNumThresholds, getSelectedPoints, getThresholdTuples, selectEvaluationOfD } from '../../store/paretoPlot';
 
 function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
@@ -43,6 +43,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
     const prioritarianismWeight = useSelector(getPrioritarianismWeight);
     const filteredData = useSelector(getFilteredData);
     const unfilteredData = useSelector(getUnfilteredData);
+    const fairnessScoreDescription = useSelector(getFairnessScoreDescription)
     
     const fairnessScores = useSelector(getFairnessScores);
     const decisionMakerUtility = useSelector(getDecisionMakerUtility);
@@ -198,21 +199,17 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
             setDecisionMakerUtility(combineThresholds(numThresholds, unfilteredData['scores'][0], unfilteredData['scores'][1], unfilteredData['y'][0], unfilteredData['y'][1], utility, sum, [dmuTP, dmuFP, dmuFN, dmuTN], [dmuTP, dmuFP, dmuFN, dmuTN]))
             let combineFunction = patternMapper(pattern)
             let fairnessScores = combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, combineFunction, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2])
-            // TODO: Add evaluation of D here
-            let maxUnfairness = undefined
             if (pattern === "egalitarianism") {
-                maxUnfairness = Math.max(...fairnessScores)
                 fairnessScores = fairnessScores.map(function(s, i) {
-                    return maxUnfairness - s;
+                    return -s;
                 });
             }
             setFairnessScores(fairnessScores)
             setSubjectsUtility(combineThresholds(numThresholds, filteredData['scores'][0], filteredData['scores'][1], filteredData['y'][0], filteredData['y'][1], averageUtility, tuple, [suTP1, suFP1, suFN1, suTN1], [suTP2, suFP2, suFN2, suTN2]))
-            return maxUnfairness
         }
     }
 
-    function updateEvaluationOfD(maxUnfairness) {
+    function updateEvaluationOfD() {
         let evaluationOfD = []
         if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
             let decisionMakerUtility_A = calculateUtilityFromDecisions(unfilteredData['d'][0], unfilteredData['y'][0], [dmuTP, dmuFP, dmuFN, dmuTN])
@@ -223,7 +220,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
             let combineFunction = patternMapper(pattern)
             let fairnessScore = combineFunction(fairnessValue_A, fairnessValue_B)
             if (pattern === "egalitarianism") {
-                fairnessScore = maxUnfairness - fairnessScore
+                fairnessScore = -fairnessScore
             }
             evaluationOfD = [fairnessScore, decisionMakerUtility, [fairnessValue_A, fairnessValue_B]]
         }
@@ -245,45 +242,24 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
         setParetoOptimalPointsY(paretoY)
     }
 
-    function updateXAxisLabel() {
-        let xaxislabel = 'Fairness score<br>'
-        if (pattern === 'egalitarianism') {
-            xaxislabel += `Maximum difference in average utility - absolute difference in average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
-        }
-        if (pattern === 'maximin') {
-            xaxislabel += `Minimum average utility of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
-        }
-        if (pattern === 'sufficientarianism') {
-            xaxislabel += `Number of groups with average utility above threshold (min: 0 groups, max: 2 groups)`
-        }
-        if (pattern === 'prioritarianism') {
-            xaxislabel += `Weighted sum of average utilities of ${group1} and ${group2} (in ${subjectsCurrency.replace('*', '')})`
-        }
-        setXAxisLabel(xaxislabel)
-    }
-
     useEffect(() => {
         deselectAllPointsAndD()
         setNumThresholds(11)
-        const maxUnfairness = updateThresholdCalculations()
-        updateEvaluationOfD(maxUnfairness)
+        updateThresholdCalculations()
+        updateEvaluationOfD()
         if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
             dispatch(selectEvaluationOfD())
         }
     }, [datasetSelection, datasetSelectionCounter]);
 
     useEffect(() => {
-        const maxUnfairness = updateThresholdCalculations()
-        updateEvaluationOfD(maxUnfairness)
+        updateThresholdCalculations()
+        updateEvaluationOfD()
     }, [suTP1, suFP1, suFN1, suTN1, suTP2, suFP2, suFN2, suTN2, dmuTP, dmuFP, dmuFN, dmuTN, pattern, sufficientarianismThreshold, prioritarianismWeight, numThresholds]);
 
     useEffect(() => {
         updateParetoFront()
     }, [fairnessScores, decisionMakerUtility]);
-
-    useEffect(() => {
-        updateXAxisLabel()
-    }, [pattern, group1, group2, subjectsCurrency]);
 
     useEffect(() => {
         deselectAllPointsAndD()
@@ -296,7 +272,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
     return (
         <div className='ParetoPlot'>
             <h2>Pareto plot</h2>
-            With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules.
+            With the decision maker utility and a fairness metric specified, we can take a simple approach to show the trade-offs between these metrics: We go through different decision rules and calculate the metrics associated with each of them, i.e., the decision maker's utility and the fairness score. For each decision rule, we then plot the associated decision maker’s utility and fairness score in a 2D plot. We use group-specific thresholds as decision rules. Select threshold rules that you want to compare by clicking on the points in the plot.
             <br/><br/>
             <b>Decision maker's utility</b>: Higher is better (total utility for the {unfilteredData['y'][0].length + unfilteredData['y'][1].length} individuals in the dataset)
             <br/>
@@ -339,7 +315,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
                     type: 'scatter',
                     hovertemplate: '<b>Decision maker\'s utility</b>: %{y:.2f}' +
                     '<br><b>Fairness score</b>: %{x:.4f}<br>' +
-                    '<b>Thresholds</b>: %{text}',
+                    `<b>Thresholds</b>: ${group1}: %{text[0]}, ${group2}: %{text[1]}`,
                     text: thresholdTuples,
                     name: 'Decision rule'
                 },
@@ -358,17 +334,17 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
                         }
                     },
                     type: 'scatter',
-                    hovertemplate: '<b>Decisions from dataset</b>' +
+                    hovertemplate: '<b>Decisions from dataset (column D)</b>' +
                     '<br><b>Decision maker\'s utility</b>: %{y:.2f}' +
                     '<br><b>Fairness score</b>: %{x:.4f}<br>',
-                    name: 'Decisions from dataset'
+                    name: 'Decisions from dataset (column D)'
                 },
                 ]}
 
                 layout={ {
                     width: 1000,
                     height: 800,
-                    xaxis: { title: xAxisLabel},
+                    xaxis: { title: `Fairness score<br>${fairnessScoreDescription}`},
                     yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
                     hovermode:'closest',
                 } }

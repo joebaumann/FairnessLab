@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { getDatasetSelection } from '../../store/dataset';
 import { getDecisionMakerCurrency, changeDecisionMakerCurrency, changeDmuTP, changeDmuFP, changeDmuFN, changeDmuTN, getDmuTP, getDmuFP, getDmuFN, getDmuTN } from '../../store/decisionMaker';
-import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier, getSufficientarianismThreshold, getPrioritarianismWeight, changeSufficientarianismThreshold, changePrioritarianismWeight } from '../../store/fairnessScore';
+import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier, getSufficientarianismThreshold, getPrioritarianismWeight, changeSufficientarianismThreshold, changePrioritarianismWeight, updateFairnessScoreDescription, getFairnessScoreDescription } from '../../store/fairnessScore';
 import { getD0Description, getD1Description, getY0Description, getY1Description } from '../../store/terminology';
 
 function Configuration({demo}) {
@@ -177,6 +177,10 @@ function Configuration({demo}) {
         }
     }, [correspondingFairnessMetric, correspondingWeightedFairnessMetric]);
 
+    useEffect(() => {
+        dispatch(updateFairnessScoreDescription())
+    }, [pattern, group1, group2, subjectsCurrency]);
+
     return (
         <div className='ParetoPlot'>
             <div className='ParetoConfiguration'>
@@ -186,7 +190,7 @@ function Configuration({demo}) {
                 <b>How much utility does the decision maker derive from the decisions?</b>
 
                 <h3>Currency of the decision maker</h3>
-                <span>In what unit do you want to measure the utility of the decision maker (e.g., dollar, well-being)?</span>
+                <span>In what unit do you want to measure the utility of the decision maker (e.g., USD, well-being)?</span>
                 <input type="text" value={decisionMakerCurrency} onChange={(e) => setDecisionMakerCurrency(e.target.value)}/>
 
                 <h3>Quantification of the decision maker's utility</h3>
@@ -200,16 +204,16 @@ function Configuration({demo}) {
                 <h2>Fairness score</h2>
                 <b>How should the utility of the decision subjects be distributed?</b>
                 
-                <h3>Socio-demographic groups</h3>
-                <div>Which socio-demographic groups do you want to compare?</div>
+                <h3>Sensitive attribute</h3>
+                <div>What are the two groups that you want to compare and that are defined by the 'sensitive-attribute' column?</div>
 
-                <label htmlFor="group1">Group 1</label>
+                <label htmlFor="group1">Group A (sensitive-attribute=0)</label>
                 <input type="text" id="group1" value={group1} onChange={(e) => setGroup1(e.target.value)}/>
                 <br/>
-                <label htmlFor="group2">Group 2</label>
+                <label htmlFor="group2">Group B (sensitive-attribute=1)</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
 
-                <h3>Claims differentiator (or justifier)</h3>
+                <h3>Claims differentiator</h3>
                 <p>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? For example, one could argue that the subgroup of people with Y=1 is deserves a higher (or lower) utility than people with Y=0.</p>
                 <div>Define the subgroup in which people are deserving of the same amount of utility:</div>
 
@@ -229,7 +233,7 @@ function Configuration({demo}) {
                 <div>How much utility do the decision subjects derive from the decisions?</div>
 
                 <h4>Currency of decision subjects</h4>
-                <span>In what unit do you want to measure the utility of the decision subject (e.g., dollar, well-being)?</span>
+                <span>In what unit do you want to measure the utility of the decision subject (e.g., USD, well-being)?</span>
                 <input type="text" value={subjectsCurrency} onChange={(e) => setSubjectsCurrency(e.target.value)}/>
 
                 <h4>Quantification of the decision subjects' utility</h4>
@@ -253,15 +257,15 @@ function Configuration({demo}) {
                 <UtilityQuantifier value={suTN2} setSliderValue={setSuTN2} disabled={justifier==="y_1" || justifier==="d_1"} unit={subjectsCurrency} label={"How much utility does " + y0description + " derive from getting " + d0description + "?"}/>
                 
                 <h3>Pattern of Justice</h3>
-                <div>How should the utility be distributed between the socio-demographic groups?</div><br/>
+                <div>How should the utility be distributed between the two groups (defined by the sensitive attribute)?</div><br/>
                 <div><b>Egalitarianism</b>: Fairness is if individuals in both groups are expected to derive the same utility from the decision rule. Equality in itself is valued.</div>
-                <div>→ Measured as: <b>How close are the average utilities to being equal?</b></div>
+                <div>→ Measured as: <i>How close are the average utilities to being equal?</i></div>
                 <div><b>Maximin</b>: Fairness is if the average utility of the worst-off group is maximized by the decision rule. Inequalities are okay if they benefit the worst-off group.</div>
-                <div>→ Measured as: <b>What’s the lowest average utility?</b></div>
+                <div>→ Measured as: <i>What’s the lowest average utility?</i></div>
                 <div><b>Prioritarianism</b>: Fairness is if the aggregated utility of the groups is maximized by the decision rule, with the utility of the worst-off group being weighted higher than the other groups' utilities.</div>
-                <div>→ Measured as: <b>What’s the aggregated utility with the worst-off group having a higher weight?</b></div>
+                <div>→ Measured as: <i>What’s the aggregated utility with the worst-off group having a higher weight?</i></div>
                 <div><b>Sufficientarianism</b>: Fairness is if all groups' have an average utility that is above the defined threshold. Inequalities are okay if every group is above the defined threshold.</div>
-                <div>→ Measured as: <b>How many groups are above the defined threshold?</b></div>
+                <div>→ Measured as: <i>How many groups are above the defined threshold?</i></div>
                 <br/>
 
                 <label htmlFor="pattern">Choose a pattern:</label>
@@ -271,6 +275,8 @@ function Configuration({demo}) {
                 <option value="prioritarianism">prioritarianism</option>
                 <option value="sufficientarianism">sufficientarianism</option>
                 </select>
+                <br/>
+                <i>If you're unsure what to use here, we recommend egalitarianism.</i>
 
                 {pattern === 'sufficientarianism' &&
                     <div>

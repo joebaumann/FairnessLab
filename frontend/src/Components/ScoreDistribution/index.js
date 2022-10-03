@@ -29,7 +29,11 @@ const ScoreDistribution = ({colors}) => {
     type: "histogram",
     name: 'Y=1',
     marker: {
-      color: "rgba(30, 132, 201, 0.4)",
+      color: "rgba(4, 111, 184, 0.4)",
+      line: {
+        color: 'rgba(4, 111, 184, 1)',
+        width: 1
+      }
     },
   };
   const trace_group1_Y0 = {
@@ -38,6 +42,10 @@ const ScoreDistribution = ({colors}) => {
     name: 'Y=0',
     marker: {
         color: "rgba(98, 182, 239, 0.4)",
+        line: {
+          color: 'rgba(98, 182, 239, 1)',
+          width: 1
+        }
     },
   };
   const dataGroup1 = [trace_group1_Y1, trace_group1_Y0]
@@ -59,7 +67,11 @@ const ScoreDistribution = ({colors}) => {
       type: "histogram",
       name: 'Y=1',
       marker: {
-          color: "rgba(207, 122, 37, 0.4)",
+          color: "rgba(186, 94, 2, 0.4)",
+          line: {
+            color: 'rgba(186, 94, 2, 1)',
+            width: 1
+          }
       },
   };
   const trace_group2_Y0 = {
@@ -68,6 +80,10 @@ const ScoreDistribution = ({colors}) => {
     name: 'Y=0',
     marker: {
         color: "rgba(255, 177, 101, 0.4)",
+        line: {
+          color: 'rgba(255, 177, 10, 1)',
+          width: 1
+        }
     },
   };
   const dataGroup2 = [trace_group2_Y1, trace_group2_Y0]

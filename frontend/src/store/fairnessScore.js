@@ -18,6 +18,7 @@ const fairnessScoreSlice = createSlice({
         pattern: 'egalitarianism',
         sufficientarianismThreshold: 0.5,
         prioritarianismWeight: 2,
+        fairnessScoreDescription: '',
     },
     reducers: {
         changeSubjectsCurrency(state, action) {
@@ -65,12 +66,23 @@ const fairnessScoreSlice = createSlice({
         changePrioritarianismWeight(state, action) {
             state.prioritarianismWeight = action.payload
         },
+        updateFairnessScoreDescription(state, action) {
+            if (state.pattern === 'egalitarianism') {
+                state.fairnessScoreDescription = `Negative absolute difference in average utility of ${state.group1} and ${state.group2} (so 0 is perfect equality)`
+            } else if (state.pattern === 'maximin') {
+                state.fairnessScoreDescription = `Minimum average utility of ${state.group1} and ${state.group2} (in ${state.currency.replace('*', '')})`
+            } else if (state.pattern === 'sufficientarianism') {
+                state.fairnessScoreDescription += `Number of groups with average utility above threshold (min: 0 groups, max: 2 groups)`
+            } else if (state.pattern === 'prioritarianism') {
+                state.fairnessScoreDescription = `Weighted sum of average utilities of ${state.group1} and ${state.group2} (in ${state.currency.replace('*', '')})`
+            }
+        }
     }
 })
 
 const { actions, reducer } = fairnessScoreSlice
 
-export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2, changeJustifier, changePattern, changeSufficientarianismThreshold, changePrioritarianismWeight } = actions
+export const { changeSubjectsCurrency, changeSuTP1, changeSuFP1, changeSuFN1, changeSuTN1, changeSuTP2, changeSuFP2, changeSuFN2, changeSuTN2, changeGroup1, changeGroup2, changeJustifier, changePattern, changeSufficientarianismThreshold, changePrioritarianismWeight, updateFairnessScoreDescription } = actions
 
 export default reducer
 
@@ -90,3 +102,4 @@ export const getJustifier = state => state.fairnessScore.justifier
 export const getPattern = state => state.fairnessScore.pattern
 export const getSufficientarianismThreshold = state => state.fairnessScore.sufficientarianismThreshold
 export const getPrioritarianismWeight = state => state.fairnessScore.prioritarianismWeight
+export const getFairnessScoreDescription = state => state.fairnessScore.fairnessScoreDescription

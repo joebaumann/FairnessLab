@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Plot from 'react-plotly.js';
 import './SubjectsUtility.css';
-import { getGroup1, getGroup2 } from '../../store/fairnessScore';
+import { getFairnessScoreDescription, getGroup1, getGroup2 } from '../../store/fairnessScore';
 import { getEvaluationOfD, getFairnessScores, getIdOfSelectedPoints, getSelectedPoints, getSubjectsUtility } from '../../store/paretoPlot';
 
 
@@ -43,18 +43,17 @@ const SubjectsUtility = ({colors}) => {
     
     return (
         <div className='SubjectsUtility'>
-            <h2>Decision subjects' utility for fairness score calculation</h2>
+            <h2>Fairness score</h2>
             {selectedPoints.length === 0 && 
-            <b>Select at least one point in the pareto plot to see something.<br/><br/></b>
+            <b>Select at least one point in the Pareto plot below to see something.<br/><br/></b>
             }
-            <span>Here you can see a direct comparison of the fairness scores for the selected points. The higher the score, the better the decision rule aligns with the configured fairness metric.</span>
-            <br/>
+            <span>Here, you can see a direct comparison of the fairness scores (for the points selected in the Pareto plot below). The higher the score, the better the decision rule aligns with the configured fairness metric. The lower the score, the worse its alignment with the fairness metric is.</span>
             <Plot
                 data={tracesFairnessScores}
 
                 layout = {
                     {
-                        title: 'Calculated fairness score',
+                        title: `Fairness score`,
                         xaxis: {
                             automargin: true,
                         }
@@ -62,8 +61,8 @@ const SubjectsUtility = ({colors}) => {
 
                 }
             />
-            <br/>
-            <span>Here you can see a direct comparison of the decision subjects' average utilities for the selected points.</span>
+            <h2>Decision subjects' utilities</h2>
+            <span>Here you can see a direct comparison of the decision subjects' average utilities (for the points selected in the Pareto plot below).</span>
             <br/>
             <Plot
                 data={tracesUtilities}

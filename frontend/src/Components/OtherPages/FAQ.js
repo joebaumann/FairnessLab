@@ -1,6 +1,7 @@
 import React from "react";
 import Header from '../Header';
 import './Pages.css'
+import pareto_explanation from './pareto_explanation.png';
 
 function FAQ() {
     return (
@@ -20,7 +21,7 @@ function FAQ() {
                 <li><b>D</b>: <i>binary (0 or 1)</i>, the decision of the model</li>
             </ul>
             <p>
-            Whether you upload a CSV or JSON file, you can always add more attributes to your file, but only the ones listed above will be considered.
+            Whether you upload a CSV or JSON file, you can always add more attributes to your file, but only the ones listed above will be considered. The order of the columns doesn't matter.
             </p>
             <p>
             If you want to upload your dataset as a <b>CSV</b> file, make sure to use a comma as the separator. The structure should look as follows:
@@ -84,6 +85,7 @@ function FAQ() {
             <p>
                 If 'D' is available: The decisions represented by 'D' are evaluated with respect to their fairness and their utility for the decision maker. This is then shown as a diamond in the Pareto plot. Together with the dots from the 'scores,' this allows for a comparison of the current decision rule with other possible threshold-based decision rules.
             </p>
+            <img src={pareto_explanation} alt="Visualization of how the Pareto plot is created: For every group, n thresholds are tested. For each the resulting n*n threshold combinations, the FairnessLab calculates the resulting decision maker’s utility and the fairness score." width="500" height="250"/>
 
             <h3>What makes the FairnessLab different from tools like Aequitas, AIF360 or FairLearn?</h3>
             <p>

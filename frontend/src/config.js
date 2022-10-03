@@ -32,8 +32,8 @@ module.exports = global.config = {
             'unit_DS': ''
         },
         'Own': {
-            'group1': 'group 1',
-            'group2': 'group 2',
+            'group1': 'group A',
+            'group2': 'group B',
             'd0': 'negative decision (D=0)',
             'd1': 'positive decision (D=1)',
             'y0': 'an individual of type Y=0',
