@@ -13,7 +13,6 @@ function Audit(props) {
   // the datasetSelectionCounter is incremented every time the datasetSelection or the justifier changes
   // this makes sure that the decision subject utilities are recalculated after the justifier has been applied to the dataset
   const [datasetSelectionCounter, setDatasetSelectionCounter] = useState(0);
-  // const [incrementalSelectionId, setIncrementalSelectionId] = useState(1);
   const [colors, setColors] = useState(Array(11 * 11).fill('#4e87ad'));
 
   return(
