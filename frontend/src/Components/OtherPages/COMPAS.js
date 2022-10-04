@@ -14,10 +14,10 @@ function COMPAS() {
 
   function compasaudit() {
     dispatch(changeDatasetSelection('COMPAS'))
-    dispatch(changeDmuTP(0))
+    dispatch(changeDmuTP(1))
     dispatch(changeDmuFP(-1))
     dispatch(changeDmuFN(-1))
-    dispatch(changeDmuTN(0))
+    dispatch(changeDmuTN(1))
     dispatch(changeSuTP1(0))
     dispatch(changeSuFP1(-1))
     dispatch(changeSuFN1(0))
@@ -47,7 +47,7 @@ function COMPAS() {
         <p>
           Use these buttons to follow our COMPAS use case study:
         </p>
-        Replication of <a href='https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing'  target='_blank'>ProPublica</a>:
+        Replication of <a href='https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing'  target='_blank'>ProPublica's audit</a>:
         <Button component={Link} to="/audit" onClick={compasaudit1}>
           Audit COMPAS "the old way"
         </Button>
