@@ -12,7 +12,7 @@ import { getDecisionMakerCurrency, changeDecisionMakerCurrency, changeDmuTP, cha
 import { getSubjectsCurrency, changeSubjectsCurrency, getSuTP1, changeSuTP1, getSuFP1, changeSuFP1, getSuFN1, changeSuFN1, getSuTN1, changeSuTN1, getSuTP2, changeSuTP2, getSuFP2, changeSuFP2, getSuFN2, changeSuFN2, getSuTN2, changeSuTN2, getGroup1, changeGroup1, getGroup2, changeGroup2, getPattern, changePattern, changeJustifier, getJustifier, getSufficientarianismThreshold, getPrioritarianismWeight, changeSufficientarianismThreshold, changePrioritarianismWeight, updateFairnessScoreDescription, getFairnessScoreDescription } from '../../store/fairnessScore';
 import { getD0Description, getD1Description, getY0Description, getY1Description } from '../../store/terminology';
 
-function Configuration({demo}) {
+function Configuration({}) {
 
     const dispatch = useDispatch ()
     function setDecisionMakerCurrency(currency) {dispatch(changeDecisionMakerCurrency(currency))}
@@ -35,7 +35,7 @@ function Configuration({demo}) {
     function setPattern(value) {dispatch(changePattern(value))}
     function setSufficientarianismThreshold(value) {dispatch(changeSufficientarianismThreshold(value))}
     function setPrioritarianismWeight(value) {dispatch(changePrioritarianismWeight(value))}
-    
+
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
     const subjectsCurrency = useSelector(getSubjectsCurrency)
@@ -146,23 +146,6 @@ function Configuration({demo}) {
         setDecisionMakerCurrency(global.config.datasets[datasetSelection]['unit_DM'])
         setSubjectsCurrency(global.config.datasets[datasetSelection]['unit_DS'])
     }, [datasetSelection]);
-
-    useEffect(() => {
-        if (demo === "compasaudit1" || demo === "compasaudit2") {
-            setDmuTP(0)
-            setDmuFP(-1)
-            setDmuFN(-1)
-            setDmuTN(0)
-            setSuFP2(-2)
-            setJustifier('y_0')
-            setPattern('egalitarianism')
-            if (demo === "compasaudit1") {
-                setSuFP1(-1)
-            } else if (demo === "compasaudit2") {
-                setSuFP1(-2)
-            }
-        }
-    }, [demo]);
     
     useEffect(() => {
         updateCorrespondsToExistingMetric()

@@ -8,7 +8,7 @@ import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 import { getDatasetSelection, changeDatasetSelection, changeFilteredData, changeUnfilteredData } from '../../store/dataset';
 import { getJustifier } from '../../store/fairnessScore';
 
-function DatasetSelector({demo, datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({datasetSelectionCounter, setDatasetSelectionCounter}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -194,11 +194,6 @@ function DatasetSelector({demo, datasetSelectionCounter, setDatasetSelectionCoun
 
     useEffect(() => {
         processData()
-        console.log('demo', demo)
-        if (demo === "compasaudit1" || demo === "compasaudit2") {
-            console.log('change selection')
-            setDatasetSelection('COMPAS')
-        }
     }, []);
     
     useEffect(() => {

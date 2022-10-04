@@ -22,15 +22,15 @@ function Audit(props) {
     <div className="Audit">
       <Header title="Audit"/>
       <div className="Content">
-        <DatasetSelector demo={props.match.params.demo} datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
+        <DatasetSelector datasetSelectionCounter={datasetSelectionCounter} setDatasetSelectionCounter={setDatasetSelectionCounter} />
         <Terminology/>
-        <Configuration demo={props.match.params.demo}/>
+        <Configuration/>
         <h1>Audit</h1>
         <h2>Resulting fairness metric</h2>
         In the audit, we will use the fairness metric that you defined with your inputs above. Specifically, we will look at the following fairness metric:
         <div><i>{fairnessScoreDescription}</i></div>
         <SubjectsUtility colors={colors} />
-        <ParetoPlot demo={props.match.params.demo} colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} />
+        <ParetoPlot colors={colors} setColors={setColors} datasetSelectionCounter={datasetSelectionCounter} />
         <SelectedPointsTable />
         <ScoreDistribution colors={colors} />
       </div>
