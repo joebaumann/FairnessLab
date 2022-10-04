@@ -28,14 +28,17 @@ npm start
 ```
 This should automatically open the WebApp at <http://localhost:3000/>.
 
-## Deploy WebApp
+## Limitations and future extensions
 
-Make sure that you are in the frontend directory with:
-```
-cd frontend
-```
-Then, deploy the React app to gh-pages with:
-```
-npm run deploy
-```
-The app is available at [https://joebaumann.github.io/FairnessLab](https://joebaumann.github.io/FairnessLab/).
+Any bias audit tool comes with limitations. Here are the main ones of the FairnessLab:
+- Can currently only audit _binary_ decision-making systems
+- Can currently only audit one model at a time
+- Can currently only build utility functions using Y, D and the sensitive attribute but no other features yet
+- Can currently only configure one fairness metric at a time
+- Should in the future show error bars in Pareto plot to assess statistical significance of efficiency-fairness tradeoffs
+
+More features will be added in the future to better reflect the flexibility of our theoretical approach.
+
+## Get in touch
+
+Do you want to audit a model using the FairnessLab or our approach and want to discuss this with us? Do you have ideas for how to improve the FairnessLab? Then don't hesitate to reach out to us: [Corinna](corinna.hertweck@uzh.ch) and [Joe](baumann@ifi.uzh.ch).
