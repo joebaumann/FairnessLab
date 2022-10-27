@@ -8,11 +8,9 @@
     height: 10vh;
   }
   
-@media (min-height: 800px), screen and (orientation: portrait) { 
-  .Navbar {
-    height: 8vh;
+  .Navbar-hamburger {
+    display: none;
   }
-}
 
   .Navbar-icon {
     background-color: transparent;
@@ -26,10 +24,21 @@
     float: left;
     padding: 1vh 3vh;
   }
+
+  .Navbar ul {
+    display: fkex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .Navbar ul li {
+    list-style-type: none;
+    padding-right: 10vw;
+  }
   
   .Navbar-link {
     float: left;
-    text-align: center;
     display: block;
     padding: 2.5vh 3vh 1vh;
     color: white;
@@ -45,4 +54,39 @@
   .active, .Navbar-link:hover {
     background-size: 80% 2px, auto;
     color: white;
+  }
+
+  @media (max-width: 767px) {
+    .Navbar-hamburger {
+      display: block;
+      float: left;
+      padding: 2vh 3vh;
+    }
+
+    .Navbar ul {
+      top: 10vh;
+      left: 0;
+      background-color: var(--main);
+      height: 35vh;
+      width: 50vw;
+      position: fixed;
+    }
+
+    ul.closed {
+      display: none;
+    }
+
+    ul.open {
+      display: inline;
+    }
+  }
+
+  @media (min-height: 800px), screen and (orientation: portrait) { 
+    .Navbar {
+      height: 8vh;
+    }
+
+    .Navbar ul {
+      top: 8vh;
+    }
   }

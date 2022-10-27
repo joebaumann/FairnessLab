@@ -341,11 +341,12 @@ function ParetoPlot({colors, setColors}) {
                 ]}
 
                 layout={ {
-                    width: 1000,
+                    width: '100%',
                     height: 800,
                     xaxis: { title: `Fairness score<br>${fairnessScoreDescription}`},
                     yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
                     hovermode:'closest',
+                    responsive: true
                 } }
 
                 onClick={(data) => {
