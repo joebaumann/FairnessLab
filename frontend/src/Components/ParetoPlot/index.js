@@ -341,7 +341,7 @@ function ParetoPlot({colors, setColors}) {
                 ]}
 
                 layout={ {
-                    width: '100%',
+                    width: 1000,
                     height: 800,
                     xaxis: { title: `Fairness score<br>${fairnessScoreDescription}`},
                     yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
