@@ -10,7 +10,7 @@ What sets the FairnessLab apart from existing tools is that it allows you to cre
 
 The app is publicly available at [https://joebaumann.github.io/FairnessLab](https://joebaumann.github.io/FairnessLab/).
 
-You can see the FairnessLab in action if you read through this audit of the COMPAS algorithm that provides new insights into the COMPAS bias discussions.
+You can see the FairnessLab in action if you read through this audit of the COMPAS algorithm that provides new insights into the COMPAS bias discussions: [COMPAS_audit_10Oct2022.pdf](COMPAS_audit_10Oct2022.pdf).
 
 ![FairnessLabDemo](demo/demo.gif)
 
