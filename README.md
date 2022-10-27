@@ -42,3 +42,18 @@ More features will be added in the future to better reflect the flexibility of o
 ## Get in touch
 
 Do you want to audit a model using the FairnessLab or our approach and want to discuss this with us? Do you have ideas for how to improve the FairnessLab? Then don't hesitate to reach out to us: [Corinna](mailto:corinna.hertweck@uzh.ch) and [Joe](mailto:baumann@ifi.uzh.ch).
+
+## Citing this work
+
+```
+@article{BaumannHertweck2022UnificationGroupFairness,
+    archivePrefix = {arXiv},
+    arxivId = {2206.02897},
+    author = {Baumann, Joachim and Hertweck, Corinna and Loi, Michele and Heitz, Christoph},
+    eprint = {2206.02897},
+    month = {jun},
+    title = {{Distributive Justice as the Foundational Premise of Fair ML: Unification, Extension, and Interpretation of Group Fairness Metrics}},
+    url = {http://arxiv.org/abs/2206.02897},
+    year = {2022}
+}
+```
