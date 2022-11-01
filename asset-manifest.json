@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/FairnessLab/static/css/main.06172896.chunk.css",
-    "main.js": "/FairnessLab/static/js/main.bd982e51.chunk.js",
-    "main.js.map": "/FairnessLab/static/js/main.bd982e51.chunk.js.map",
-    "runtime-main.js": "/FairnessLab/static/js/runtime-main.6b1cb85a.js",
-    "runtime-main.js.map": "/FairnessLab/static/js/runtime-main.6b1cb85a.js.map",
-    "static/js/2.74302f07.chunk.js": "/FairnessLab/static/js/2.74302f07.chunk.js",
-    "static/js/2.74302f07.chunk.js.map": "/FairnessLab/static/js/2.74302f07.chunk.js.map",
-    "static/js/3.fbdb1efb.chunk.js": "/FairnessLab/static/js/3.fbdb1efb.chunk.js",
-    "static/js/3.fbdb1efb.chunk.js.map": "/FairnessLab/static/js/3.fbdb1efb.chunk.js.map",
+    "main.css": "/FairnessLab/static/css/main.5c7ec529.chunk.css",
+    "main.js": "/FairnessLab/static/js/main.4d85144e.chunk.js",
+    "main.js.map": "/FairnessLab/static/js/main.4d85144e.chunk.js.map",
+    "runtime-main.js": "/FairnessLab/static/js/runtime-main.f18a191a.js",
+    "runtime-main.js.map": "/FairnessLab/static/js/runtime-main.f18a191a.js.map",
+    "static/js/2.afd415ee.chunk.js": "/FairnessLab/static/js/2.afd415ee.chunk.js",
+    "static/js/2.afd415ee.chunk.js.map": "/FairnessLab/static/js/2.afd415ee.chunk.js.map",
+    "static/js/3.3f753317.chunk.js": "/FairnessLab/static/js/3.3f753317.chunk.js",
+    "static/js/3.3f753317.chunk.js.map": "/FairnessLab/static/js/3.3f753317.chunk.js.map",
     "index.html": "/FairnessLab/index.html",
-    "static/css/main.06172896.chunk.css.map": "/FairnessLab/static/css/main.06172896.chunk.css.map",
-    "static/js/2.74302f07.chunk.js.LICENSE.txt": "/FairnessLab/static/js/2.74302f07.chunk.js.LICENSE.txt",
+    "static/css/main.5c7ec529.chunk.css.map": "/FairnessLab/static/css/main.5c7ec529.chunk.css.map",
+    "static/js/2.afd415ee.chunk.js.LICENSE.txt": "/FairnessLab/static/js/2.afd415ee.chunk.js.LICENSE.txt",
     "static/media/logo.672e0f8f.ico": "/FairnessLab/static/media/logo.672e0f8f.ico",
     "static/media/pareto_explanation.94c7707c.png": "/FairnessLab/static/media/pareto_explanation.94c7707c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.6b1cb85a.js",
-    "static/js/2.74302f07.chunk.js",
-    "static/css/main.06172896.chunk.css",
-    "static/js/main.bd982e51.chunk.js"
+    "static/js/runtime-main.f18a191a.js",
+    "static/js/2.afd415ee.chunk.js",
+    "static/css/main.5c7ec529.chunk.css",
+    "static/js/main.4d85144e.chunk.js"
   ]
 }
