@@ -8,7 +8,7 @@ import ACSEmploymentCA_file from '../../data_static/ACS/ACSEmployment_CA.json';
 import { getDatasetSelection, changeDatasetSelection, changeFilteredData, changeUnfilteredData } from '../../store/dataset';
 import { getJustifier } from '../../store/fairnessScore';
 
-function DatasetSelector({datasetSelectionCounter, setDatasetSelectionCounter}) {
+function DatasetSelector({}) {
     const datasets = {
         'COMPAS': {
             'file': compas_file
@@ -126,7 +126,6 @@ function DatasetSelector({datasetSelectionCounter, setDatasetSelectionCounter}) 
             setUnfilteredData({'y': [[],[]], 'scores': [[],[]], 'd': [[],[]]})
             setFileError(true)
         }
-        setDatasetSelectionCounter(datasetSelectionCounter + 1)
     }
 
     function applyJustifierToRow(row, justifier) {
@@ -198,11 +197,7 @@ function DatasetSelector({datasetSelectionCounter, setDatasetSelectionCounter}) 
     
     useEffect(() => {
         processData()
-    }, [datasetSelection, justifier]);
-    
-    useEffect(() => {
-            processData()
-    }, [uploadedData, datasetSelection]);
+    }, [datasetSelection, justifier, uploadedData]);
 
     useEffect(() => {
         if (uploadedData.length !== 0) {

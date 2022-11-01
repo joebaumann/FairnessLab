@@ -10,7 +10,7 @@ import { getDecisionMakerCurrency, getDmuFN, getDmuFP, getDmuTN, getDmuTP } from
 import { getSubjectsCurrency, getSuTP1, getSuFP1, getSuFN1, getSuTN1, getSuTP2, getSuFP2, getSuFN2, getSuTN2, getGroup1, getGroup2, getPattern, getSufficientarianismThreshold, getPrioritarianismWeight, getFairnessScoreDescription } from '../../store/fairnessScore';
 import { addSelectedPoint, changeDecisionMakerUtility, changeEvaluationOfD, changeFairnessScores, changeNumThresholds, changeSubjectsUtility, changeThresholdTuples, deleteSelectedPoint, deselectAllPoints, getColorOfD, getDecisionMakerUtility, getEvaluationOfD, getFairnessScores, getNumThresholds, getSelectedPoints, getThresholdTuples, selectEvaluationOfD } from '../../store/paretoPlot';
 
-function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
+function ParetoPlot({colors, setColors}) {
     
     const dispatch = useDispatch ()
     function setNumThresholds(value) {dispatch(changeNumThresholds(value))}
@@ -22,7 +22,6 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
 
     const datasetSelection = useSelector(getDatasetSelection)
     const decisionMakerCurrency = useSelector(getDecisionMakerCurrency)
-    const subjectsCurrency = useSelector(getSubjectsCurrency)
     const dmuTP = useSelector(getDmuTP);
     const dmuFP = useSelector(getDmuFP);
     const dmuFN = useSelector(getDmuFN);
@@ -250,7 +249,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
         if (filteredData['d'][0].length !== 0 || filteredData['d'][1].length !== 0) {
             dispatch(selectEvaluationOfD())
         }
-    }, [datasetSelection, datasetSelectionCounter]);
+    }, [datasetSelection, filteredData, unfilteredData]);
 
     useEffect(() => {
         updateThresholdCalculations()
@@ -347,6 +346,7 @@ function ParetoPlot({datasetSelectionCounter, colors, setColors}) {
                     xaxis: { title: `Fairness score<br>${fairnessScoreDescription}`},
                     yaxis: { title: `Decision maker's utility (in ${decisionMakerCurrency.replace('*', '')})` },
                     hovermode:'closest',
+                    responsive: true
                 } }
 
                 onClick={(data) => {
