@@ -14,6 +14,7 @@ then
     echo creating release...
 
     git checkout releases
+    git pull
     echo "which branch do you want to release?"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
