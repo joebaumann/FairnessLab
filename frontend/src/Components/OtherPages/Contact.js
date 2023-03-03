@@ -10,7 +10,7 @@ export function Contact() {
         <p>
           For questions, comments or feedback on this tool, please contact the developers: Corinna Hertweck [<a href="mailto:corinna.hertweck@uzh.ch">corinna.hertweck@uzh.ch</a>] and Joachim Baumann [<a href="mailto:baumann@ifi.uzh.ch">baumann@ifi.uzh.ch</a>].
         </p>
-        <p>The code for this tool is openly available on <a href="https://github.com/joebaumann/FairnessLab" target="_blank">GitHub</a>.</p>
+        <p>The code for this tool is publicly available on <a href="https://github.com/joebaumann/FairnessLab" target="_blank">GitHub</a>.</p>
       </div>
     </div>
   );
