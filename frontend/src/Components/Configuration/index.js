@@ -196,7 +196,7 @@ function Configuration({}) {
                 <label htmlFor="group2">Group B (sensitive-attribute=1)</label>
                 <input type="text" id="group2" value={group2} onChange={(e) => setGroup2(e.target.value)}/>
 
-                <h3>Claims differentiator</h3>
+                <h3>Claim differentiator</h3>
                 <p>Do the socio-demographic groups have the same moral claims to utility or is it only a subgroup of them? For example, one could argue that the subgroup of people with Y=1 is deserves a higher (or lower) utility than people with Y=0.</p>
                 <div>Define the subgroup in which people are deserving of the same amount of utility:</div>
 
