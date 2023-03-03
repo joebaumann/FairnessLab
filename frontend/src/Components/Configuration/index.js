@@ -259,7 +259,7 @@ function Configuration({}) {
                 <option value="sufficientarianism">sufficientarianism</option>
                 </select>
                 <br/>
-                <i>If you're unsure what to use here, we recommend egalitarianism.</i>
+                <i>If you're unsure what to choose here, we recommend egalitarianism for your first evaluation.</i>
 
                 {pattern === 'sufficientarianism' &&
                     <div>

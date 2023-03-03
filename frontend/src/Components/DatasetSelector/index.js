@@ -219,8 +219,8 @@ function DatasetSelector({}) {
                     <li>Y=1: Was not arrested within two years</li>
                     <li>D=0: Predicted to be rearrested</li>
                     <li>D=1: Predicted not to be rearrested</li>
-                    <li>Group 1: Black</li>
-                    <li>Group 2: white</li>
+                    <li>Group A: Black</li>
+                    <li>Group B: white</li>
                 </ul>
                 <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/compas/Compas%20Analysis%20-%20Unifying%20framework.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
@@ -233,8 +233,8 @@ function DatasetSelector({}) {
                     <li>Y=1: Repaid the loan</li>
                     <li>D=0: Predicted to default</li>
                     <li>D=1: Predicted to repay</li>
-                    <li>Group 1: female</li>
-                    <li>Group 2: male</li>
+                    <li>Group A: female</li>
+                    <li>Group B: male</li>
                 </ul>
                 <a href="https://github.com/joebaumann/FairnessLab/blob/main/frontend/src/data_static/credit_lending/UCI%20German%20Credit.ipynb" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
@@ -247,8 +247,8 @@ function DatasetSelector({}) {
                     <li>Y=1: Is employed</li>
                     <li>D=0: Predicted to be unemployed</li>
                     <li>D=1: Predicted to be employed</li>
-                    <li>Group 1: Black</li>
-                    <li>Group 2: white</li>
+                    <li>Group A: Black</li>
+                    <li>Group B: white</li>
                 </ul>
                 <a href="https://colab.research.google.com/drive/1R_UgSktEOFPccktXDis8VakEFJwuEvmd?usp=sharing" target="_blank" rel="noreferrer">You can find the notebook here to see how we prepared the data.</a>
             </div>
