@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run this file by running the following command in the terminal: ./release.sh
+
 # created released branch with command: git checkout -b releases bd384c69bb86aa6965da8dc2fb6a4e72e835774d
 # created remote for public repo with: git remote add public-releases https://github.com/joebaumann/FairnessLab.git
 
