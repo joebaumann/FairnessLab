@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# run this file by running the following command in the terminal: ./release.sh
-
 # created released branch with command: git checkout -b releases bd384c69bb86aa6965da8dc2fb6a4e72e835774d
 # created remote for public repo with: git remote add public-releases https://github.com/joebaumann/FairnessLab.git
 
@@ -17,7 +15,7 @@ then
 
     git checkout releases
     git pull
-    echo "which branch do you want to release? (probably you want to type main?!)"
+    echo "which branch do you want to release?"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
     echo "automatically change gh-pages homepage for public repo (only works on Mac/Linux)? (yes/no)"
@@ -41,18 +39,19 @@ then
         git push
         git push public-releases releases:main
 
-        echo all new commits have commited locally on the releases and to the public-release main branch
+        echo all new commits were commited locally on the releases and pushed the public-release main branch
 
-        echo "The latest git tag is: $(git describe --tags)"
-        echo Please enter the new tag name:
-        read new_tag_name
-        echo the new tag name is $new_tag_name
-        git tag $new_tag_name
 
-        echo "Have a look at the current latest commit. Do you really want to do the release? (yes/no)"
+        echo "Have a look at the current latest commit. Do you want to create a public release of this new version or not? (yes/no)"
         read input_release
         if [ "$input_release" == "yes" ]
         then
+            echo "The latest git tag is: $(git describe --tags)"
+            echo "Here's a list of all the tags: $(git tag -l)"
+            echo Please enter the new tag name, which does not exist yet:
+            read new_tag_name
+            echo the new tag name is $new_tag_name
+            git tag $new_tag_name
             gh release create $new_tag_name -t "$new_tag_name: $commit_message" -F changelog.md -R https://github.com/joebaumann/FairnessLab
         else
             echo aborting release...
