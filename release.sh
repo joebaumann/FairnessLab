@@ -64,3 +64,4 @@ else
 echo "Describe the changes for the new release \(as this will be used as the description for the new release\) using: nano changelog.md"
 
 fi
+git checkout main
