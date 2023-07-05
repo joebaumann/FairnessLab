@@ -17,7 +17,7 @@ then
 
     git checkout releases
     git pull
-    echo "which branch do you want to release?"
+    echo "which branch do you want to release? (probably you want to type main?!)"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
     echo "automatically change gh-pages homepage for public repo (only works on Mac/Linux)? (yes/no)"
