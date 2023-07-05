@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run this file by running the following command in the terminal: ./release.sh
+
 # created released branch with command: git checkout -b releases bd384c69bb86aa6965da8dc2fb6a4e72e835774d
 # created remote for public repo with: git remote add public-releases https://github.com/joebaumann/FairnessLab.git
 
@@ -15,7 +17,7 @@ then
 
     git checkout releases
     git pull
-    echo "which branch do you want to release?"
+    echo "which branch do you want to release? (probably you want to type main?!)"
     read branch_to_release
     git merge $branch_to_release --no-ff --no-commit
     echo "automatically change gh-pages homepage for public repo (only works on Mac/Linux)? (yes/no)"
